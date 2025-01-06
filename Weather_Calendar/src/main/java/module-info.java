@@ -5,3 +5,4 @@ module com.zogirdex.weather_calendar {
     opens com.zogirdex.weather_calendar to javafx.fxml;
     exports com.zogirdex.weather_calendar;
 }
+  

@@ -11,6 +11,16 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>com.spidru</groupId>
+            <artifactId>jgribx</artifactId>
+            <version>jdk9</version>
+        </dependency>
+        <dependency> 
+            <groupId>com.google.code.gson</groupId> 
+            <artifactId>gson</artifactId> 
+            <version>2.11.0</version> 
+        </dependency> 
+        <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>13</version>
