@@ -13,27 +13,26 @@ import javafx.event.ActionEvent;
  *
  * @author tom3k
  * 
- * POMYSŁY NA TĄ KLASĘ:
- * - można by dodać zapisywanie otwieranych okien do jakieś hashMap
- * - w stage.setOnCloseRequest( handler -> {}); usuwać te okno z hashMapy
- * - można by zrobić funkcję do zamykania określonego okna, oraz funkcje do zamykania wszystkich otwartych okien.
- * - funkcję, która umożliwiałaby ustawianie różnych stylów wszystkich/określonych okien
- * - można by stworzyć globalny handler, z którego mogłyby korzystać klasy takie jak "Logger", który
- * zarejestrował by ten handler i w przypadku jego wykonania, logowane byłyby informacje na temat zamkniętego okna.
- * - dodać mechanizm przechwytywania błędów podczas otwierania okien
- * - można by dodać animacje otwierania/zamykania okien
- * 
- * 
  */
 public class WindowManager {
     //private static final String CALENDAR_SCENE_FXML = "test.fxml";
     //private static final String SECONDARY_SCENE_FXML = "secondary.fxml";
     
+    /**
+     * Singleton pattern. Instance of WindowManager
+     */
     private static WindowManager instance;
 
-    // Prywatny konstruktor, aby uniemożliwić tworzenie nowych instancji
+     /**
+     * Singleton pattern. Private constructor to prevent new instances from being created
+     */
     private WindowManager() {}
     
+    /**
+     * Singleton pattern. Method to get instance of WindowManager, if instance is null, new instance will be created.
+     * 
+     * @return Instance of WindowManager.
+     */
     public static WindowManager getInstance() {
         if (instance == null) {
             instance = new WindowManager();
@@ -42,14 +41,16 @@ public class WindowManager {
     }
     
     /**
-     * Metoda do otwierania nowego okna z kontrolerem.
+     * Open a new fxml window called "Stage" and assign a scene to it. Scene is created under FXMLLoader class by 
+     * assigning path to .fxml file. New window can be "modal", which means that primary window is not available while
+     * showing second window.
      * 
-     * @param   fxmlPath           Path to FXML file.
-     * @param   title                  Title of new window
-     * @param   isModal            determines window modality
-     * @param   <T>                 controller class type
-     * @return                          controller of new opened window
-     * @throws                         IOException if FXML file wasn't loaded correctly
+     * @param fxmlPath  Path to FXML file.
+     * @param title Title of new window.
+     * @param isModal  Specifies whether the window should be modal.
+     * @param <T> Controller class assigned to input fxml file.
+     * @return Controller of new opened window assigned to input fxml file.
+     * @throws IOException if FXML file wasn't loaded correctly.
      */
     public <T> T openNewWindow(String fxmlPath, String title, boolean isModal) throws IOException {        
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
@@ -61,17 +62,20 @@ public class WindowManager {
         if (isModal) {
             stage.initModality(Modality.APPLICATION_MODAL);
         }
-///////////////////////////////// OPCJA Z ExtController ////////////////////////////////////////////
-//        T controller = loader.getController();
-//        // jeśli dziedziczy po ExtController, ustawiamy Stage
-//        if(controller instanceof ExtController) {
-//            ((ExtController)controller).setStage(stage);
-//        }
-///////////////////////////////// OPCJA Z ExtController ////////////////////////////////////////////
         stage.show();
         return loader.getController();
     }
     
+     /**
+     * Switch Scene in current Stage that is correlated with event that occured. 
+     * Stage is accessed by event.getSource() method.
+     * 
+     * @param fxmlPath  Path to FXML file.
+     * @param event ActionEvent from which Stage can be loaded.
+     * @param <T> Controller class assigned to input fxml file.
+     * @return Controller of new opened window assigned to input fxml file.
+     * @throws IOException if FXML file wasn't loaded correctly.
+     */
     public <T> T switchScene(String fxmlPath, ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
         Parent root = loader.load();
@@ -82,6 +86,12 @@ public class WindowManager {
      }
 
 ////////////////////////////////////////////////// OPCJA Z ExtController ////////////////////////////////////////////////////////
+//        // tworząc nowe okno (openNewWindow()):
+//        T controller = loader.getController();
+//        // jeśli dziedziczy po ExtController, ustawiamy Stage
+//        if(controller instanceof ExtController) {
+//            ((ExtController)controller).setStage(stage);
+//        }
 //    public <T> T switchScene(String fxmlPath, Stage stage) throws IOException {
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
 //        Parent root = loader.load();
