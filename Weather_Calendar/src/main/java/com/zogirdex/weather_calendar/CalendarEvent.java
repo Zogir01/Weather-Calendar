@@ -10,15 +10,18 @@ import javafx.beans.property.StringProperty;
 public class CalendarEvent {
     private StringProperty eventName;
     private StringProperty eventDesc;
+    private StringProperty dayOfMonth;
     
     public CalendarEvent() {
         this.eventName = new SimpleStringProperty("");
         this.eventDesc = new SimpleStringProperty("");
+        this.dayOfMonth = new SimpleStringProperty("");
     }
     
-    public CalendarEvent(String eventName, String eventDesc) {
+    public CalendarEvent(String eventName, String eventDesc, String dayOfMonth) {
         this.eventName = new SimpleStringProperty(eventName);
         this.eventDesc = new SimpleStringProperty(eventDesc);
+        this.dayOfMonth = new SimpleStringProperty(dayOfMonth);
     }
     
     public StringProperty eventNameProperty() { return this.eventName; }
@@ -28,4 +31,14 @@ public class CalendarEvent {
     public StringProperty eventDescProperty() { return this.eventDesc; }
     public String getEventDesc() { return this.eventDesc.get(); }
     public void setEventDesc(String eventDesc) { this.eventDesc.set(eventDesc); }
+    
+    public StringProperty dayOfMonthProperty() { return this.dayOfMonth; }
+    public String getDayOfMonth() { return this.dayOfMonth.get(); }
+    public void setDayOfMonth(String dayOfMonth) { this.dayOfMonth.set(dayOfMonth); }
+    
+    public StringProperty calendarTextProperty() {
+        StringProperty fullText = new SimpleStringProperty();
+        fullText.bind(dayOfMonth.concat("\n").concat(eventName));
+        return fullText;
+    }
 }

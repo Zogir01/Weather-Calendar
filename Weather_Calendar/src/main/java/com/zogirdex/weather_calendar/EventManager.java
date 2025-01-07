@@ -39,7 +39,7 @@ public class EventManager {
     
     private EventManager() {
         // Przykładowe dane
-        events.put(LocalDate.now(), new CalendarEvent("Spotkanie", "Opis spotkania"));
+        events.put(LocalDate.now(), new CalendarEvent("Spotkanie", "Opis spotkania", "5"));
     }
     
     // getInstance wzorca singleton (synchronized, aby ułatwić wielowątkowość, którą można by zaimplementować)
@@ -72,46 +72,5 @@ public class EventManager {
     
     public void addWeatherDay(LocalDate date, WeatherDay weatherDay) {
         this.weatherDays.put(date, weatherDay);
-    }
-    
-    public static enum bindType {
-        BY_EVENT_NAME,
-        BY_EVENT_DESC
-    }
-    
-    public void bindCalendarItemToEvent(CalendarItem item) {
-         if(item == null) {
-             throw new IllegalArgumentException("Given calendarItem item was null.");
-         }
-         
-         LocalDate date = item.getDate();
-         
-         if(date == null) {
-             throw new IllegalArgumentException("Given calendarItem field 'date' was null.");
-         }
-         
-        CalendarEvent event = this.getEvent(date);
-        
-         if (event == null) {
-             throw new IllegalArgumentException(String.format("Event with given LocalDate = %s was null.", date.toString()));
-         }
-         
-         DayButton button = item.getButton();
-         
-         if(button == null) {
-             throw new IllegalArgumentException("Given calendarItem field 'button' was null");
-         }
-         
-         String initialText = item.getInitialText();
-         
-         if(initialText == null) {
-             throw new IllegalArgumentException("Given calendarItem field 'initialText' was null.");
-         }
-         
-          button.setText(initialText + event.getEventName());
-          event.eventNameProperty().addListener((observable, oldVal, newVal) -> {
-                button.setText(initialText + newVal);
-                //mozna by zmieniac jeszcze np. wyglad buttona
-          });
     }
 }
