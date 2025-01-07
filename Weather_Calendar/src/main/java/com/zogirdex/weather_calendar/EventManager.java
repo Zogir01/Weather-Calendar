@@ -62,6 +62,10 @@ public class EventManager {
         return events;
     }
     
+    public boolean eventExists(LocalDate date) {
+        return this.events.containsKey(date);
+    }
+    
     public WeatherDay getWeatherDay(LocalDate date) {
         return this.weatherDays.getOrDefault(date, null);
     }

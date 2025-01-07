@@ -46,11 +46,9 @@ public class CalendarService {
 
                 CalendarItem item = new CalendarItem(date, (col - 1) % 7, row, button, initialText);
                 
-                if(this.eventManager.getEvent(date) != null) {
-                    if(bindToEvent) {
+                if(bindToEvent && this.eventManager.eventExists(date)) {
                          this.eventManager.bindCalendarItemToEvent(item);
-                    }
-                  }
+                }
 
                 calendarItems.add(item);
 
