@@ -14,27 +14,21 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
+import java.time.LocalDate;
 
 /**
  *
  * @author tom3k
  */
 public class WeatherApiService {
-    private static WeatherApiService instance;
-    
-    public static WeatherApiService getInstance() {
-        if(instance == null) {
-            instance = new WeatherApiService();
-        }
-        return instance;
-    }
-    
+    private final EventManager eventManager;
     private Map<String, String> queryParams = new HashMap<>();
     private String baseUrl;
 
     //String url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/%s?unitGroup=metric&elements=datetime%2Cname%2Ctemp%2Chumidity%2Cprecip%2Cprecipprob%2Csnow%2Cpressure%2Ccloudcover%2Csunrise%2Csunset%2Cconditions%2Cdescription%2Cicon&include=days%2Cfcst&key=VHEMMB29AXXDT86HR399VV4RT&contentType=json";
     
-    private WeatherApiService() {
+    public WeatherApiService() {
+        this.eventManager = EventManager.getInstance();
         this.baseUrl = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/";
         queryParams.put("unitGroup", "metric");
         queryParams.put("elements", "datetime%2Cname%2Ctemp%2Chumidity%2Cprecip%2Cprecipprob%2Csnow%2Cpressure%2Ccloudcover%2Csunrise%2Csunset%2Cconditions%2Cdescription%2Cicon");
@@ -55,9 +49,9 @@ public class WeatherApiService {
         return builder.toString();
     }
     
-    public Query makeQuery(String location) throws IOException{
-        this.baseUrl += location;
-        String finalUrl = baseUrl.concat(this.createParamString());
+    // zwraca czy operacja zakończyła się sukcesem.
+    public boolean makeQuery(String location) throws IOException{
+        String finalUrl = this.baseUrl + location + this.createParamString();
 
         try {
             URL endpoint = new URL(finalUrl);
@@ -72,13 +66,18 @@ public class WeatherApiService {
                 
                 Gson gson = new Gson();
                 Query query = gson.fromJson(br, Query.class);
+                query.getDays().forEach(elem -> {
+                    this.eventManager.addWeatherDay(LocalDate.parse(elem.getDatetime()), elem);
+                //format elem.getDatetime(): 2025-01-07 yyyy-mm-dd
+                });
                 conn.disconnect();
-                return query;
+                return true;
+                
             }
         } catch (MalformedURLException ex) {
             ex.printStackTrace();
         }
         
-        return null;
+        return false;
     }
 }

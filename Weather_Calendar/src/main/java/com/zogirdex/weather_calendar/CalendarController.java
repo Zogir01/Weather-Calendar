@@ -17,6 +17,7 @@ import javafx.event.ActionEvent;
 
 //public class CalendarController extends ExtController implements Initializable {
 public class CalendarController implements Initializable {
+    private CalendarService calendarService;
     private final int YEARS_RANGE = 4;
     
     @FXML private ComboBox<Month> comboBoxMonths;
@@ -26,6 +27,7 @@ public class CalendarController implements Initializable {
     
     @Override
     public void initialize​(URL location, ResourceBundle resources) {
+        this.calendarService = new CalendarService();
         this.fillComboBoxMonths();
         this.fillComboBoxYears();
         this.addDayLabels();
@@ -34,16 +36,16 @@ public class CalendarController implements Initializable {
     
     @FXML
     public void testFunction(ActionEvent event) {
-        try {
-            // 2 OPCJE
-            //WindowManager.getInstance()..switchScene("secondary.fxml", this.getStage());
-            // tap ierwsza zakomentowana 
-            //WindowManager.getInstance().switchScene("secondary.fxml", event);
-            EventManager.getInstance().updateFromApi("Gliwice");
-        }
-        catch(IOException ex) {
-            
-        }
+//        try {
+//            // 2 OPCJE
+//            //WindowManager.getInstance()..switchScene("secondary.fxml", this.getStage());
+//            // tap ierwsza zakomentowana 
+//            //WindowManager.getInstance().switchScene("secondary.fxml", event);
+//            EventManager.getInstance().updateFromApi("Gliwice");
+//        }
+//        catch(IOException ex) {
+//            
+//        }
     }
     
     @FXML
@@ -53,7 +55,7 @@ public class CalendarController implements Initializable {
 
         this.cleanCalendar();
        
-        CalendarService.getInstance().generateCalendar(year, month, true, true).forEach(item -> {
+        this.calendarService.generateCalendar(year, month, true, true).forEach(item -> {
             DayButton button = item.getButton();
             button.setOnAction(e -> dayButton_click(item));
             this.gridPaneCalendar.add(button, item.getColumn(), item.getRow());

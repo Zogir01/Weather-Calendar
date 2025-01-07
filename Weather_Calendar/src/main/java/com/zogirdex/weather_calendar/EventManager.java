@@ -10,6 +10,8 @@ import java.nio.charset.Charset;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import java.time.LocalDate;
+import java.lang.NullPointerException;
+import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import com.google.gson.Gson;
@@ -25,12 +27,15 @@ import javafx.util.Pair;
  * Może lepsze byłoby rozdzielenie na "EventManager" oraz "WeatherManager", tymbardziej
  * jak dojdzie więcej funkcji (np. odczyt/zapis do pliku).
  * 
+ * EventManager przechowuje globalny stan aplikacji
+ * 
  */
 public class EventManager {
     private static EventManager instance;
     private final ObservableMap<LocalDate, CalendarEvent> events = FXCollections.observableHashMap();
     private final ObservableMap<LocalDate, WeatherDay> weatherDays = FXCollections.observableHashMap();
     //private final ObservableMap<Pair<LocalDate, CalendarEvent>> events = FXCollections.observableHashMap();
+   
     
     private EventManager() {
         // Przykładowe dane
@@ -53,13 +58,6 @@ public class EventManager {
         events.put(date, event);
     }
     
-//    public void addEvent(LocalDate date, String eventName, String eventDesc) {
-//        if(eventName != "" && )
-//        
-//        CalendarEvent event = new CalendarEvent(eventName, eventDesc);
-//        events.put(date, event);
-//    }
-    
     public ObservableMap<LocalDate, CalendarEvent> getEvents() {
         return events;
     }
@@ -68,25 +66,48 @@ public class EventManager {
         return this.weatherDays.getOrDefault(date, null);
     }
     
-    private void addWeatherDay(LocalDate date, WeatherDay weatherDay) {
+    public void addWeatherDay(LocalDate date, WeatherDay weatherDay) {
         this.weatherDays.put(date, weatherDay);
     }
     
-    public void updateFromApi(String location) throws IOException {
-        Query query = WeatherApiService.getInstance().makeQuery(location);
-         query.getDays().forEach(elem -> {
-         this.addWeatherDay(LocalDate.parse(elem.getDatetime()), elem);
-         //format elem.getDatetime(): 2025-01-07
-         });
+    public static enum bindType {
+        BY_EVENT_NAME,
+        BY_EVENT_DESC
     }
     
-    // ładowanie danych z api zrobić wielowątkowo (chat miał jakiś pomysł fajny)
-//    public void loadWeatherData () {
-//        for (Entry<Object, Object> entry : FXCollections.observableHashMap().entrySet()) {
-//            LocalDate key = (LocalDate)entry.getKey();
-//            CalendarEvent value = (CalendarEvent)entry.getValue();
-//
-//            System.out.println("Key: " + key + ", Value: " + value);
-//        }
-//    }
+    public void bindCalendarItemToEvent(CalendarItem item) {
+         if(item == null) {
+             throw new IllegalArgumentException("Given calendarItem item was null.");
+         }
+         
+         LocalDate date = item.getDate();
+         
+         if(date == null) {
+             throw new IllegalArgumentException("Given calendarItem field 'date' was null.");
+         }
+         
+        CalendarEvent event = this.getEvent(date);
+        
+         if (event == null) {
+             throw new IllegalArgumentException(String.format("Event with given LocalDate = %s was null.", date.toString()));
+         }
+         
+         DayButton button = item.getButton();
+         
+         if(button == null) {
+             throw new IllegalArgumentException("Given calendarItem field 'button' was null");
+         }
+         
+         String initialText = item.getInitialText();
+         
+         if(initialText == null) {
+             throw new IllegalArgumentException("Given calendarItem field 'initialText' was null.");
+         }
+         
+          button.setText(initialText + event.getEventName());
+          event.eventNameProperty().addListener((observable, oldVal, newVal) -> {
+                button.setText(initialText + newVal);
+                //mozna by zmieniac jeszcze np. wyglad buttona
+          });
+    }
 }

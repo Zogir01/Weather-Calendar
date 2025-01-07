@@ -14,9 +14,6 @@ public class DayButton extends Button {
         this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         this.setStyle("-fx-font-size: 14px; "
                 + "-fx-padding: 5px;"
-                //+"-fx-background-image: url('path_to_image.jpg');"
-                //+"-fx-background-size: cover;"
-                //+"-fx-background-repeat: no-repeat;"
                 + "-fx-alignment: center;");
         
         Tooltip tp = new Tooltip();
@@ -25,6 +22,14 @@ public class DayButton extends Button {
         tp.setShowDuration(Duration.seconds(5)); 
         tp.setHideDelay(Duration.millis(200));
         this.setTooltip(tp);
+    }
+    
+    public void setBackgroundImage(String url) {
+        this.setStyle(this.getStyle()
+                + String.format("-fx-background-image: url('%s');", url)
+                + "-fx-background-size: cover;"
+                + "-fx-background-repeat: no-repeat;"
+        );
     }
     
 //    private void initializeStyle() {
