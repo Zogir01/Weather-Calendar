@@ -33,15 +33,15 @@ public class CalendarService {
                 int day = col - shift;
                 LocalDate date = LocalDate.of(year.getValue(), month, day);
                 String initialText;
-                DayButton button;
+                CalendarButton button;
 
                 if(showDayNumbers) {
                     initialText = String.valueOf(date.getDayOfMonth()).concat("\n");
-                    button = new DayButton(String.valueOf(date.getDayOfMonth()), date.toString());
+                    button = new CalendarButton(String.valueOf(date.getDayOfMonth()), date.toString());
                 }
                 else {
                     initialText = "";
-                    button = new DayButton("", date.toString());
+                    button = new CalendarButton("", date.toString());
                 }
 
                 CalendarItem item = new CalendarItem(date, (col - 1) % 7, row, button, initialText);

@@ -56,7 +56,7 @@ public class CalendarController implements Initializable {
         this.cleanCalendar();
        
         this.calendarService.generateCalendar(year, month, true, true).forEach(item -> {
-            DayButton button = item.getButton();
+            CalendarButton button = item.getButton();
             button.setOnAction(e -> dayButton_click(item));
             this.gridPaneCalendar.add(button, item.getColumn(), item.getRow());
         });
@@ -100,16 +100,16 @@ public class CalendarController implements Initializable {
     }
     
     private void addDayLabels() {
-        this.gridPaneCalendar.add(new DayLabel("Poniedziałek"), 0, 0);
-        this.gridPaneCalendar.add(new DayLabel("Wtorek"), 1, 0);
-        this.gridPaneCalendar.add(new DayLabel("Środa"), 2, 0);
-        this.gridPaneCalendar.add(new DayLabel("Czwartek"), 3, 0);
-        this.gridPaneCalendar.add(new DayLabel("Piątek"), 4, 0);
-        this.gridPaneCalendar.add(new DayLabel("Sobota"), 5, 0);
-        this.gridPaneCalendar.add(new DayLabel("Niedziela"), 6, 0);
+        this.gridPaneCalendar.add(new CalendarLabel("Poniedziałek"), 0, 0);
+        this.gridPaneCalendar.add(new CalendarLabel("Wtorek"), 1, 0);
+        this.gridPaneCalendar.add(new CalendarLabel("Środa"), 2, 0);
+        this.gridPaneCalendar.add(new CalendarLabel("Czwartek"), 3, 0);
+        this.gridPaneCalendar.add(new CalendarLabel("Piątek"), 4, 0);
+        this.gridPaneCalendar.add(new CalendarLabel("Sobota"), 5, 0);
+        this.gridPaneCalendar.add(new CalendarLabel("Niedziela"), 6, 0);
     }
     
      private void cleanCalendar() {
-        this.gridPaneCalendar.getChildren().removeIf(node -> node instanceof DayButton);
+        this.gridPaneCalendar.getChildren().removeIf(node -> node instanceof CalendarButton);
     }
 }

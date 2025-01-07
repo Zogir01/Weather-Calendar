@@ -6,9 +6,9 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.control.Tooltip;
 import javafx.util.Duration;
 
-public class DayButton extends Button {
+public class CalendarButton extends Button {
     
-    public DayButton(String text, String tooltipText) {
+    public CalendarButton(String text, String tooltipText) {
         super(text);
         this.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
