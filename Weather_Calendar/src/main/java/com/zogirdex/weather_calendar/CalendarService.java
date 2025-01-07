@@ -47,16 +47,11 @@ public class CalendarService {
                 CalendarItem item = new CalendarItem(date, (col - 1) % 7, row, button, initialText);
                 
                 if(this.eventManager.getEvent(date) != null) {
-                    try {
-                       if(bindToEvent) {
-                            this.eventManager.bindCalendarItemToEvent(item);
-                       }
+                    if(bindToEvent) {
+                         this.eventManager.bindCalendarItemToEvent(item);
                     }
-                    catch(NullPointerException ex) {}
                   }
-                
-              
-                
+
                 calendarItems.add(item);
 
                 if (col % 7 == 0) {

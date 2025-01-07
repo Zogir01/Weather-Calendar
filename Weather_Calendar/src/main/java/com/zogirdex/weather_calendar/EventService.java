@@ -35,7 +35,7 @@ public class EventService {
         
         if(weatherDay == null) {
             // można by logować te informacje
-            // np. logger.println("Brak danych pogody dla daty:" + localDate)
+            // np. logger.println("Brak danych pogody dla daty:" + localDate, tworze nowy obiekt.)
             weatherDay = new WeatherDay(
                     date.toString(), 
                     0, 0, 0, 0, 0, 0, 0, 
