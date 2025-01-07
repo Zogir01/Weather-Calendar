@@ -14,6 +14,9 @@ public class DayButton extends Button {
         this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         this.setStyle("-fx-font-size: 14px; "
                 + "-fx-padding: 5px;"
+                //+"-fx-background-image: url('path_to_image.jpg');"
+                //+"-fx-background-size: cover;"
+                //+"-fx-background-repeat: no-repeat;"
                 + "-fx-alignment: center;");
         
         Tooltip tp = new Tooltip();

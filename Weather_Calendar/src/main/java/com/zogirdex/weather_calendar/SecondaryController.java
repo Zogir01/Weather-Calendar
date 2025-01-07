@@ -1,6 +1,8 @@
 package com.zogirdex.weather_calendar;
 
+import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -27,6 +29,18 @@ public class SecondaryController implements Initializable{
     
     public void loadData(CalendarItem item) {
         this.selectedItem = item;
+        
+        WeatherDay weather = EventManager.getInstance().getWeatherDay(this.selectedItem.getDate());
+        if(weather != null) {
+            System.out.println(weather.getDatetime());
+            System.out.println("warunki: " + weather.getConditions());
+            System.out.println("opis: " + weather.getDescription());
+            System.out.println("ikona: " + weather.getIcon());
+        }
+        else {
+            // SHOW ALERT
+        }
+    
         CalendarEvent event = this.eventManager.getEvent(this.selectedItem.getDate());
         
         if(event != null) {
@@ -37,10 +51,6 @@ public class SecondaryController implements Initializable{
             this.labelEventName.setText("brak danych");
             this.labelEventDesc.setText("brak danych");
         }
-    //          ROZWAŻ:
-    //        this.textFieldEventName.textProperty().bind(event.eventNameProperty());
-    //        this.textFieldEventDesc.textProperty().bind(event.eventDescProperty());
-    //        this.textFieldWeatherInfo.textProperty().bind(event.weatherInfoProperty());
     }
     
     @FXML
@@ -48,8 +58,7 @@ public class SecondaryController implements Initializable{
         if(this.selectedItem != null) {
             CalendarEvent newEvent = new CalendarEvent(
                     this.textFieldEventName.getText(),
-                    this.textAreaEventDesc.getText(),
-                    "pogoda i tak nie bedzie dodadawana w ten sposob xD"
+                    this.textAreaEventDesc.getText()
             );
             this.selectedItem.bindToEvent(newEvent, true);
             this.eventManager.addEvent(this.selectedItem.getDate(), newEvent);

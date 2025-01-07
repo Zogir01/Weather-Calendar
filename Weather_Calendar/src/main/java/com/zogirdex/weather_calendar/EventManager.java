@@ -14,17 +14,27 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import com.google.gson.Gson;
 
+import java.util.Map;
+import java.util.HashMap;
+import javafx.util.Pair;
+
 /**
  *
  * @author tom3k
+ * 
+ * Może lepsze byłoby rozdzielenie na "EventManager" oraz "WeatherManager", tymbardziej
+ * jak dojdzie więcej funkcji (np. odczyt/zapis do pliku).
+ * 
  */
 public class EventManager {
     private static EventManager instance;
     private final ObservableMap<LocalDate, CalendarEvent> events = FXCollections.observableHashMap();
-
+    private final ObservableMap<LocalDate, WeatherDay> weatherDays = FXCollections.observableHashMap();
+    //private final ObservableMap<Pair<LocalDate, CalendarEvent>> events = FXCollections.observableHashMap();
+    
     private EventManager() {
         // Przykładowe dane
-        events.put(LocalDate.now(), new CalendarEvent("Spotkanie", "Opis spotkania", "Słonecznie, 20 stopni"));
+        events.put(LocalDate.now(), new CalendarEvent("Spotkanie", "Opis spotkania"));
     }
     
     // getInstance wzorca singleton (synchronized, aby ułatwić wielowątkowość, którą można by zaimplementować)
@@ -42,52 +52,32 @@ public class EventManager {
     public void addEvent(LocalDate date, CalendarEvent event) {
         events.put(date, event);
     }
-
+    
+//    public void addEvent(LocalDate date, String eventName, String eventDesc) {
+//        if(eventName != "" && )
+//        
+//        CalendarEvent event = new CalendarEvent(eventName, eventDesc);
+//        events.put(date, event);
+//    }
+    
     public ObservableMap<LocalDate, CalendarEvent> getEvents() {
         return events;
     }
     
-    @FXML
-    public void makeQuery() throws IOException {
-
-        try {
-            URL nbpEndpoint = new URL("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Gliwice?unitGroup=metric&elements=datetime%2Cname%2Ctemp%2Chumidity%2Cprecip%2Cprecipprob%2Csnow%2Cpressure%2Ccloudcover%2Csunrise%2Csunset%2Cconditions%2Cdescription%2Cicon&include=days%2Cfcst&key=VHEMMB29AXXDT86HR399VV4RT&contentType=json");
-            
-            HttpURLConnection nbpConnection = (HttpURLConnection) nbpEndpoint.openConnection();
-            
-            nbpConnection.setRequestProperty("Accept", "application/json");
-            
-            if (nbpConnection.getResponseCode() == 200) {
-                
-                BufferedReader br = new BufferedReader(new InputStreamReader(nbpConnection.getInputStream(), Charset.forName("UTF-8")));
-                
-                Gson gson = new Gson();
-                
-                //NBP API odsyła jednoelementową tablicę
-                Query query = gson.fromJson(br, Query.class);
-//              
-                System.out.println("Query cost = " + query.getQueryCost());
-
-                 query.getDays().forEach(elem -> {
-                     System.out.println(elem.getDatetime());
-                    System.out.println(elem.getDescription());
-                    System.out.println(elem.getPressure());
-                    System.out.println(elem.getPressure());
-                 });
-                 
-
-//                Waluty waluty = walutyArray[0];
-//                walutyCB.setItems(FXCollections.observableArrayList(waluty.getRates()));
-//                
-//                if(walutyCB.getItems().size()>0){
-//                walutyCB.getSelectionModel().select(0);
-//                }
-                
-                nbpConnection.disconnect();
-            }
-        } catch (MalformedURLException ex) {
-            ex.printStackTrace();
-        }
+    public WeatherDay getWeatherDay(LocalDate date) {
+        return this.weatherDays.getOrDefault(date, null);
+    }
+    
+    private void addWeatherDay(LocalDate date, WeatherDay weatherDay) {
+        this.weatherDays.put(date, weatherDay);
+    }
+    
+    public void updateFromApi(String location) throws IOException {
+        Query query = WeatherApiService.getInstance().makeQuery(location);
+         query.getDays().forEach(elem -> {
+         this.addWeatherDay(LocalDate.parse(elem.getDatetime()), elem);
+         //format elem.getDatetime(): 2025-01-07
+         });
     }
     
     // ładowanie danych z api zrobić wielowątkowo (chat miał jakiś pomysł fajny)

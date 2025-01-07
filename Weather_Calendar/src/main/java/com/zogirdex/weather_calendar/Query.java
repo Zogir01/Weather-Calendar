@@ -14,7 +14,7 @@ public String address;
 public String timezone;
 public double tzoffset;
 public String description;
-public List<Day> days;
+public List<WeatherDay> days;
 
     /**
      * No args constructor for use in serialization
@@ -23,7 +23,7 @@ public List<Day> days;
     public Query() {
     }
 
-    public Query(int queryCost, double latitude, double longitude, String resolvedAddress, String address, String timezone, double tzoffset, String description, List<Day> days) {
+    public Query(int queryCost, double latitude, double longitude, String resolvedAddress, String address, String timezone, double tzoffset, String description, List<WeatherDay> days) {
         super();
         this.queryCost = queryCost;
         this.latitude = latitude;
@@ -100,11 +100,11 @@ public void setDescription(String description) {
 this.description = description;
 }
 
-public List<Day> getDays() {
+public List<WeatherDay> getDays() {
 return days;
 }
 
-public void setDays(List<Day> days) {
+public void setDays(List<WeatherDay> days) {
 this.days = days;
 }
 
