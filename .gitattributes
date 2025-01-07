@@ -1,0 +1,3 @@
+# Keep LF in the repository
+* text=auto
+*.java eol=lf
