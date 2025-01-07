@@ -10,11 +10,11 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
     <dependencies>
-        <dependency>
+<!--        <dependency>
             <groupId>com.spidru</groupId>
             <artifactId>jgribx</artifactId>
             <version>jdk9</version>
-        </dependency>
+        </dependency>-->
         <dependency> 
             <groupId>com.google.code.gson</groupId> 
             <artifactId>gson</artifactId> 

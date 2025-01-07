@@ -38,7 +38,8 @@ public class CalendarController implements Initializable {
             // 2 OPCJE
             //WindowManager.getInstance()..switchScene("secondary.fxml", this.getStage());
             // tap ierwsza zakomentowana 
-            WindowManager.getInstance().switchScene("secondary.fxml", event);
+            //WindowManager.getInstance().switchScene("secondary.fxml", event);
+            EventManager.getInstance().makeQuery();
         }
         catch(IOException ex) {
             
