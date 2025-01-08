@@ -5,7 +5,6 @@ import java.time.Month;
 import java.time.Year;
 import java.util.List;
 import java.util.ArrayList;
-import java.lang.NullPointerException;
 
 /**
  *
@@ -28,7 +27,7 @@ public class CalendarService {
             int daysInMonth = month.length(year.isLeap());
             int shift = LocalDate.of(year.getValue(), month, 1).getDayOfWeek().getValue() - 1;
             int row = 1;
-
+            
             for (int col = 1 + shift; col <= daysInMonth + shift; col++) {
                 int day = col - shift;
                 LocalDate date = LocalDate.of(year.getValue(), month, day);
@@ -45,7 +44,6 @@ public class CalendarService {
                 }
 
                 CalendarItem item = new CalendarItem(date, (col - 1) % 7, row, button, initialText);
-                
                 ScheduledEvent event = this.eventManager.getEvent(date);
                 
                 if(event != null) {

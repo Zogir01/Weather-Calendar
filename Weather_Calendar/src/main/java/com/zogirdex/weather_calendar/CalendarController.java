@@ -11,8 +11,6 @@ import java.time.Month;
 import java.time.Year;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.stage.Stage;
-import java.io.IOException;
 import javafx.event.ActionEvent;
 
 //public class CalendarController extends ExtController implements Initializable {

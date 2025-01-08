@@ -1,6 +1,5 @@
 package com.zogirdex.weather_calendar;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -12,6 +11,7 @@ import javafx.fxml.Initializable;
 
 public class EventController implements Initializable{
     private EventService eventService;
+    private WeatherService weatherService;
     private CalendarItem selectedItem;
     
     @FXML private TextField textFieldEventName;
@@ -23,6 +23,7 @@ public class EventController implements Initializable{
     @Override
     public void initialize​(URL location, ResourceBundle resources) {
         this.eventService = new EventService();
+        this.weatherService = new WeatherService();
         this.selectedItem = null;
     } 
     
@@ -30,7 +31,7 @@ public class EventController implements Initializable{
         this.selectedItem = item;
         
         try {
-            WeatherDay weather = this.eventService.getWeatherDay(this.selectedItem);
+            WeatherDay weather = this.weatherService.getWeatherDay(this.selectedItem);
             System.out.println(weather.getDatetime());
             System.out.println("warunki: " + weather.getConditions());
             System.out.println("opis: " + weather.getDescription());

@@ -1,10 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.zogirdex.weather_calendar;
 
-import java.time.LocalDate;
 /**
  *
  * @author tom3k
@@ -28,27 +23,9 @@ public class EventService {
         item.getButton().textProperty().bind(newEvent.calendarTextProperty());
         this.eventManager.addEvent(item.getDate(), newEvent);
     }
-    
-    public WeatherDay getWeatherDay(CalendarItem item)  {
-        this.validateCalendarItem(item);
         
-        LocalDate date = item.getDate();
-        WeatherDay weatherDay = this.eventManager.getWeatherDay(date);
-        
-        if(weatherDay == null) {
-            // można by logować te informacje
-            // np. logger.println("Brak danych pogody dla daty:" + localDate, tworze nowy obiekt.)
-            weatherDay = new WeatherDay(
-                    date.toString(), 
-                    0, 0, 0, 0, 0, 0, 0, 
-                    "brak danych", "brak danych" ,"brak danych", "brak danych", "brak danych");
-        }
-        return weatherDay;
-    }
-    
     public ScheduledEvent getEvent(CalendarItem item) {
         this.validateCalendarItem(item);
-        
         ScheduledEvent event = this.eventManager.getEvent(item.getDate());
         
         if (event == null) {

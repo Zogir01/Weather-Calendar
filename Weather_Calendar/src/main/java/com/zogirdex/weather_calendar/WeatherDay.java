@@ -20,14 +20,10 @@ public String conditions; // warunki
 public String description; // opis
 public String icon; // ikona
 
-    /**
-     * No args constructor for use in serialization
-     * 
-     */
-    public WeatherDay() {
-    }
+public WeatherDay() {
+}
 
-    public WeatherDay(String datetime, double temp, double humidity, double precip, double precipprob, double snow, double pressure, double cloudcover, String sunrise, String sunset, String conditions, String description, String icon) {
+public WeatherDay(String datetime, double temp, double humidity, double precip, double precipprob, double snow, double pressure, double cloudcover, String sunrise, String sunset, String conditions, String description, String icon) {
         super();
         this.datetime = datetime;
         this.temp = temp;

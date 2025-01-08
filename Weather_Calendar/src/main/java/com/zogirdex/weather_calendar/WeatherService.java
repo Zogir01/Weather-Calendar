@@ -20,15 +20,14 @@ import java.time.LocalDate;
  *
  * @author tom3k
  */
-public class WeatherApiService {
-    private final EventManager eventManager;
-    private Map<String, String> queryParams = new HashMap<>();
-    private String baseUrl;
-
+public class WeatherService {
+    private final WeatherManager weatherManager;
+    private final Map<String, String> queryParams = new HashMap<>();
+    private final String baseUrl;
     //String url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/%s?unitGroup=metric&elements=datetime%2Cname%2Ctemp%2Chumidity%2Cprecip%2Cprecipprob%2Csnow%2Cpressure%2Ccloudcover%2Csunrise%2Csunset%2Cconditions%2Cdescription%2Cicon&include=days%2Cfcst&key=VHEMMB29AXXDT86HR399VV4RT&contentType=json";
     
-    public WeatherApiService() {
-        this.eventManager = EventManager.getInstance();
+    public WeatherService() {
+        this.weatherManager = WeatherManager.getInstance();
         this.baseUrl = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/";
         queryParams.put("unitGroup", "metric");
         queryParams.put("elements", "datetime%2Cname%2Ctemp%2Chumidity%2Cprecip%2Cprecipprob%2Csnow%2Cpressure%2Ccloudcover%2Csunrise%2Csunset%2Cconditions%2Cdescription%2Cicon");
@@ -67,17 +66,37 @@ public class WeatherApiService {
                 Gson gson = new Gson();
                 WeatherQuery query = gson.fromJson(br, WeatherQuery.class);
                 query.getDays().forEach(elem -> {
-                    this.eventManager.addWeatherDay(LocalDate.parse(elem.getDatetime()), elem);
-                //format elem.getDatetime(): 2025-01-07 yyyy-mm-dd
+                    this.weatherManager.addWeatherDay(LocalDate.parse(elem.getDatetime()), elem);
+                //format daty z api: np. 2025-01-07 (yyyy-mm-dd)
                 });
                 conn.disconnect();
                 return true;
-                
             }
         } catch (MalformedURLException ex) {
             ex.printStackTrace();
         }
-        
         return false;
+    }
+    
+    public WeatherDay getWeatherDay(CalendarItem item)  {
+        this.validateCalendarItem(item);
+        LocalDate date = item.getDate();
+        WeatherDay weatherDay = this.weatherManager.getWeatherDay(date);
+        
+        if(weatherDay == null) {
+            // można by logować te informacje
+            // np. logger.println("Brak danych pogody dla daty:" + localDate, tworze nowy obiekt.)
+            weatherDay = new WeatherDay(
+                    date.toString(), 
+                    0, 0, 0, 0, 0, 0, 0, 
+                    "brak danych", "brak danych" ,"brak danych", "brak danych", "brak danych");
+        }
+        return weatherDay;
+    }
+    
+    private void validateCalendarItem(CalendarItem item) {
+        if (item == null) {
+            throw new IllegalArgumentException("Given calendarItem item was null.");
+        }
     }
 }
