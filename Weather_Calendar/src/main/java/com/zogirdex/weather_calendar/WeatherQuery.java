@@ -4,7 +4,7 @@ import java.util.List;
 //import javax.annotation.Generated;
 
 //@Generated("jsonschema2pojo")
-public class Query {
+public class WeatherQuery {
 
 public int queryCost;
 public double latitude;
@@ -20,10 +20,10 @@ public List<WeatherDay> days;
      * No args constructor for use in serialization
      * 
      */
-    public Query() {
+    public WeatherQuery() {
     }
 
-    public Query(int queryCost, double latitude, double longitude, String resolvedAddress, String address, String timezone, double tzoffset, String description, List<WeatherDay> days) {
+    public WeatherQuery(int queryCost, double latitude, double longitude, String resolvedAddress, String address, String timezone, double tzoffset, String description, List<WeatherDay> days) {
         super();
         this.queryCost = queryCost;
         this.latitude = latitude;

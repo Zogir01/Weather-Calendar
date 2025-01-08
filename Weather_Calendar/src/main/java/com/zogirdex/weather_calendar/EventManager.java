@@ -32,14 +32,14 @@ import javafx.util.Pair;
  */
 public class EventManager {
     private static EventManager instance;
-    private final ObservableMap<LocalDate, CalendarEvent> events = FXCollections.observableHashMap();
+    private final ObservableMap<LocalDate, ScheduledEvent> events = FXCollections.observableHashMap();
     private final ObservableMap<LocalDate, WeatherDay> weatherDays = FXCollections.observableHashMap();
     //private final ObservableMap<Pair<LocalDate, CalendarEvent>> events = FXCollections.observableHashMap();
    
     
     private EventManager() {
         // Przykładowe dane
-        events.put(LocalDate.now(), new CalendarEvent("Spotkanie", "Opis spotkania", "5"));
+        events.put(LocalDate.now(), new ScheduledEvent("Spotkanie", "Opis spotkania", "5"));
     }
     
     // getInstance wzorca singleton (synchronized, aby ułatwić wielowątkowość, którą można by zaimplementować)
@@ -50,15 +50,15 @@ public class EventManager {
         return instance;
     }
 
-    public CalendarEvent getEvent(LocalDate date) {
+    public ScheduledEvent getEvent(LocalDate date) {
         return events.getOrDefault(date, null);
     }
 
-    public void addEvent(LocalDate date, CalendarEvent event) {
+    public void addEvent(LocalDate date, ScheduledEvent event) {
         events.put(date, event);
     }
     
-    public ObservableMap<LocalDate, CalendarEvent> getEvents() {
+    public ObservableMap<LocalDate, ScheduledEvent> getEvents() {
         return events;
     }
     

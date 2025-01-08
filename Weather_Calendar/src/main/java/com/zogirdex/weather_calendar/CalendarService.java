@@ -46,7 +46,7 @@ public class CalendarService {
 
                 CalendarItem item = new CalendarItem(date, (col - 1) % 7, row, button, initialText);
                 
-                CalendarEvent event = this.eventManager.getEvent(date);
+                ScheduledEvent event = this.eventManager.getEvent(date);
                 
                 if(event != null) {
                     button.textProperty().bind(event.calendarTextProperty());

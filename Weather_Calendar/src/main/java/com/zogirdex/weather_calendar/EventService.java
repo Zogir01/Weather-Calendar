@@ -22,7 +22,7 @@ public class EventService {
         if(eventName.length() <= 3) {
             //throw
         }
-        CalendarEvent newEvent = new CalendarEvent(eventName, eventDesc, 
+        ScheduledEvent newEvent = new ScheduledEvent(eventName, eventDesc, 
                 String.valueOf(item.getDate().getDayOfMonth()));
         
         item.getButton().textProperty().bind(newEvent.calendarTextProperty());
@@ -46,13 +46,13 @@ public class EventService {
         return weatherDay;
     }
     
-    public CalendarEvent getEvent(CalendarItem item) {
+    public ScheduledEvent getEvent(CalendarItem item) {
         this.validateCalendarItem(item);
         
-        CalendarEvent event = this.eventManager.getEvent(item.getDate());
+        ScheduledEvent event = this.eventManager.getEvent(item.getDate());
         
         if (event == null) {
-            event = new CalendarEvent("brak danych", "brak danych", 
+            event = new ScheduledEvent("brak danych", "brak danych", 
                     String.valueOf(item.getDate().getDayOfMonth()));
         }
         return event;

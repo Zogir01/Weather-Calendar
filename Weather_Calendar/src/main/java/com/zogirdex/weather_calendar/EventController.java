@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.fxml.Initializable;
 
-public class SecondaryController implements Initializable{
+public class EventController implements Initializable{
     private EventService eventService;
     private CalendarItem selectedItem;
     
@@ -36,7 +36,7 @@ public class SecondaryController implements Initializable{
             System.out.println("opis: " + weather.getDescription());
             System.out.println("ikona: " + weather.getIcon());
             
-            CalendarEvent event = this.eventService.getEvent(this.selectedItem);
+            ScheduledEvent event = this.eventService.getEvent(this.selectedItem);
             this.labelEventName.setText(event.getEventName());
             this.labelEventDesc.setText(event.getEventDesc());
         }

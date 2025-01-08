@@ -20,7 +20,7 @@ public class App extends Application {
     
     @Override
     public void start(Stage stage) throws IOException {
-        WindowManager.getInstance().openNewWindow("calendar.fxml", "Kalendarz", true);
+        StageManager.getInstance().openNewStage("calendar.fxml", "Kalendarz", true);
     }
     
     @Override

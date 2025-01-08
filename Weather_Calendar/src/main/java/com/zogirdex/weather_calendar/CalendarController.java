@@ -65,8 +65,8 @@ public class CalendarController implements Initializable {
     @FXML
     private void dayButton_click(CalendarItem item) {
         try {
-         SecondaryController controller = WindowManager.getInstance().openNewWindow(
-                 "secondary.fxml", item.getDate().toString(), true);
+         EventController controller = StageManager.getInstance().openNewStage(
+                 "event.fxml", item.getDate().toString(), true);
          controller.loadData(item);
         }
        catch(Exception ex) {

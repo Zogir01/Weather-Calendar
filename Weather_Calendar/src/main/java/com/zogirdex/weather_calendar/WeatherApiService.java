@@ -65,7 +65,7 @@ public class WeatherApiService {
                 );
                 
                 Gson gson = new Gson();
-                Query query = gson.fromJson(br, Query.class);
+                WeatherQuery query = gson.fromJson(br, WeatherQuery.class);
                 query.getDays().forEach(elem -> {
                     this.eventManager.addWeatherDay(LocalDate.parse(elem.getDatetime()), elem);
                 //format elem.getDatetime(): 2025-01-07 yyyy-mm-dd
