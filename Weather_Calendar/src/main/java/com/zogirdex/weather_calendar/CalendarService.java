@@ -58,4 +58,10 @@ public class CalendarService {
          }
          return calendarItems;
     }
+    
+    public static void validateCalendarItem(CalendarItem item) {
+        if (item == null) {
+            throw new IllegalArgumentException("Given calendarItem item was null.");
+        }
+    }
 }

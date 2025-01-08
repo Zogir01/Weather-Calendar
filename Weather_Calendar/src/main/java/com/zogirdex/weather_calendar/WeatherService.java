@@ -79,7 +79,7 @@ public class WeatherService {
     }
     
     public WeatherDay getWeatherDay(CalendarItem item)  {
-        this.validateCalendarItem(item);
+        CalendarService.validateCalendarItem(item);
         LocalDate date = item.getDate();
         WeatherDay weatherDay = this.weatherManager.getWeatherDay(date);
         
@@ -92,11 +92,5 @@ public class WeatherService {
                     "brak danych", "brak danych" ,"brak danych", "brak danych", "brak danych");
         }
         return weatherDay;
-    }
-    
-    private void validateCalendarItem(CalendarItem item) {
-        if (item == null) {
-            throw new IllegalArgumentException("Given calendarItem item was null.");
-        }
     }
 }

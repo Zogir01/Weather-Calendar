@@ -12,7 +12,7 @@ public class EventService {
     }
     
     public void addEvent(CalendarItem item, String eventName, String eventDesc) {
-        this.validateCalendarItem(item);
+        CalendarService.validateCalendarItem(item);
         
         if(eventName.length() <= 3) {
             //throw
@@ -25,7 +25,7 @@ public class EventService {
     }
         
     public ScheduledEvent getEvent(CalendarItem item) {
-        this.validateCalendarItem(item);
+        CalendarService.validateCalendarItem(item);
         ScheduledEvent event = this.eventManager.getEvent(item.getDate());
         
         if (event == null) {
@@ -33,11 +33,5 @@ public class EventService {
                     String.valueOf(item.getDate().getDayOfMonth()));
         }
         return event;
-    }
-    
-    private void validateCalendarItem(CalendarItem item) {
-        if (item == null) {
-            throw new IllegalArgumentException("Given calendarItem item was null.");
-        }
     }
 }
