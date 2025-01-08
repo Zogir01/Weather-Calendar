@@ -14,28 +14,28 @@ import javafx.event.ActionEvent;
  * @author tom3k
  * 
  */
-public class WindowManager {
+public class StageManager {
     //private static final String CALENDAR_SCENE_FXML = "test.fxml";
     //private static final String SECONDARY_SCENE_FXML = "secondary.fxml";
     
     /**
      * Singleton pattern. Instance of WindowManager
      */
-    private static WindowManager instance;
+    private static StageManager instance;
 
      /**
      * Singleton pattern. Private constructor to prevent new instances from being created
      */
-    private WindowManager() {}
+    private StageManager() {}
     
     /**
      * Singleton pattern. Method to get instance of WindowManager, if instance is null, new instance will be created.
      * 
      * @return Instance of WindowManager.
      */
-    public static WindowManager getInstance() {
+    public static StageManager getInstance() {
         if (instance == null) {
-            instance = new WindowManager();
+            instance = new StageManager();
         }
         return instance;
     }
@@ -52,7 +52,7 @@ public class WindowManager {
      * @return Controller of new opened window assigned to input fxml file.
      * @throws IOException if FXML file wasn't loaded correctly.
      */
-    public <T> T openNewWindow(String fxmlPath, String title, boolean isModal) throws IOException {        
+    public <T> T openNewStage(String fxmlPath, String title, boolean isModal) throws IOException {        
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
         Parent root = loader.load();
         Scene scene = new Scene(root);

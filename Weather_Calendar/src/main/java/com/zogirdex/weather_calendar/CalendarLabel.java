@@ -5,9 +5,9 @@ import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
 
-public class DayLabel extends Label {
+public class CalendarLabel extends Label {
 
-    public DayLabel(String dayName) {
+    public CalendarLabel(String dayName) {
         super(dayName);
         initializeStyle();
     }

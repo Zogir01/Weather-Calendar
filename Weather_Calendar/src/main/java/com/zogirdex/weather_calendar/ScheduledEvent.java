@@ -7,21 +7,21 @@ import javafx.beans.property.StringProperty;
  *
  * @author tom3k
  */
-public class CalendarEvent {
+public class ScheduledEvent {
     private StringProperty eventName;
     private StringProperty eventDesc;
-    private Day day;
+    private StringProperty dayOfMonth;
     
-    public CalendarEvent() {
+    public ScheduledEvent() {
         this.eventName = new SimpleStringProperty("");
         this.eventDesc = new SimpleStringProperty("");
-        this.day = null;
+        this.dayOfMonth = new SimpleStringProperty("");
     }
     
-    public CalendarEvent(String eventName, String eventDesc, String weatherInfo) {
+    public ScheduledEvent(String eventName, String eventDesc, String dayOfMonth) {
         this.eventName = new SimpleStringProperty(eventName);
         this.eventDesc = new SimpleStringProperty(eventDesc);
-        this.day = null;
+        this.dayOfMonth = new SimpleStringProperty(dayOfMonth);
     }
     
     public StringProperty eventNameProperty() { return this.eventName; }
@@ -32,8 +32,13 @@ public class CalendarEvent {
     public String getEventDesc() { return this.eventDesc.get(); }
     public void setEventDesc(String eventDesc) { this.eventDesc.set(eventDesc); }
     
-    public void setDay(Day day) { this.day = day; }
-    public Day getDay() { return this.day; }
+    public StringProperty dayOfMonthProperty() { return this.dayOfMonth; }
+    public String getDayOfMonth() { return this.dayOfMonth.get(); }
+    public void setDayOfMonth(String dayOfMonth) { this.dayOfMonth.set(dayOfMonth); }
     
-    
+    public StringProperty calendarTextProperty() {
+        StringProperty fullText = new SimpleStringProperty();
+        fullText.bind(dayOfMonth.concat("\n").concat(eventName));
+        return fullText;
+    }
 }

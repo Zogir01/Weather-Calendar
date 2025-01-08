@@ -4,30 +4,26 @@ package com.zogirdex.weather_calendar;
 //import javax.annotation.Generated;
 
 //@Generated("jsonschema2pojo")
-public class Day {
+public class WeatherDay {
 
 public String datetime;
-public double temp;
-public double humidity;
-public double precip;
-public double precipprob;
-public double snow;
-public double pressure;
-public double cloudcover;
-public String sunrise;
-public String sunset;
-public String conditions;
-public String description;
-public String icon;
+public double temp; // temperatura
+public double humidity; // wilgotnosc
+public double precip; // opady
+public double precipprob; // szansa opadów
+public double snow; // śnieg
+public double pressure; // ciśnienie
+public double cloudcover; // zachmurzenie
+public String sunrise; // wschód słońca
+public String sunset; // zachód słońca
+public String conditions; // warunki
+public String description; // opis
+public String icon; // ikona
 
-    /**
-     * No args constructor for use in serialization
-     * 
-     */
-    public Day() {
-    }
+public WeatherDay() {
+}
 
-    public Day(String datetime, double temp, double humidity, double precip, double precipprob, double snow, double pressure, double cloudcover, String sunrise, String sunset, String conditions, String description, String icon) {
+public WeatherDay(String datetime, double temp, double humidity, double precip, double precipprob, double snow, double pressure, double cloudcover, String sunrise, String sunset, String conditions, String description, String icon) {
         super();
         this.datetime = datetime;
         this.temp = temp;

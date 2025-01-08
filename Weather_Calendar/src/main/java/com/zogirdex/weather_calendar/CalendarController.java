@@ -11,12 +11,11 @@ import java.time.Month;
 import java.time.Year;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.stage.Stage;
-import java.io.IOException;
 import javafx.event.ActionEvent;
 
 //public class CalendarController extends ExtController implements Initializable {
 public class CalendarController implements Initializable {
+    private CalendarService calendarService;
     private final int YEARS_RANGE = 4;
     
     @FXML private ComboBox<Month> comboBoxMonths;
@@ -26,6 +25,7 @@ public class CalendarController implements Initializable {
     
     @Override
     public void initialize​(URL location, ResourceBundle resources) {
+        this.calendarService = new CalendarService();
         this.fillComboBoxMonths();
         this.fillComboBoxYears();
         this.addDayLabels();
@@ -34,16 +34,16 @@ public class CalendarController implements Initializable {
     
     @FXML
     public void testFunction(ActionEvent event) {
-        try {
-            // 2 OPCJE
-            //WindowManager.getInstance()..switchScene("secondary.fxml", this.getStage());
-            // tap ierwsza zakomentowana 
-            //WindowManager.getInstance().switchScene("secondary.fxml", event);
-            EventManager.getInstance().makeQuery();
-        }
-        catch(IOException ex) {
-            
-        }
+//        try {
+//            // 2 OPCJE
+//            //WindowManager.getInstance()..switchScene("secondary.fxml", this.getStage());
+//            // tap ierwsza zakomentowana 
+//            //WindowManager.getInstance().switchScene("secondary.fxml", event);
+//            EventManager.getInstance().updateFromApi("Gliwice");
+//        }
+//        catch(IOException ex) {
+//            
+//        }
     }
     
     @FXML
@@ -53,8 +53,8 @@ public class CalendarController implements Initializable {
 
         this.cleanCalendar();
        
-        CalendarService.getInstance().generateCalendar(year, month, true, true).forEach(item -> {
-            DayButton button = item.getButton();
+        this.calendarService.generateCalendar(year, month, true, true).forEach(item -> {
+            CalendarButton button = item.getButton();
             button.setOnAction(e -> dayButton_click(item));
             this.gridPaneCalendar.add(button, item.getColumn(), item.getRow());
         });
@@ -63,8 +63,8 @@ public class CalendarController implements Initializable {
     @FXML
     private void dayButton_click(CalendarItem item) {
         try {
-         SecondaryController controller = WindowManager.getInstance().openNewWindow(
-                 "secondary.fxml", item.getDate().toString(), true);
+         EventController controller = StageManager.getInstance().openNewStage(
+                 "event.fxml", item.getDate().toString(), true);
          controller.loadData(item);
         }
        catch(Exception ex) {
@@ -98,16 +98,16 @@ public class CalendarController implements Initializable {
     }
     
     private void addDayLabels() {
-        this.gridPaneCalendar.add(new DayLabel("Poniedziałek"), 0, 0);
-        this.gridPaneCalendar.add(new DayLabel("Wtorek"), 1, 0);
-        this.gridPaneCalendar.add(new DayLabel("Środa"), 2, 0);
-        this.gridPaneCalendar.add(new DayLabel("Czwartek"), 3, 0);
-        this.gridPaneCalendar.add(new DayLabel("Piątek"), 4, 0);
-        this.gridPaneCalendar.add(new DayLabel("Sobota"), 5, 0);
-        this.gridPaneCalendar.add(new DayLabel("Niedziela"), 6, 0);
+        this.gridPaneCalendar.add(new CalendarLabel("Poniedziałek"), 0, 0);
+        this.gridPaneCalendar.add(new CalendarLabel("Wtorek"), 1, 0);
+        this.gridPaneCalendar.add(new CalendarLabel("Środa"), 2, 0);
+        this.gridPaneCalendar.add(new CalendarLabel("Czwartek"), 3, 0);
+        this.gridPaneCalendar.add(new CalendarLabel("Piątek"), 4, 0);
+        this.gridPaneCalendar.add(new CalendarLabel("Sobota"), 5, 0);
+        this.gridPaneCalendar.add(new CalendarLabel("Niedziela"), 6, 0);
     }
     
      private void cleanCalendar() {
-        this.gridPaneCalendar.getChildren().removeIf(node -> node instanceof DayButton);
+        this.gridPaneCalendar.getChildren().removeIf(node -> node instanceof CalendarButton);
     }
 }
