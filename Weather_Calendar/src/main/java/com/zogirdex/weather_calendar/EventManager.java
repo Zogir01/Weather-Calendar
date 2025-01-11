@@ -3,6 +3,8 @@ package com.zogirdex.weather_calendar;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import java.time.LocalDate;
+import java.io.IOException;
+import java.lang.ClassNotFoundException;
 
 /**
  *
@@ -20,13 +22,14 @@ public class EventManager {
    
     private EventManager() {
         // Przykładowe dane
-        events.put(LocalDate.now(), new ScheduledEvent("Spotkanie", "Opis spotkania", "5"));
+        //events.put(LocalDate.now(), new ScheduledEvent("Spotkanie", "Opis spotkania", "5"));
     }
     
     // getInstance wzorca singleton (synchronized, aby ułatwić wielowątkowość, którą można by zaimplementować)
     public static synchronized EventManager getInstance() {
         if (instance == null) {
             instance = new EventManager();
+            //instance = (EventManager)GlobalStateManager.loadState(GlobalStateManager.EVENT_MANAGER_STATE_FILE);
         }
         return instance;
     }
@@ -46,4 +49,12 @@ public class EventManager {
     public boolean eventExists(LocalDate date) {
         return this.events.containsKey(date);
     }
+    
+//    public final void saveToFile() {
+//        FileAssistant.saveToFile(events);
+//    }
+//    
+//    public final void loadFromFile() {
+//        this.events = FileAssistant.loadFromFile();
+//    }
 }

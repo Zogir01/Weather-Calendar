@@ -9,6 +9,7 @@ public class EventService {
     
     public EventService() {
         this.eventManager = EventManager.getInstance();
+
     }
     
     public void addEvent(CalendarItem item, String eventName, String eventDesc) {

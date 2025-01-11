@@ -33,7 +33,7 @@ public class CalendarService {
                 LocalDate date = LocalDate.of(year.getValue(), month, day);
                 String initialText;
                 CalendarButton button;
-
+                
                 if(showDayNumbers) {
                     initialText = String.valueOf(date.getDayOfMonth()).concat("\n");
                     button = new CalendarButton(String.valueOf(date.getDayOfMonth()), date.toString());
