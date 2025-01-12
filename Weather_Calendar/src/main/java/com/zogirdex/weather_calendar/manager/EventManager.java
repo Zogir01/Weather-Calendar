@@ -66,24 +66,16 @@ public class EventManager {
     }
     
      public void makeWeatherQuery (LocalDate date) throws WeatherApiException, IllegalArgumentException{
-           // aktualizacja danych pogodowych w przypadku znalezienia eventu.
            try {
                ScheduledEvent event = this.events.get(date);
                if(event == null) {
                    throw new IllegalArgumentException("Cannot find any event with the assigned date: " + date.toString());
                }
+                // aktualizacja danych pogodowych w przypadku znalezienia eventu.
                 WeatherApiAssistant.makeQuery(event.getLocation());
            }
            catch(WeatherApiException ex) {
                throw new WeatherApiException("Błąd podczas tworzenia zapytania do API.", ex);
            }
        }
-    
-//    public final void saveToFile() {
-//        FileAssistant.saveToFile(events);
-//    }
-//    
-//    public final void loadFromFile() {
-//        this.events = FileAssistant.loadFromFile();
-//    }
 }

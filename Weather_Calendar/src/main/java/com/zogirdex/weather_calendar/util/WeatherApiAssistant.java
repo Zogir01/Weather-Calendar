@@ -7,6 +7,8 @@ package com.zogirdex.weather_calendar.util;
 import com.google.gson.Gson;
 import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.model.WeatherQuery;
+import com.zogirdex.weather_calendar.model.WeatherLocation;
+import com.zogirdex.weather_calendar.model.WeatherDay;
 import com.zogirdex.weather_calendar.manager.WeatherManager;
 
 import java.io.BufferedReader;
@@ -60,26 +62,26 @@ public class WeatherApiAssistant {
                 Gson gson = new Gson();
                 WeatherQuery query = gson.fromJson(br, WeatherQuery.class);
                 
-                //format daty z api: np. 2025-01-07 (yyyy-mm-dd)
+                WeatherLocation weatherLocation = weatherManager.getWeatherLocation(location);
                 
-                if(!readOneDate) { // dodaje wszystkie daty
-                    query.getDays().forEach(elem ->{ 
-                        weatherManager.addWeatherDay(LocalDate.parse(elem.getDatetime()), location, elem);
-                    });
+                // mozna by to lepiej zoptymalizowac - tzn. jeśli WeatherManager nie ma takiego WeatherLocation (=null), to
+                // tworzymy ten obiekt i dodajemy mu WeatherDay, a dopiero na samym końcu wstawiamy ten obiekt do 
+                // WeatherManager.
+                if (weatherLocation == null) {
+                    weatherManager.addWeatherLocation(new WeatherLocation(location));
                 }
-                else { // dodaje jedną date
-                    query.getDays().forEach(elem ->{ 
-                    LocalDate dateFromQuery = LocalDate.parse(elem.getDatetime());
-                    
-                    if(dateFromQuery.equals(date)) {
-                        System.out.println("znaleziono date we wczytanych danych");
-                        weatherManager.addWeatherDay(LocalDate.parse(elem.getDatetime()), location, elem);
+                if(!readOneDate) {
+                    for(WeatherDay day : query.getDays()) {
+                        weatherManager.addWeatherDay(location, day);
                     }
-                    else {
-                        System.out.println("nie znaleziono daty we wczytanych danych");
-                    }
- 
-                    });
+                }
+                else {
+                    for(WeatherDay day : query.getDays()) {
+                        LocalDate dateFromQuery = LocalDate.parse(day.getDatetime());
+                        if(dateFromQuery.equals(date)) {
+                            weatherManager.addWeatherDay(location, day);
+                        }
+                    }  
                 }
                 conn.disconnect();
             }

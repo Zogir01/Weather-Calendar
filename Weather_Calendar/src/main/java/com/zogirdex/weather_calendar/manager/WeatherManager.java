@@ -1,6 +1,7 @@
 package com.zogirdex.weather_calendar.manager;
 
 import com.zogirdex.weather_calendar.model.WeatherDay;
+import com.zogirdex.weather_calendar.model.WeatherLocation;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.util.Pair;
@@ -14,8 +15,8 @@ import java.time.LocalDate;
  */
 public class WeatherManager {
     private static WeatherManager instance;
-    private final ObservableMap<Pair<LocalDate, String>, WeatherDay> weatherDays = FXCollections.observableHashMap();
-
+    private final ObservableMap<String, WeatherLocation> weatherLocations = FXCollections.observableHashMap();
+    
     private WeatherManager() {
     }
     
@@ -26,13 +27,28 @@ public class WeatherManager {
         }
         return instance;
     }
-
-    public WeatherDay getWeatherDay(LocalDate date, String location) {
-        return this.weatherDays.getOrDefault(new Pair<>(date, location), null);
+    
+    public WeatherLocation getWeatherLocation(String location) {
+        return this.weatherLocations.getOrDefault(location, null);
+    }
+    
+    public void addWeatherLocation(WeatherLocation weatherLocation) {
+        this.weatherLocations.put(weatherLocation.getLocation(), weatherLocation);
     }
 
-    public void addWeatherDay(LocalDate date, String location, WeatherDay weatherDay) {
-        this.weatherDays.put(new Pair<>(date, location), weatherDay);
+    public WeatherDay getWeatherDay(LocalDate date, String location) {
+        WeatherLocation weatherLocation = this.weatherLocations.getOrDefault(location, null);
+        if(weatherLocation == null) {
+            return null;
+        }  
+        return weatherLocation.getWeatherDay(date);
+    }
+
+    public void addWeatherDay(String location, WeatherDay weatherDay) {
+        WeatherLocation weatherLocation = this.weatherLocations.getOrDefault(location, null);
+        if(weatherLocation != null) {
+            weatherLocation.addWeatherDay(weatherDay);
+        }
     }
 }
 

@@ -47,20 +47,25 @@ public class EventService {
         CalendarService.validateCalendarItem(item);
         ScheduledEvent event = this.eventManager.getEvent(item.getDate());
         
-        if(event != null) {
-            if(AppConstants.WEATHER_API_AUTO_QUERY) {
-                try {
-                    this.eventManager.makeWeatherQuery(item.getDate());
-                }
-                catch (WeatherApiException ex) {
-                    throw new WeatherApiException("Wystąpił błąd podczas pobierania danych pogodowych dla istniejącego spotkania.", ex);
-                }
-            }
-        }
-        else {
+        if(event == null ) {
             event = new ScheduledEvent("brak danych", "brak danych", "brak danych",
                     String.valueOf(item.getDate().getDayOfMonth()));
         }
+        
+//        if(event != null) {
+//            if(AppConstants.WEATHER_API_AUTO_QUERY) {
+//                try {
+//                    this.eventManager.makeWeatherQuery(item.getDate());
+//                }
+//                catch (WeatherApiException ex) {
+//                    throw new WeatherApiException("Wystąpił błąd podczas pobierania danych pogodowych dla istniejącego spotkania.", ex);
+//                }
+//            }
+//        }
+//        else {
+//            event = new ScheduledEvent("brak danych", "brak danych", "brak danych",
+//                    String.valueOf(item.getDate().getDayOfMonth()));
+//        }
         return event;
     }
    
