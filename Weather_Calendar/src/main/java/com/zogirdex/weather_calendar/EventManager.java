@@ -1,10 +1,13 @@
 package com.zogirdex.weather_calendar;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import java.time.LocalDate;
 import java.io.IOException;
 import java.lang.ClassNotFoundException;
+import java.util.LinkedList;
 
 /**
  *
@@ -18,18 +21,24 @@ import java.lang.ClassNotFoundException;
  */
 public class EventManager {
     private static EventManager instance;
-    private final ObservableMap<LocalDate, ScheduledEvent> events = FXCollections.observableHashMap();
+    private final ObservableMap<LocalDate, ScheduledEvent> events;
    
     private EventManager() {
-        // Przykładowe dane
-        //events.put(LocalDate.now(), new ScheduledEvent("Spotkanie", "Opis spotkania", "5"));
+        ObservableMap<LocalDate, ScheduledEvent> state;
+        try {
+            state = GlobalStateAssistant.loadEventsState();
+        }
+        catch(ClassNotFoundException | IOException ex) {
+            state = FXCollections.observableHashMap();
+            // LOGGER?
+        }
+        this.events = state;
     }
     
     // getInstance wzorca singleton (synchronized, aby ułatwić wielowątkowość, którą można by zaimplementować)
     public static synchronized EventManager getInstance() {
         if (instance == null) {
             instance = new EventManager();
-            //instance = (EventManager)GlobalStateManager.loadState(GlobalStateManager.EVENT_MANAGER_STATE_FILE);
         }
         return instance;
     }

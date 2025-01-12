@@ -11,6 +11,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.ClassNotFoundException;
+import java.util.HashMap;
+import javafx.collections.ObservableMap;
+import java.time.LocalDate;
 import java.io.File;
 
 /**
@@ -18,41 +21,46 @@ import java.io.File;
  * @author tom3k
  */
 public class GlobalStateAssistant {
-    public GlobalStateAssistant() {
-
-    }
+    public GlobalStateAssistant() {}
     public static final String EVENTS_STATE_FILE = "eventmanager.dat";
     public static final String FILES_STATE_FILE = "filemanager.dat";
     
-    public static <T> T loadState(String path, Class<T> classOfT) throws IOException, ClassNotFoundException {
-//        File file = new File(path);
-//        if (!file.exists()) {
-//            throw new FileNotFoundException("Binary file not found: " + path);
-//        }
+    // wymagana jest zmiana z ObservableMap na HashMap, gdyż ObservableMap nie implementuje
+    // interfejsu Serializable.
+    public static final void saveEventsState(ObservableMap<LocalDate, ScheduledEvent> observableMap) throws IOException {
+        HashMap<LocalDate, ScheduledEvent> map = new HashMap<>(observableMap);
+        GlobalStateAssistant.saveState(map, EVENTS_STATE_FILE);
+    }
 
-        FileInputStream fileStream = new FileInputStream(path);
-        ObjectInputStream objectStream = new ObjectInputStream(fileStream);
-        T obj = (T) objectStream.readObject();
-        objectStream.close();
-        fileStream.close();
-
-        return obj;
+    // wymagana jest zmiana z ObservableMap na HashMap, gdyż ObservableMap nie implementuje
+    // interfejsu Serializable.
+    public static final ObservableMap<LocalDate, ScheduledEvent> loadEventsState() throws IOException, ClassNotFoundException {
+        HashMap<LocalDate, ScheduledEvent> loadedMap = GlobalStateAssistant.loadState(EVENTS_STATE_FILE);
+        return javafx.collections.FXCollections.observableMap(loadedMap);
     }
     
-    private static final void saveState(Object obj, String path) throws IOException {
-         FileOutputStream file = new FileOutputStream(path);
-         ObjectOutputStream data = new ObjectOutputStream(file);
-         data.writeObject(obj);
-         data.close();
-         file.close();
+    private static <T> T loadState(String path) throws IOException, ClassNotFoundException {
+        // konstrukcja try-with-resources
+        try (FileInputStream fileStream = new FileInputStream(path);
+            ObjectInputStream objectStream = new ObjectInputStream(fileStream)) {
+            return (T) objectStream.readObject();
+        }
+        catch(IOException ex) {
+            throw new IOException("Binary file not found: " + path + ". Cannot load state.");
+        }
+        catch(ClassNotFoundException ex) {
+            throw new ClassNotFoundException("This object cannot be loaded from this binary file: " + path);
+        }
     }
     
-    public static void saveStates() throws IOException {
-        //GlobalStateAssistant.saveState(EventManager.getInstance().getEvents(), EVENTS_STATE_FILE);
-        GlobalStateAssistant.saveState(FileManager.getInstance().getFileList(), FILES_STATE_FILE);
+    private static void saveState(Object obj, String path) throws IOException {
+        // konstrukcja try-with-resources
+        try (FileOutputStream fileStream = new FileOutputStream(path)) {
+            ObjectOutputStream data = new ObjectOutputStream(fileStream);
+            data.writeObject(obj);
+        }
+        catch(IOException  ex) {
+            throw new IOException("Binary file not found: " + path + ". Cannot load state.");
+        }
     }
-    
-//    public static void loadStates() {
-//        GlobalStateManager.saveState(FileManager.getInstance().getFileList() = (FileManager)GlobalStateManager.loadState(FILES_STATE_FILE);
-//    }
 }

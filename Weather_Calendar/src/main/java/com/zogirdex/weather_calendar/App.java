@@ -18,24 +18,6 @@ public class App extends Application {
     @Override
     public void init() {
         System.out.println("Inicjalizacja aplikacji");
-        
-        String test1 = "jakis obiekt do zapisania 1";
-        String test2 = "jakis obiekt do zapisania 2";
-        
-        try {
-            File file1 = new File("plik1.json");
-            File file2 = new File("plik2.json");
-            FileManager.getInstance().saveToNewFile(test1, file1);
-            FileManager.getInstance().saveToNewFile(test2, file2);
-            System.out.println(file1.getAbsolutePath());
-            System.out.println(file2.getAbsolutePath());
-            
-        }
-        catch(IOException ex) {
-            ex.printStackTrace();
-        }
-        
-        
     }
     
     @Override
@@ -47,10 +29,10 @@ public class App extends Application {
     @Override
     public void stop() {
         try {
-            GlobalStateAssistant.saveStates();
-            
+            //GlobalStateAssistant.saveStates();
+            GlobalStateAssistant.saveEventsState(EventManager.getInstance().getEvents());
             //testowo
-            FileManager.getInstance().saveToNewFile(EventManager.getInstance().getEvents(), new File("events.json"));
+            //FileManager.getInstance().saveToNewFile(EventManager.getInstance().getEvents(), new File("events.json"));
         }
         catch (IOException ex) {
             ex.printStackTrace();
