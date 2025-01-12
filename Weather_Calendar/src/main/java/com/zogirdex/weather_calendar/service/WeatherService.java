@@ -2,9 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.zogirdex.weather_calendar;
+package com.zogirdex.weather_calendar.service;
 
+import com.zogirdex.weather_calendar.service.CalendarService;
+import com.zogirdex.weather_calendar.manager.WeatherManager;
 import com.google.gson.Gson;
+import com.zogirdex.weather_calendar.uiutil.CalendarItem;
+import com.zogirdex.weather_calendar.model.WeatherDay;
+import com.zogirdex.weather_calendar.model.WeatherQuery;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;

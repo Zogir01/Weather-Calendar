@@ -1,4 +1,4 @@
-package com.zogirdex.weather_calendar;
+package com.zogirdex.weather_calendar.uiutil;
 
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;

@@ -1,4 +1,9 @@
-package com.zogirdex.weather_calendar;
+package com.zogirdex.weather_calendar.service;
+
+import com.zogirdex.weather_calendar.uiutil.CalendarItem;
+import com.zogirdex.weather_calendar.model.ScheduledEvent;
+import com.zogirdex.weather_calendar.service.CalendarService;
+import com.zogirdex.weather_calendar.manager.EventManager;
 
 /**
  *

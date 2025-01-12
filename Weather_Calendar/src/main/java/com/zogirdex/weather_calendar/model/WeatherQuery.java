@@ -1,4 +1,4 @@
-package com.zogirdex.weather_calendar;
+package com.zogirdex.weather_calendar.model;
 
 import java.util.List;
 //import javax.annotation.Generated;

@@ -1,5 +1,6 @@
-package com.zogirdex.weather_calendar;
+package com.zogirdex.weather_calendar.manager;
 
+import com.zogirdex.weather_calendar.model.WeatherDay;
 import java.time.LocalDate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;

@@ -1,4 +1,4 @@
-package com.zogirdex.weather_calendar;
+package com.zogirdex.weather_calendar.model;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.zogirdex.weather_calendar;
+package com.zogirdex.weather_calendar.util;
 
+import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
@@ -22,6 +23,7 @@ import java.io.File;
  */
 public class GlobalStateAssistant {
     public GlobalStateAssistant() {}
+    // pomyslec nad tym: getClass().getClassLoader().getResourceAsStream(EVENTS_STATE_FILE);
     public static final String EVENTS_STATE_FILE = "eventmanager.dat";
     public static final String FILES_STATE_FILE = "filemanager.dat";
     

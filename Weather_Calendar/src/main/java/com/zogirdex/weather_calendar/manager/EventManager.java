@@ -1,5 +1,7 @@
-package com.zogirdex.weather_calendar;
+package com.zogirdex.weather_calendar.manager;
 
+import com.zogirdex.weather_calendar.util.GlobalStateAssistant;
+import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import javafx.collections.FXCollections;

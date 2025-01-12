@@ -1,5 +1,10 @@
-package com.zogirdex.weather_calendar;
+package com.zogirdex.weather_calendar.controller;
 
+import com.zogirdex.weather_calendar.uiutil.CalendarItem;
+import com.zogirdex.weather_calendar.model.WeatherDay;
+import com.zogirdex.weather_calendar.model.ScheduledEvent;
+import com.zogirdex.weather_calendar.service.EventService;
+import com.zogirdex.weather_calendar.service.WeatherService;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
