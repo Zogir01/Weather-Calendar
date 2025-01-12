@@ -5,6 +5,7 @@
 package com.zogirdex.weather_calendar.util;
 
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
+import com.zogirdex.weather_calendar.util.GlobalStateException;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
@@ -29,40 +30,40 @@ public class GlobalStateAssistant {
     
     // wymagana jest zmiana z ObservableMap na HashMap, gdyż ObservableMap nie implementuje
     // interfejsu Serializable.
-    public static final void saveEventsState(ObservableMap<LocalDate, ScheduledEvent> observableMap) throws IOException {
+    public static final void saveEventsState(ObservableMap<LocalDate, ScheduledEvent> observableMap) throws GlobalStateException {
         HashMap<LocalDate, ScheduledEvent> map = new HashMap<>(observableMap);
         GlobalStateAssistant.saveState(map, EVENTS_STATE_FILE);
     }
 
     // wymagana jest zmiana z ObservableMap na HashMap, gdyż ObservableMap nie implementuje
     // interfejsu Serializable.
-    public static final ObservableMap<LocalDate, ScheduledEvent> loadEventsState() throws IOException, ClassNotFoundException {
+    public static final ObservableMap<LocalDate, ScheduledEvent> loadEventsState() throws GlobalStateException {
         HashMap<LocalDate, ScheduledEvent> loadedMap = GlobalStateAssistant.loadState(EVENTS_STATE_FILE);
         return javafx.collections.FXCollections.observableMap(loadedMap);
     }
     
-    private static <T> T loadState(String path) throws IOException, ClassNotFoundException {
+    private static <T> T loadState(String path) throws GlobalStateException {
         // konstrukcja try-with-resources
         try (FileInputStream fileStream = new FileInputStream(path);
             ObjectInputStream objectStream = new ObjectInputStream(fileStream)) {
             return (T) objectStream.readObject();
         }
         catch(IOException ex) {
-            throw new IOException("Binary file not found: " + path + ". Cannot load state.");
+            throw new GlobalStateException("Binary file not found: " + path + ". Cannot load state.", ex);
         }
         catch(ClassNotFoundException ex) {
-            throw new ClassNotFoundException("This object cannot be loaded from this binary file: " + path);
+            throw new GlobalStateException("This object cannot be loaded from this binary file: " + path, ex);
         }
     }
     
-    private static void saveState(Object obj, String path) throws IOException {
+    private static void saveState(Object obj, String path) throws GlobalStateException {
         // konstrukcja try-with-resources
         try (FileOutputStream fileStream = new FileOutputStream(path)) {
             ObjectOutputStream data = new ObjectOutputStream(fileStream);
             data.writeObject(obj);
         }
         catch(IOException  ex) {
-            throw new IOException("Binary file not found: " + path + ". Cannot load state.");
+            throw new GlobalStateException("Binary file not found: " + path + ". Cannot load state.", ex);
         }
     }
 }

@@ -1,30 +1,29 @@
-
 package com.zogirdex.weather_calendar.model;
 
-//import javax.annotation.Generated;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.DoubleProperty;
 
-//@Generated("jsonschema2pojo")
 public class WeatherDay {
 
-public String datetime;
-public double temp; // temperatura
-public double humidity; // wilgotnosc
-public double precip; // opady
-public double precipprob; // szansa opadów
-public double snow; // śnieg
-public double pressure; // ciśnienie
-public double cloudcover; // zachmurzenie
-public String sunrise; // wschód słońca
-public String sunset; // zachód słońca
-public String conditions; // warunki
-public String description; // opis
-public String icon; // ikona
+    private String datetime;
+    private double temp; 
+    private double humidity; 
+    private double precip; 
+    private double precipprob; 
+    private double snow; 
+    private double pressure; 
+    private double cloudcover; 
+    private String sunrise; 
+    private String sunset; 
+    private String conditions; 
+    private String description; 
+    private String icon;
 
-public WeatherDay() {
-}
+    public WeatherDay() { }
 
-public WeatherDay(String datetime, double temp, double humidity, double precip, double precipprob, double snow, double pressure, double cloudcover, String sunrise, String sunset, String conditions, String description, String icon) {
-        super();
+    public WeatherDay(String datetime, double temp, double humidity, double precip, double precipprob, double snow, double pressure, double cloudcover, String sunrise, String sunset, String conditions, String description, String icon) {
         this.datetime = datetime;
         this.temp = temp;
         this.humidity = humidity;
@@ -40,108 +39,55 @@ public WeatherDay(String datetime, double temp, double humidity, double precip, 
         this.icon = icon;
     }
 
-public String getDatetime() {
-return datetime;
-}
+    public StringProperty datetimeProperty() { return new SimpleStringProperty(datetime); }
+    public String getDatetime() { return datetime; } 
+    public void setDatetime(String datetime) { this.datetime = datetime; }
 
-public void setDatetime(String datetime) {
-this.datetime = datetime;
-}
+    public DoubleProperty tempProperty() { return new SimpleDoubleProperty(temp); }
+    public double getTemp() { return temp; } 
+    public void setTemp(double temp) { this.temp = temp; }
 
-public double getTemp() {
-return temp;
-}
+    public DoubleProperty humidityProperty() { return new SimpleDoubleProperty(humidity); }
+    public double getHumidity() { return humidity; } 
+    public void setHumidity(double humidity) { this.humidity = humidity; }
 
-public void setTemp(double temp) {
-this.temp = temp;
-}
+    public DoubleProperty precipProperty() { return new SimpleDoubleProperty(precip); }
+    public double getPrecip() { return precip; } 
+    public void setPrecip(double precip) { this.precip = precip; }
 
-public double getHumidity() {
-return humidity;
-}
+    public DoubleProperty precipprobProperty() { return new SimpleDoubleProperty(precipprob); }
+    public double getPrecipprob() { return precipprob; } 
+    public void setPrecipprob(double precipprob) { this.precipprob = precipprob; }
 
-public void setHumidity(double humidity) {
-this.humidity = humidity;
-}
+    public DoubleProperty snowProperty() { return new SimpleDoubleProperty(snow); }
+    public double getSnow() { return snow; } 
+    public void setSnow(double snow) { this.snow = snow; }
 
-public double getPrecip() {
-return precip;
-}
+    public DoubleProperty pressureProperty() { return new SimpleDoubleProperty(pressure); }
+    public double getPressure() { return pressure; } 
+    public void setPressure(double pressure) { this.pressure = pressure; }
 
-public void setPrecip(double precip) {
-this.precip = precip;
-}
+    public DoubleProperty cloudcoverProperty() { return new SimpleDoubleProperty(cloudcover); }
+    public double getCloudcover() { return cloudcover; } 
+    public void setCloudcover(double cloudcover) { this.cloudcover = cloudcover; }
 
-public double getPrecipprob() {
-return precipprob;
-}
+    public StringProperty sunriseProperty() { return new SimpleStringProperty(sunrise); }
+    public String getSunrise() { return sunrise; } 
+    public void setSunrise(String sunrise) { this.sunrise = sunrise; }
 
-public void setPrecipprob(double precipprob) {
-this.precipprob = precipprob;
-}
+    public StringProperty sunsetProperty() { return new SimpleStringProperty(sunset); }
+    public String getSunset() { return sunset; } 
+    public void setSunset(String sunset) { this.sunset = sunset; }
 
-public double getSnow() {
-return snow;
-}
+    public StringProperty conditionsProperty() { return new SimpleStringProperty(conditions); }
+    public String getConditions() { return conditions; } 
+    public void setConditions(String conditions) { this.conditions = conditions; }
 
-public void setSnow(double snow) {
-this.snow = snow;
-}
+    public StringProperty descriptionProperty() { return new SimpleStringProperty(description); }
+    public String getDescription() { return description; } 
+    public void setDescription(String description) { this.description = description; }
 
-public double getPressure() {
-return pressure;
-}
-
-public void setPressure(double pressure) {
-this.pressure = pressure;
-}
-
-public double getCloudcover() {
-return cloudcover;
-}
-
-public void setCloudcover(double cloudcover) {
-this.cloudcover = cloudcover;
-}
-
-public String getSunrise() {
-return sunrise;
-}
-
-public void setSunrise(String sunrise) {
-this.sunrise = sunrise;
-}
-
-public String getSunset() {
-return sunset;
-}
-
-public void setSunset(String sunset) {
-this.sunset = sunset;
-}
-
-public String getConditions() {
-return conditions;
-}
-
-public void setConditions(String conditions) {
-this.conditions = conditions;
-}
-
-public String getDescription() {
-return description;
-}
-
-public void setDescription(String description) {
-this.description = description;
-}
-
-public String getIcon() {
-return icon;
-}
-
-public void setIcon(String icon) {
-this.icon = icon;
-}
-
+    public StringProperty iconProperty() { return new SimpleStringProperty(icon); }
+    public String getIcon() { return icon; } 
+    public void setIcon(String icon) { this.icon = icon; }
 }

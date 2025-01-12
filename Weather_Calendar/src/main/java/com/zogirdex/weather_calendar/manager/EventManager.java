@@ -1,7 +1,11 @@
 package com.zogirdex.weather_calendar.manager;
 
+import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.util.GlobalStateAssistant;
+import com.zogirdex.weather_calendar.util.GlobalStateException;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
+import com.zogirdex.weather_calendar.util.WeatherApiAssistant;
+import com.zogirdex.weather_calendar.util.WeatherApiException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import javafx.collections.FXCollections;
@@ -30,7 +34,7 @@ public class EventManager {
         try {
             state = GlobalStateAssistant.loadEventsState();
         }
-        catch(ClassNotFoundException | IOException ex) {
+        catch(GlobalStateException ex) {
             state = FXCollections.observableHashMap();
             // LOGGER?
         }
@@ -60,6 +64,20 @@ public class EventManager {
     public boolean eventExists(LocalDate date) {
         return this.events.containsKey(date);
     }
+    
+     public void makeWeatherQuery (LocalDate date) throws WeatherApiException, IllegalArgumentException{
+           // aktualizacja danych pogodowych w przypadku znalezienia eventu.
+           try {
+               ScheduledEvent event = this.events.get(date);
+               if(event == null) {
+                   throw new IllegalArgumentException("Cannot find any event with the assigned date: " + date.toString());
+               }
+                WeatherApiAssistant.makeQuery(event.getLocation());
+           }
+           catch(WeatherApiException ex) {
+               throw new WeatherApiException("Błąd podczas tworzenia zapytania do API.", ex);
+           }
+       }
     
 //    public final void saveToFile() {
 //        FileAssistant.saveToFile(events);

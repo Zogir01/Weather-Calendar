@@ -2,6 +2,7 @@ package com.zogirdex.weather_calendar;
 
 import com.zogirdex.weather_calendar.uiutil.StageManager;
 import com.zogirdex.weather_calendar.util.GlobalStateAssistant;
+import com.zogirdex.weather_calendar.util.GlobalStateException;
 import com.zogirdex.weather_calendar.manager.EventManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -37,9 +38,9 @@ public class App extends Application {
             //testowo
             //FileManager.getInstance().saveToNewFile(EventManager.getInstance().getEvents(), new File("events.json"));
         }
-        catch (IOException ex) {
+        catch (GlobalStateException ex) {
             ex.printStackTrace();
-            //logger: pojawił się problem podczas zapisu stanu globalnych obiektów.
+            //logger: pojawił się problem podczas zapisu stanu globalnych obiektów?
         }
         
         

@@ -4,11 +4,16 @@ import com.zogirdex.weather_calendar.uiutil.CalendarButton;
 import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.manager.EventManager;
+import com.zogirdex.weather_calendar.util.WeatherApiAssistant;
+import com.zogirdex.weather_calendar.util.WeatherApiException;
+import com.zogirdex.weather_calendar.config.AppConstants;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
 import java.util.List;
 import java.util.ArrayList;
+import java.io.IOException;
+
 
 /**
  *
@@ -25,7 +30,8 @@ public class CalendarService {
         this.eventManager = EventManager.getInstance();
     }
     
-    public List<CalendarItem> generateCalendar(Year year, Month month, boolean showDayNumbers, boolean bindToEvent) {
+    public List<CalendarItem> generateCalendar(Year year, Month month, boolean showDayNumbers, 
+            boolean bindToEvent) throws WeatherApiException {
             List<CalendarItem> calendarItems = new ArrayList<>();
 
             int daysInMonth = month.length(year.isLeap());
@@ -52,6 +58,16 @@ public class CalendarService {
                 
                 if(event != null) {
                     button.textProperty().bind(event.calendarTextProperty());
+                    
+                    if(AppConstants.WEATHER_API_AUTO_QUERY) {
+                        // aktualizacja danych pogodowych w przypadku znalezienia eventu.
+                        try {
+                            eventManager.makeWeatherQuery(date);
+                        }
+                        catch(WeatherApiException ex) {
+                            throw new WeatherApiException("Wystąpił błąd podczas pobierania danych pogodowych podczas generowania kalendarza.", ex);
+                        }
+                    }
                 }
 
                 calendarItems.add(item);
@@ -65,7 +81,7 @@ public class CalendarService {
     
     public static void validateCalendarItem(CalendarItem item) {
         if (item == null) {
-            throw new IllegalArgumentException("Given calendarItem item was null.");
+            throw new IllegalArgumentException("Przekazano pusty CalendarItem.");
         }
     }
 }
