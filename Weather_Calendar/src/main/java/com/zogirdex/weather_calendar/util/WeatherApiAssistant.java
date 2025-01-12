@@ -70,12 +70,12 @@ public class WeatherApiAssistant {
                 if (weatherLocation == null) {
                     weatherManager.addWeatherLocation(new WeatherLocation(location));
                 }
-                if(!readOneDate) {
+                if(!readOneDate) { // dodaje 14 nowych WeatherDay
                     for(WeatherDay day : query.getDays()) {
                         weatherManager.addWeatherDay(location, day);
                     }
                 }
-                else {
+                else { // dodaje jeden WeatherDay do określonej daty
                     for(WeatherDay day : query.getDays()) {
                         LocalDate dateFromQuery = LocalDate.parse(day.getDatetime());
                         if(dateFromQuery.equals(date)) {
@@ -86,6 +86,7 @@ public class WeatherApiAssistant {
                 conn.disconnect();
             }
             else {
+                // można by obsłużyć jeszcze więcej http status codes.
                 throw new WeatherApiException("Error while creating weather API query, get response status code = " 
                         + conn.getResponseCode());
             }

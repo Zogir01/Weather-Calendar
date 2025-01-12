@@ -39,6 +39,17 @@ public class EventManager {
             // LOGGER?
         }
         this.events = state;
+        
+        if(AppConstants.WEATHER_API_AUTO_QUERY && !this.events.isEmpty()) {
+            for(ScheduledEvent event : this.events.values()) {
+                try {
+                    WeatherApiAssistant.makeQuery(event.getLocation());
+                }
+                catch(WeatherApiException ex) {
+                    //throw new WeatherApiException("Error while performing initial query to load weather data.", ex);
+                 }
+            }
+        }
     }
     
     // getInstance wzorca singleton (synchronized, aby ułatwić wielowątkowość, którą można by zaimplementować)
@@ -75,7 +86,7 @@ public class EventManager {
                 WeatherApiAssistant.makeQuery(event.getLocation());
            }
            catch(WeatherApiException ex) {
-               throw new WeatherApiException("Błąd podczas tworzenia zapytania do API.", ex);
+               throw new WeatherApiException("Error while performing query.", ex);
            }
        }
 }

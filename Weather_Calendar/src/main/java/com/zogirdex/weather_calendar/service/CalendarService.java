@@ -59,15 +59,15 @@ public class CalendarService {
                 if(event != null) {
                     button.textProperty().bind(event.calendarTextProperty());
                     
-                    if(AppConstants.WEATHER_API_AUTO_QUERY) {
-                        // aktualizacja danych pogodowych w przypadku znalezienia eventu.
-                        try {
-                            eventManager.makeWeatherQuery(date);
-                        }
-                        catch(WeatherApiException ex) {
-                            throw new WeatherApiException("Wystąpił błąd podczas pobierania danych pogodowych podczas generowania kalendarza.", ex);
-                        }
-                    }
+//                    if(AppConstants.WEATHER_API_AUTO_QUERY) {
+//                        // aktualizacja danych pogodowych w przypadku znalezienia eventu.
+//                        try {
+//                            eventManager.makeWeatherQuery(date);
+//                        }
+//                        catch(WeatherApiException ex) {
+//                            throw new WeatherApiException("Wystąpił błąd podczas pobierania danych pogodowych podczas generowania kalendarza.", ex);
+//                        }
+//                    }
                 }
 
                 calendarItems.add(item);
