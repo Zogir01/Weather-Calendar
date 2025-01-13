@@ -1,10 +1,16 @@
-package com.zogirdex.weather_calendar;
+package com.zogirdex.weather_calendar.service;
 
+import com.zogirdex.weather_calendar.uiutil.CalendarButton;
+import com.zogirdex.weather_calendar.uiutil.CalendarItem;
+import com.zogirdex.weather_calendar.model.ScheduledEvent;
+import com.zogirdex.weather_calendar.manager.EventManager;
+import com.zogirdex.weather_calendar.util.WeatherApiException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
 import java.util.List;
 import java.util.ArrayList;
+
 
 /**
  *
@@ -21,7 +27,8 @@ public class CalendarService {
         this.eventManager = EventManager.getInstance();
     }
     
-    public List<CalendarItem> generateCalendar(Year year, Month month, boolean showDayNumbers, boolean bindToEvent) {
+    public List<CalendarItem> generateCalendar(Year year, Month month, boolean showDayNumbers, 
+            boolean bindToEvent) throws WeatherApiException {
             List<CalendarItem> calendarItems = new ArrayList<>();
 
             int daysInMonth = month.length(year.isLeap());
@@ -33,7 +40,7 @@ public class CalendarService {
                 LocalDate date = LocalDate.of(year.getValue(), month, day);
                 String initialText;
                 CalendarButton button;
-
+                
                 if(showDayNumbers) {
                     initialText = String.valueOf(date.getDayOfMonth()).concat("\n");
                     button = new CalendarButton(String.valueOf(date.getDayOfMonth()), date.toString());
@@ -57,5 +64,11 @@ public class CalendarService {
                 }
          }
          return calendarItems;
+    }
+    
+    public static void validateCalendarItem(CalendarItem item) {
+        if (item == null) {
+            throw new IllegalArgumentException("Przekazano pusty CalendarItem.");
+        }
     }
 }

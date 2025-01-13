@@ -1,11 +1,17 @@
 package com.zogirdex.weather_calendar;
 
+import com.zogirdex.weather_calendar.uiutil.StageManager;
+import com.zogirdex.weather_calendar.util.GlobalStateAssistant;
+import com.zogirdex.weather_calendar.util.GlobalStateException;
+import com.zogirdex.weather_calendar.manager.EventManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import java.io.IOException;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -20,16 +26,23 @@ public class App extends Application {
     
     @Override
     public void start(Stage stage) throws IOException {
-        StageManager.getInstance().openNewStage("calendar.fxml", "Kalendarz", true);
+        StageManager.getInstance().openNewStage("/com/zogirdex/weather_calendar/calendar.fxml", "Kalendarz", true);
     }
     
     @Override
     public void stop() {
+        try {
+            GlobalStateAssistant.saveEventsState(EventManager.getInstance().getEvents());
+            //FileManager.getInstance().saveToNewFile(EventManager.getInstance().getEvents(), new File("events.json"));
+        }
+        catch (GlobalStateException ex) {
+            ex.printStackTrace();
+            //logger: pojawił się problem podczas zapisu stanu globalnych obiektów?
+        }
         System.out.println("Aplikacja zakonczona.");
     }
 
     public static void main(String[] args) {
         launch();
     }
-
 }

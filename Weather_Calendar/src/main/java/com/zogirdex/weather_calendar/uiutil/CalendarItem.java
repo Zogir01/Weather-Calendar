@@ -1,4 +1,4 @@
-package com.zogirdex.weather_calendar;
+package com.zogirdex.weather_calendar.uiutil;
 
 import java.time.LocalDate;
 
