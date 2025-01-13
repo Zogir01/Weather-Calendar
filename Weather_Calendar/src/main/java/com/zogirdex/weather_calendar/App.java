@@ -4,6 +4,7 @@ import com.zogirdex.weather_calendar.uiutil.StageManager;
 import com.zogirdex.weather_calendar.util.GlobalStateAssistant;
 import com.zogirdex.weather_calendar.util.GlobalStateException;
 import com.zogirdex.weather_calendar.manager.EventManager;
+import com.zogirdex.weather_calendar.config.AppConstants;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -20,7 +21,7 @@ public class App extends Application {
     
     @Override
     public void start(Stage stage) throws IOException {
-        StageManager.getInstance().openNewStage("/com/zogirdex/weather_calendar/calendar.fxml", "Kalendarz", true, 650, 400);
+        StageManager.getInstance().openNewStage(AppConstants.CALENDAR_FXML_PATH, "Kalendarz", true, 650, 400);
     }
     
     @Override

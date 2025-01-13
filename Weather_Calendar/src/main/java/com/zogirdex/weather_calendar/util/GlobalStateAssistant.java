@@ -1,6 +1,7 @@
 package com.zogirdex.weather_calendar.util;
 
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
+import com.zogirdex.weather_calendar.config.AppConstants;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
@@ -13,24 +14,23 @@ import java.time.LocalDate;
 /**
  *
  * @author tom3k
+ * 
  */
 public class GlobalStateAssistant {
     public GlobalStateAssistant() {}
     // pomyslec nad tym: getClass().getClassLoader().getResourceAsStream(EVENTS_STATE_FILE);
-    public static final String EVENTS_STATE_FILE = "eventmanager.dat";
-    public static final String FILES_STATE_FILE = "filemanager.dat";
     
     // wymagana jest zmiana z ObservableMap na HashMap, gdyż ObservableMap nie implementuje
     // interfejsu Serializable.
     public static final void saveEventsState(ObservableMap<LocalDate, ScheduledEvent> observableMap) throws GlobalStateException {
         HashMap<LocalDate, ScheduledEvent> map = new HashMap<>(observableMap);
-        GlobalStateAssistant.saveState(map, EVENTS_STATE_FILE);
+        GlobalStateAssistant.saveState(map, AppConstants.EVENTS_STATE_PATH);
     }
 
     // wymagana jest zmiana z ObservableMap na HashMap, gdyż ObservableMap nie implementuje
     // interfejsu Serializable.
     public static final ObservableMap<LocalDate, ScheduledEvent> loadEventsState() throws GlobalStateException {
-        HashMap<LocalDate, ScheduledEvent> loadedMap = GlobalStateAssistant.loadState(EVENTS_STATE_FILE);
+        HashMap<LocalDate, ScheduledEvent> loadedMap = GlobalStateAssistant.loadState(AppConstants.EVENTS_STATE_PATH);
         return javafx.collections.FXCollections.observableMap(loadedMap);
     }
     

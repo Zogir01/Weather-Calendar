@@ -6,6 +6,7 @@ import com.zogirdex.weather_calendar.uiutil.CalendarButton;
 import com.zogirdex.weather_calendar.uiutil.StageManager;
 import com.zogirdex.weather_calendar.service.CalendarService;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
+import com.zogirdex.weather_calendar.config.AppConstants;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import java.net.URL;
@@ -18,8 +19,6 @@ import java.time.Year;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.ColumnConstraints;
 
 public class CalendarController implements Initializable {
     private CalendarService calendarService;
@@ -83,7 +82,7 @@ public class CalendarController implements Initializable {
     private void dayButton_click(CalendarItem item) {
         try {
          EventController controller = StageManager.getInstance().openNewStage(
-                 "/com/zogirdex/weather_calendar/event.fxml", item.getDate().toString(), true, 0.0, 0.0);
+                 AppConstants.EVENT_FXML_PATH, item.getDate().toString(), true, 0.0, 0.0);
          controller.loadData(item);
         }
        catch(Exception ex) {
