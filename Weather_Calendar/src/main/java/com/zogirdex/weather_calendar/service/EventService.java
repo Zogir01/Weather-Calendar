@@ -3,12 +3,8 @@ package com.zogirdex.weather_calendar.service;
 import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
-import com.zogirdex.weather_calendar.service.CalendarService;
 import com.zogirdex.weather_calendar.manager.EventManager;
-import com.zogirdex.weather_calendar.util.WeatherApiAssistant;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
-
-import java.io.IOException;
 
 /**
  *

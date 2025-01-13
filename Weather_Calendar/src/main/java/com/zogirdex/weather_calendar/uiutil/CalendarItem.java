@@ -1,6 +1,5 @@
 package com.zogirdex.weather_calendar.uiutil;
 
-import com.zogirdex.weather_calendar.uiutil.CalendarButton;
 import java.time.LocalDate;
 
 /**

@@ -15,9 +15,6 @@ import javafx.event.ActionEvent;
  * 
  */
 public class StageManager {
-    //private static final String CALENDAR_SCENE_FXML = "test.fxml";
-    //private static final String SECONDARY_SCENE_FXML = "secondary.fxml";
-    
     /**
      * Singleton pattern. Instance of WindowManager
      */
@@ -84,26 +81,4 @@ public class StageManager {
         stage.setScene(scene);
         return loader.getController();
      }
-
-////////////////////////////////////////////////// OPCJA Z ExtController ////////////////////////////////////////////////////////
-//        // tworząc nowe okno (openNewWindow()):
-//        T controller = loader.getController();
-//        // jeśli dziedziczy po ExtController, ustawiamy Stage
-//        if(controller instanceof ExtController) {
-//            ((ExtController)controller).setStage(stage);
-//        }
-//    public <T> T switchScene(String fxmlPath, Stage stage) throws IOException {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-//        Parent root = loader.load();
-//        Scene scene = new Scene(root);
-//        stage.setScene(scene);
-//        return loader.getController();
-//    }
-//     public <T> T switchScene(String fxmlPath, ActionEvent event) throws IOException {
-//          return switchScene(fxmlPath, this.getStage(event));
-//     }
-//        private Stage getStage(ActionEvent event) {
-//        return (Stage)((Node)event.getSource()).getScene().getWindow();
-//    }
-////////////////////////////////////////////////// OPCJA Z ExtController ////////////////////////////////////////////////////////
 }

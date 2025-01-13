@@ -19,9 +19,6 @@ import java.util.LinkedList;
  *
  * @author tom3k
  * 
- * Może lepsze byłoby rozdzielenie na "EventManager" oraz "WeatherManager", tymbardziej
- * jak dojdzie więcej funkcji (np. odczyt/zapis do pliku).
- * 
  * EventManager przechowuje globalny stan aplikacji
  * 
  */
@@ -47,6 +44,7 @@ public class EventManager {
                 }
                 catch(WeatherApiException ex) {
                     //throw new WeatherApiException("Error while performing initial query to load weather data.", ex);
+                    // tutaj można by coś rzucić
                  }
             }
         }

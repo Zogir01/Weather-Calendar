@@ -18,9 +18,7 @@ import java.time.Year;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import java.io.IOException;
 
-//public class CalendarController extends ExtController implements Initializable {
 public class CalendarController implements Initializable {
     private CalendarService calendarService;
     private final int YEARS_RANGE = 4;
@@ -29,7 +27,6 @@ public class CalendarController implements Initializable {
     @FXML private ComboBox<Year> comboBoxYears;
     @FXML private GridPane gridPaneCalendar;
 
-    
     @Override
     public void initialize​(URL location, ResourceBundle resources) {
         this.calendarService = new CalendarService();

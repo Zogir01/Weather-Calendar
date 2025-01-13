@@ -10,17 +10,12 @@ import java.util.Map;
  * na nowo skompilować.
  * 
  */
-
 public class AppConstants {
 
     // App general settings
 //    public static final String APP_NAME = "Weather Calendar";
-//    public static final String APP_VERSION = "1.0";
+//    public static final String APP_VERSION = "0.1";
       public static final boolean DEBUG_MODE = true;
-
-    // Server settings
-//    public static final String SERVER_HOST = "localhost";
-//    public static final int SERVER_PORT = 8080;
 
     // API settings
     public static final String WEATHER_API_BASE_URL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/";
@@ -37,12 +32,7 @@ public class AppConstants {
     //public static final int WEATHER_API_TIMEOUT = 5000; // w milisekundach
     //String url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/%s?unitGroup=metric&elements=datetime%2Cname%2Ctemp%2Chumidity%2Cprecip%2Cprecipprob%2Csnow%2Cpressure%2Ccloudcover%2Csunrise%2Csunset%2Cconditions%2Cdescription%2Cicon&include=days%2Cfcst&key=VHEMMB29AXXDT86HR399VV4RT&contentType=json";
     
-    
-
     // Logger settings
 //    public static final String LOG_LEVEL = "INFO";
 //    public static final String LOG_FILE = "logs/app.log";
-
-    // 
-//    public static final String DEFAULT_LOCATION = "Warsaw, Poland";
 }

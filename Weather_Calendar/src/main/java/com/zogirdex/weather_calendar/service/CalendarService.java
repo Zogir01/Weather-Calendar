@@ -4,15 +4,12 @@ import com.zogirdex.weather_calendar.uiutil.CalendarButton;
 import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.manager.EventManager;
-import com.zogirdex.weather_calendar.util.WeatherApiAssistant;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
-import com.zogirdex.weather_calendar.config.AppConstants;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
 import java.util.List;
 import java.util.ArrayList;
-import java.io.IOException;
 
 
 /**
@@ -58,16 +55,6 @@ public class CalendarService {
                 
                 if(event != null) {
                     button.textProperty().bind(event.calendarTextProperty());
-                    
-//                    if(AppConstants.WEATHER_API_AUTO_QUERY) {
-//                        // aktualizacja danych pogodowych w przypadku znalezienia eventu.
-//                        try {
-//                            eventManager.makeWeatherQuery(date);
-//                        }
-//                        catch(WeatherApiException ex) {
-//                            throw new WeatherApiException("Wystąpił błąd podczas pobierania danych pogodowych podczas generowania kalendarza.", ex);
-//                        }
-//                    }
                 }
 
                 calendarItems.add(item);
