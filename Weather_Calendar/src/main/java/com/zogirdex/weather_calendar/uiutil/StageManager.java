@@ -1,4 +1,4 @@
-package com.zogirdex.weather_calendar;
+package com.zogirdex.weather_calendar.uiutil;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,28 +14,25 @@ import javafx.event.ActionEvent;
  * @author tom3k
  * 
  */
-public class WindowManager {
-    //private static final String CALENDAR_SCENE_FXML = "test.fxml";
-    //private static final String SECONDARY_SCENE_FXML = "secondary.fxml";
-    
+public class StageManager {
     /**
      * Singleton pattern. Instance of WindowManager
      */
-    private static WindowManager instance;
+    private static StageManager instance;
 
      /**
      * Singleton pattern. Private constructor to prevent new instances from being created
      */
-    private WindowManager() {}
+    private StageManager() {}
     
     /**
      * Singleton pattern. Method to get instance of WindowManager, if instance is null, new instance will be created.
      * 
      * @return Instance of WindowManager.
      */
-    public static WindowManager getInstance() {
+    public static StageManager getInstance() {
         if (instance == null) {
-            instance = new WindowManager();
+            instance = new StageManager();
         }
         return instance;
     }
@@ -52,7 +49,7 @@ public class WindowManager {
      * @return Controller of new opened window assigned to input fxml file.
      * @throws IOException if FXML file wasn't loaded correctly.
      */
-    public <T> T openNewWindow(String fxmlPath, String title, boolean isModal) throws IOException {        
+    public <T> T openNewStage(String fxmlPath, String title, boolean isModal) throws IOException {        
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
         Parent root = loader.load();
         Scene scene = new Scene(root);
@@ -84,26 +81,4 @@ public class WindowManager {
         stage.setScene(scene);
         return loader.getController();
      }
-
-////////////////////////////////////////////////// OPCJA Z ExtController ////////////////////////////////////////////////////////
-//        // tworząc nowe okno (openNewWindow()):
-//        T controller = loader.getController();
-//        // jeśli dziedziczy po ExtController, ustawiamy Stage
-//        if(controller instanceof ExtController) {
-//            ((ExtController)controller).setStage(stage);
-//        }
-//    public <T> T switchScene(String fxmlPath, Stage stage) throws IOException {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-//        Parent root = loader.load();
-//        Scene scene = new Scene(root);
-//        stage.setScene(scene);
-//        return loader.getController();
-//    }
-//     public <T> T switchScene(String fxmlPath, ActionEvent event) throws IOException {
-//          return switchScene(fxmlPath, this.getStage(event));
-//     }
-//        private Stage getStage(ActionEvent event) {
-//        return (Stage)((Node)event.getSource()).getScene().getWindow();
-//    }
-////////////////////////////////////////////////// OPCJA Z ExtController ////////////////////////////////////////////////////////
 }

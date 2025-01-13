@@ -1,4 +1,4 @@
-package com.zogirdex.weather_calendar;
+package com.zogirdex.weather_calendar.uiutil;
 
 import javafx.scene.control.Button;
 import javafx.scene.text.Font;
@@ -6,9 +6,9 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.control.Tooltip;
 import javafx.util.Duration;
 
-public class DayButton extends Button {
+public class CalendarButton extends Button {
     
-    public DayButton(String text, String tooltipText) {
+    public CalendarButton(String text, String tooltipText) {
         super(text);
         this.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -22,6 +22,14 @@ public class DayButton extends Button {
         tp.setShowDuration(Duration.seconds(5)); 
         tp.setHideDelay(Duration.millis(200));
         this.setTooltip(tp);
+    }
+    
+    public void setBackgroundImage(String url) {
+        this.setStyle(this.getStyle()
+                + String.format("-fx-background-image: url('%s');", url)
+                + "-fx-background-size: cover;"
+                + "-fx-background-repeat: no-repeat;"
+        );
     }
     
 //    private void initializeStyle() {
