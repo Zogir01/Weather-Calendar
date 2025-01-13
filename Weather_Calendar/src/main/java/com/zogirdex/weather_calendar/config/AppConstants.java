@@ -15,6 +15,13 @@ public class AppConstants {
     // App general settings
 //    public static final String APP_NAME = "Weather Calendar";
 //    public static final String APP_VERSION = "0.1";
+    
+    // Resources settings
+    public static final String RESOURCES_PATH = "/com/zogirdex/weather_calendar/";
+    public static final String CSS_STYLES_PATH = RESOURCES_PATH + "styles.css";
+    //public static final String CALENDAR_FXML_PATH = RESOURCES_PATH + "calendar.fxml";
+    //public static final String EVENT_FXML_PATH = RESOURCES_PATH + "event.fxml";
+    
       public static final boolean DEBUG_MODE = true;
 
     // API settings

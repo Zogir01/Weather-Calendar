@@ -1,0 +1,45 @@
+/* Styl przycisku */
+.calendar-label {
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-color: linear-gradient(to bottom, #4DB6AC, #00796B); /* Zmiana na ciemniejszy odcień dla nagłówka */
+    -fx-opacity: 1;
+    -fx-padding: 5px 10px; /* Większe odstępy wokół tekstu, aby wyglądało to jak nagłówek */
+    -fx-alignment: center; 
+    -fx-text-fill: #FFFFFF; /* Biały tekst, aby wyróżniał się na ciemniejszym tle */
+    -fx-font-size: 16px; /* Większa czcionka niż dla przycisku */
+    -fx-font-weight: bold; 
+    -fx-border-color: #004D40;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 10, 0, 0, 5); /* Wyraźniejszy cień, by nagłówek był bardziej widoczny */
+    -fx-cursor: default; /* Zmieniamy kursor na domyślny, bo to tylko nagłówek */
+    -fx-transition: all 0.3s ease; /* Animacja przejścia */
+}
+
+.callendar-button {
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-color: linear-gradient(to bottom, #80CBC4, #4DB6AC);
+    -fx-opacity: 1;
+    -fx-padding: 3px;
+    -fx-alignment: center;
+    /*-fx-text-fill: #004D40;*/
+    -fx-text-fill: #012e26;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-border-color: #004D40;
+    -fx-border-width: 1.5px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 4);
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s ease; /* Animacja przejścia */
+}
+
+/* Styl przycisku po najechaniu */
+.callendar-button-hover:hover {
+    -fx-background-color: linear-gradient(to bottom, #00796B, #004D40);  /* Zmiana tła po najechaniu */
+    -fx-border-color: #00251A; /* Ciemniejsze obramowanie */
+    -fx-effect: dropshadow(gaussian, #004D40, 8, 0.5, 0, 0);  /* Dodanie cienia */
+    -fx-text-fill: #FFFFFF; /* Zmiana koloru tekstu na biel */
+}

@@ -18,6 +18,8 @@ import java.time.Year;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.ColumnConstraints;
 
 public class CalendarController implements Initializable {
     private CalendarService calendarService;
@@ -65,6 +67,9 @@ public class CalendarController implements Initializable {
             this.calendarService.generateCalendar(year, month, true, true).forEach(item -> {
                 CalendarButton button = item.getButton();
                 button.setOnAction(e -> dayButton_click(item));
+                //button.setMinSize(64, 64);
+                //button.setPrefSize(100, 50);  // Preferowany rozmiar przycisku
+                
                 this.gridPaneCalendar.add(button, item.getColumn(), item.getRow());
             });
         }
@@ -78,7 +83,7 @@ public class CalendarController implements Initializable {
     private void dayButton_click(CalendarItem item) {
         try {
          EventController controller = StageManager.getInstance().openNewStage(
-                 "/com/zogirdex/weather_calendar/event.fxml", item.getDate().toString(), true);
+                 "/com/zogirdex/weather_calendar/event.fxml", item.getDate().toString(), true, 0.0, 0.0);
          controller.loadData(item);
         }
        catch(Exception ex) {

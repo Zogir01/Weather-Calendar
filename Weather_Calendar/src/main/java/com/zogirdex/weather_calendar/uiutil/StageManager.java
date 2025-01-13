@@ -1,5 +1,6 @@
 package com.zogirdex.weather_calendar.uiutil;
 
+import com.zogirdex.weather_calendar.config.AppConstants;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -49,13 +50,16 @@ public class StageManager {
      * @return Controller of new opened window assigned to input fxml file.
      * @throws IOException if FXML file wasn't loaded correctly.
      */
-    public <T> T openNewStage(String fxmlPath, String title, boolean isModal) throws IOException {        
+    public <T> T openNewStage(String fxmlPath, String title, boolean isModal, double minWidth, double minHeight) throws IOException {        
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
         Parent root = loader.load();
         Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource(AppConstants.CSS_STYLES_PATH).toExternalForm());
         Stage stage = new Stage();
         stage.setTitle(title);
         stage.setScene(scene);
+        stage.setMinWidth(minWidth);
+        stage.setMinHeight(minHeight);
         if (isModal) {
             stage.initModality(Modality.APPLICATION_MODAL);
         }
@@ -77,6 +81,7 @@ public class StageManager {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
         Parent root = loader.load();
         Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource(AppConstants.CSS_STYLES_PATH).toExternalForm());
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         return loader.getController();
