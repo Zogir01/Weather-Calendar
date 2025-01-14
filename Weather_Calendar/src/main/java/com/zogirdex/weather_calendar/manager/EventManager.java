@@ -78,7 +78,6 @@ public class EventManager {
     // wymagana jest zmiana z ObservableMap na HashMap, gdyż ObservableMap nie implementuje
     // interfejsu Serializable.
     public final void saveEventsState() throws GlobalStateException {
-        HashMap<LocalDate, ScheduledEvent> map = new HashMap<>(this.events);
-        GlobalStateAssistant.saveState(map, AppConstants.EVENTS_STATE_PATH);
+        GlobalStateAssistant.saveState(new HashMap<>(this.events), AppConstants.EVENTS_STATE_PATH);
     }
 }
