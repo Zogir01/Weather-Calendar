@@ -6,6 +6,10 @@ import com.zogirdex.weather_calendar.uiutil.CalendarButton;
 import com.zogirdex.weather_calendar.uiutil.StageManager;
 import com.zogirdex.weather_calendar.service.CalendarService;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
+import com.zogirdex.weather_calendar.config.AppConstants;
+import com.zogirdex.weather_calendar.service.EventService;
+import com.zogirdex.weather_calendar.service.WeatherService;
+import com.zogirdex.weather_calendar.util.GlobalStateException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import java.net.URL;
@@ -29,7 +33,12 @@ public class CalendarController implements Initializable {
 
     @Override
     public void initialize​(URL location, ResourceBundle resources) {
-        this.calendarService = new CalendarService();
+        try {
+            this.calendarService = new CalendarService();
+        }
+        catch(WeatherApiException | GlobalStateException ex) {
+            // ALERT
+        }
         this.fillComboBoxMonths();
         this.fillComboBoxYears();
         this.addDayLabels();
@@ -64,7 +73,7 @@ public class CalendarController implements Initializable {
         try {
             this.calendarService.generateCalendar(year, month, true, true).forEach(item -> {
                 CalendarButton button = item.getButton();
-                button.setOnAction(e -> dayButton_click(item));
+                button.setOnAction(e -> calendarButton_click(item));
                 this.gridPaneCalendar.add(button, item.getColumn(), item.getRow());
             });
         }
@@ -75,10 +84,15 @@ public class CalendarController implements Initializable {
     }
     
     @FXML
-    private void dayButton_click(CalendarItem item) {
+    private void calendarButton_click(CalendarItem item) {
         try {
          EventController controller = StageManager.getInstance().openNewStage(
-                 "/com/zogirdex/weather_calendar/event.fxml", item.getDate().toString(), true);
+                 AppConstants.EVENT_FXML_PATH, 
+                 item.getDate().toString(), 
+                 true, 
+                 AppConstants.ADD_EVENT_STAGE_MIN_WIDTH, 
+                 AppConstants.ADD_EVENT_STAGE_MIN_HEIGHT
+         );
          controller.loadData(item);
         }
        catch(Exception ex) {

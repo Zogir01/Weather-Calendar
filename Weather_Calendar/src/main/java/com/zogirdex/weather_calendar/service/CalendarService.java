@@ -5,12 +5,14 @@ import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.manager.EventManager;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
+import com.zogirdex.weather_calendar.manager.WeatherManager;
+import com.zogirdex.weather_calendar.model.WeatherDay;
+import com.zogirdex.weather_calendar.util.GlobalStateException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
 import java.util.List;
 import java.util.ArrayList;
-
 
 /**
  *
@@ -21,10 +23,20 @@ public class CalendarService {
     // lub np. map<YearMonth, List<CalendarItem>
     // jakbyśmy chcieli stworzyć listę kalendarzy - czyli zapisywać je w pamięci, żeby ich na nowo nie generować.
     // przyda się też wtedy coś w stylu:     public void update(CalendarItem)
-    private EventManager eventManager;
+    private final EventManager eventManager;
+    private final WeatherManager weatherManager;
     
-    public CalendarService() {
-        this.eventManager = EventManager.getInstance();
+    public CalendarService() throws WeatherApiException, GlobalStateException {
+        try {
+            this.eventManager = EventManager.getInstance();
+            this.weatherManager = WeatherManager.getInstance();
+        }
+        catch(WeatherApiException ex) {
+            throw new WeatherApiException("Wystąpił błąd komunikacji z api pogodowym.", ex);
+        }
+        catch(GlobalStateException ex) {
+            throw new GlobalStateException ("Wystapił błąd podczas ładowania danych aplikacji.", ex);
+        }
     }
     
     public List<CalendarItem> generateCalendar(Year year, Month month, boolean showDayNumbers, 
@@ -55,8 +67,16 @@ public class CalendarService {
                 
                 if(event != null) {
                     button.textProperty().bind(event.calendarTextProperty());
-                }
+                    WeatherDay weatherDay = this.weatherManager.getWeatherDay(date, event.getLocation());
+                    
+                    if(weatherDay != null) {
+                        button.setBackgroundImage("/img/weather-icon/" + weatherDay.getIcon() + ".png");
 
+                        weatherDay.iconProperty().addListener((observable, oldVal, newVal) -> {
+                            button.setBackgroundImage("/img/weather-icon/" + newVal + ".png");
+                        });
+                    }
+                }
                 calendarItems.add(item);
 
                 if (col % 7 == 0) {

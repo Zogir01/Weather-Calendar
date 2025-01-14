@@ -4,16 +4,11 @@ import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.util.GlobalStateAssistant;
 import com.zogirdex.weather_calendar.util.GlobalStateException;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
-import com.zogirdex.weather_calendar.util.WeatherApiAssistant;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
-import java.io.File;
-import java.io.FileNotFoundException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import java.time.LocalDate;
-import java.io.IOException;
-import java.lang.ClassNotFoundException;
-import java.util.LinkedList;
+import java.util.HashMap;
 
 /**
  *
@@ -26,32 +21,22 @@ public class EventManager {
     private static EventManager instance;
     private final ObservableMap<LocalDate, ScheduledEvent> events;
    
-    private EventManager() {
-        ObservableMap<LocalDate, ScheduledEvent> state;
+    private EventManager() throws GlobalStateException {
+        HashMap<LocalDate, ScheduledEvent> state;
         try {
-            state = GlobalStateAssistant.loadEventsState();
+             state = GlobalStateAssistant.loadState(AppConstants.EVENTS_STATE_PATH);
         }
         catch(GlobalStateException ex) {
-            state = FXCollections.observableHashMap();
+            this.events = FXCollections.observableHashMap();
+            throw new GlobalStateException("Error occured while loading global events state. Initializing with"
+                    + "an empty collection.", ex);
             // LOGGER?
         }
-        this.events = state;
-        
-        if(AppConstants.WEATHER_API_AUTO_QUERY && !this.events.isEmpty()) {
-            for(ScheduledEvent event : this.events.values()) {
-                try {
-                    WeatherApiAssistant.makeQuery(event.getLocation());
-                }
-                catch(WeatherApiException ex) {
-                    //throw new WeatherApiException("Error while performing initial query to load weather data.", ex);
-                    // tutaj można by coś rzucić
-                 }
-            }
-        }
+        this.events = javafx.collections.FXCollections.observableMap(state);
     }
     
     // getInstance wzorca singleton (synchronized, aby ułatwić wielowątkowość, którą można by zaimplementować)
-    public static synchronized EventManager getInstance() {
+    public static synchronized EventManager getInstance() throws GlobalStateException {
         if (instance == null) {
             instance = new EventManager();
         }
@@ -62,8 +47,24 @@ public class EventManager {
         return events.getOrDefault(date, null);
     }
 
-    public void addEvent(LocalDate date, ScheduledEvent event) {
-        events.put(date, event);
+    public void addEvent(LocalDate date, ScheduledEvent event) throws WeatherApiException{
+        if(events.put(date, event) != null) {
+            if(AppConstants.WEATHER_API_AUTO_QUERY) {
+                try {
+                    WeatherManager.getInstance().makeQuery(event.getLocation());
+                }
+                catch(WeatherApiException ex) {
+                        throw new WeatherApiException("When new event was added, error occured "
+                                + "while performing weather api query.", ex);
+                }
+                catch (GlobalStateException ex) {}
+            }
+        }
+        else {
+            throw new IllegalArgumentException("Cannot add event with the assigned date: " + date.toString());
+            // events.put zwraca null lub rzuca wyjątki jeśli nie mógł dodać do mapy
+            // mozna zrobic własną klase wyjątku
+        }
     }
     
     public ObservableMap<LocalDate, ScheduledEvent> getEvents() {
@@ -74,17 +75,9 @@ public class EventManager {
         return this.events.containsKey(date);
     }
     
-     public void makeWeatherQuery (LocalDate date) throws WeatherApiException, IllegalArgumentException{
-           try {
-               ScheduledEvent event = this.events.get(date);
-               if(event == null) {
-                   throw new IllegalArgumentException("Cannot find any event with the assigned date: " + date.toString());
-               }
-                // aktualizacja danych pogodowych w przypadku znalezienia eventu.
-                WeatherApiAssistant.makeQuery(event.getLocation());
-           }
-           catch(WeatherApiException ex) {
-               throw new WeatherApiException("Error while performing query.", ex);
-           }
-       }
+    // wymagana jest zmiana z ObservableMap na HashMap, gdyż ObservableMap nie implementuje
+    // interfejsu Serializable.
+    public final void saveEventsState() throws GlobalStateException {
+        GlobalStateAssistant.saveState(new HashMap<>(this.events), AppConstants.EVENTS_STATE_PATH);
+    }
 }

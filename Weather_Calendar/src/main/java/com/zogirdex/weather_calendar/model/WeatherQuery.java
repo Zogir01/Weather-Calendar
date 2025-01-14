@@ -14,12 +14,7 @@ public double tzoffset;
 public String description;
 public List<WeatherDay> days;
 
-    /**
-     * No args constructor for use in serialization
-     * 
-     */
-    public WeatherQuery() {
-    }
+    public WeatherQuery() {}
 
     public WeatherQuery(int queryCost, double latitude, double longitude, String resolvedAddress, String address, String timezone, double tzoffset, String description, List<WeatherDay> days) {
         super();
