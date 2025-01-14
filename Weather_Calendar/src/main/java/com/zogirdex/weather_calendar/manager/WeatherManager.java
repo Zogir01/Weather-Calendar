@@ -29,7 +29,7 @@ public class WeatherManager {
     private final ObservableMap<String, WeatherLocation> weatherLocations = FXCollections.observableHashMap();
     
     private WeatherManager() throws WeatherApiException {
-        // aktualizuje swój model na podstawie wczytanych eventów.
+        // inicjalizuje swój model na podstawie wczytanych eventów.
         if(AppConstants.WEATHER_API_AUTO_QUERY) {
              for(ScheduledEvent event : EventManager.getInstance().getEvents().values()) {
                 try {
