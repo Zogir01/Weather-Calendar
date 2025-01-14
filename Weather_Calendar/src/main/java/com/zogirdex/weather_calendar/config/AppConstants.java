@@ -38,7 +38,7 @@ public class AppConstants {
 
     // API settings
     public static final String WEATHER_API_BASE_URL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/";
-    public static final boolean WEATHER_API_AUTO_QUERY = false;
+    public static final boolean WEATHER_API_AUTO_QUERY = true;
     
     public static final Map<String, String> QUERY_PARAMS = Map.of(
         "unitGroup", "metric",

@@ -4,7 +4,6 @@ import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.util.GlobalStateAssistant;
 import com.zogirdex.weather_calendar.util.GlobalStateException;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
-import not_used.WeatherApiAssistant;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;

@@ -17,9 +17,14 @@ public class EventService {
     private final EventManager eventManager;
     private final WeatherManager weatherManager;
     
-    public EventService() {
+    public EventService() throws WeatherApiException{
         this.eventManager = EventManager.getInstance();
-        this.weatherManager = WeatherManager.getInstance();
+        try {
+            this.weatherManager = WeatherManager.getInstance();
+        }
+        catch(WeatherApiException ex) {
+            throw new WeatherApiException("Error while initalizing WeatherManager in EventService", ex);
+        }
     }
     
     public void addEvent(CalendarItem item, String eventName, String eventDesc, String location) throws WeatherApiException {

@@ -7,6 +7,7 @@ package com.zogirdex.weather_calendar.service;
 import com.zogirdex.weather_calendar.manager.WeatherManager;
 import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.model.WeatherDay;
+import com.zogirdex.weather_calendar.util.WeatherApiException;
 import java.time.LocalDate;
 
 /**
@@ -16,8 +17,13 @@ import java.time.LocalDate;
 public class WeatherService {
     private final WeatherManager weatherManager;
     
-    public WeatherService() {
-        this.weatherManager = WeatherManager.getInstance();
+    public WeatherService() throws WeatherApiException{
+        try {
+            this.weatherManager = WeatherManager.getInstance();
+        }
+        catch(WeatherApiException ex) {
+            throw new WeatherApiException("Error while initalizing WeatherManager in WeatherService", ex);
+        }
     }
     
     public WeatherDay getWeatherDay(CalendarItem item, String location)  {

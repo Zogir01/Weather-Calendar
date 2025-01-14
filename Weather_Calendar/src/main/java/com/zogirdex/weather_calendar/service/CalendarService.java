@@ -25,9 +25,14 @@ public class CalendarService {
     private final EventManager eventManager;
     private final WeatherManager weatherManager;
     
-    public CalendarService() {
+    public CalendarService() throws WeatherApiException {
         this.eventManager = EventManager.getInstance();
-        this.weatherManager = WeatherManager.getInstance();
+        try {
+            this.weatherManager = WeatherManager.getInstance();
+        }
+        catch(WeatherApiException ex) {
+            throw new WeatherApiException("Error while initalizing WeatherManager in CalendarService", ex);
+        }
     }
     
     public List<CalendarItem> generateCalendar(Year year, Month month, boolean showDayNumbers, 
