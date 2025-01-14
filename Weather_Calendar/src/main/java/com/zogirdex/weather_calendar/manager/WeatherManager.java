@@ -17,6 +17,8 @@ public class WeatherManager {
     private final ObservableMap<String, WeatherLocation> weatherLocations = FXCollections.observableHashMap();
     
     private WeatherManager() {
+        
+        
     }
     
     // getInstance wzorca singleton (synchronized, aby ułatwić wielowątkowość, którą można by zaimplementować)
@@ -33,6 +35,10 @@ public class WeatherManager {
     
     public void addWeatherLocation(WeatherLocation weatherLocation) {
         this.weatherLocations.put(weatherLocation.getLocation(), weatherLocation);
+    }
+    
+    public boolean weatherLocationExists(String location) {
+        return this.weatherLocations.containsKey(location);
     }
 
     public WeatherDay getWeatherDay(LocalDate date, String location) {

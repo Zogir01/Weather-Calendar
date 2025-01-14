@@ -1,6 +1,5 @@
 package com.zogirdex.weather_calendar.service;
 
-import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.manager.EventManager;
@@ -35,15 +34,11 @@ public class EventService {
         CalendarButton button = item.getButton();
         button.textProperty().bind(newEvent.calendarTextProperty());
         
-        this.eventManager.addEvent(item.getDate(), newEvent);
-        
-        if(AppConstants.WEATHER_API_AUTO_QUERY) {
-            try {
-                this.eventManager.makeWeatherQuery(item.getDate());
-            }
-            catch (WeatherApiException ex) {
-                throw new WeatherApiException("Wystąpił błąd podczas pobierania danych pogodowych dla nowo dodanego spotkania.", ex);
-            }
+        try {
+            this.eventManager.addEvent(item.getDate(), newEvent);
+        }
+        catch (WeatherApiException ex) {
+            throw new WeatherApiException("Wystąpił błąd podczas pobierania danych pogodowych dla nowo dodanego spotkania.", ex);
         }
         
         // UWAGA UWAGA UWAGA!!!!!

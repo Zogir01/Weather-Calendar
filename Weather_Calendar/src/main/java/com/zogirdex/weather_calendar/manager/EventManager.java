@@ -57,8 +57,23 @@ public class EventManager {
         return events.getOrDefault(date, null);
     }
 
-    public void addEvent(LocalDate date, ScheduledEvent event) {
-        events.put(date, event);
+    public void addEvent(LocalDate date, ScheduledEvent event) throws WeatherApiException{
+        if(events.put(date, event) != null) {
+            if(AppConstants.WEATHER_API_AUTO_QUERY) {
+                try {
+                    WeatherApiAssistant.makeQuery(event.getLocation());
+                }
+                catch(WeatherApiException ex) {
+                        throw new WeatherApiException("When new event was added, error occured "
+                                + "while performing weather api query.", ex);
+                }
+            }
+        }
+        else {
+            throw new IllegalArgumentException("Cannot add event with the assigned date: " + date.toString());
+            // events.put zwraca null lub zwraca wyjątki jeśli nie mógł dodać do mapy
+            // mozna zrobic własną klase wyjątku
+        }
     }
     
     public ObservableMap<LocalDate, ScheduledEvent> getEvents() {
@@ -68,18 +83,4 @@ public class EventManager {
     public boolean eventExists(LocalDate date) {
         return this.events.containsKey(date);
     }
-    
-     public void makeWeatherQuery (LocalDate date) throws WeatherApiException, IllegalArgumentException{
-           try {
-               ScheduledEvent event = this.events.get(date);
-               if(event == null) {
-                   throw new IllegalArgumentException("Cannot find any event with the assigned date: " + date.toString());
-               }
-                // aktualizacja danych pogodowych w przypadku znalezienia eventu.
-                WeatherApiAssistant.makeQuery(event.getLocation());
-           }
-           catch(WeatherApiException ex) {
-               throw new WeatherApiException("Error while performing query.", ex);
-           }
-       }
 }
