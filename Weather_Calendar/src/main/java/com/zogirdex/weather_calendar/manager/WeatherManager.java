@@ -18,6 +18,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  *
@@ -44,21 +46,30 @@ public class WeatherManager {
         
         // inicjalizuje swój model na podstawie wczytanych eventów.
         if(AppConstants.WEATHER_API_AUTO_QUERY) {
-            try {
-                for(ScheduledEvent event : EventManager.getInstance().getEvents().values()) {
+                EventManager eventManager;
+                try {
+                    eventManager = EventManager.getInstance();
+                }
+                catch(GlobalStateException ex) {
+                    throw new GlobalStateException("Error with EventManager global state occured.", ex);
+                }
+                
+                // tworzę Set aby lokalizacje były unikalne - aby nie tworzyć wielu zapytań niepotrzebnie do tej samej lokalizacji.
+                Set <String> uniqueLocations = new HashSet();
+                for(ScheduledEvent event : eventManager.getEvents().values()) {
+                    uniqueLocations.add(event.getLocation());
+                }
+                
+                for(String uniqueLocation : uniqueLocations) {
                     try {
-                        this.makeQuery(event.getLocation());
+                        this.makeQuery(uniqueLocation);
                     }
                     catch(WeatherApiException ex) {
                         throw new WeatherApiException("Error performing weather api query while creating instance of "
                                 + "WeatherManager.", ex);
                     }
                 }
-            }
-            catch(GlobalStateException ex) {
-                throw new GlobalStateException("Error with EventManager global state occured.", ex);
-            }
-        }
+          }
     }
     
     // getInstance wzorca singleton (synchronized, aby ułatwić wielowątkowość, którą można by zaimplementować)
