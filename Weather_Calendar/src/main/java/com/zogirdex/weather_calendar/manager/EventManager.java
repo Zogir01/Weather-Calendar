@@ -4,7 +4,7 @@ import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.util.GlobalStateAssistant;
 import com.zogirdex.weather_calendar.util.GlobalStateException;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
-import com.zogirdex.weather_calendar.util.WeatherApiAssistant;
+import not_used.WeatherApiAssistant;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
@@ -31,18 +31,6 @@ public class EventManager {
             // LOGGER?
         }
         this.events = state;
-        
-        if(AppConstants.WEATHER_API_AUTO_QUERY && !this.events.isEmpty()) {
-            for(ScheduledEvent event : this.events.values()) {
-                try {
-                    WeatherApiAssistant.makeQuery(event.getLocation());
-                }
-                catch(WeatherApiException ex) {
-                    //throw new WeatherApiException("Error while performing initial query to load weather data.", ex);
-                    // tutaj można by coś rzucić
-                 }
-            }
-        }
     }
     
     // getInstance wzorca singleton (synchronized, aby ułatwić wielowątkowość, którą można by zaimplementować)
@@ -61,7 +49,7 @@ public class EventManager {
         if(events.put(date, event) != null) {
             if(AppConstants.WEATHER_API_AUTO_QUERY) {
                 try {
-                    WeatherApiAssistant.makeQuery(event.getLocation());
+                    WeatherManager.getInstance().makeQuery(event.getLocation());
                 }
                 catch(WeatherApiException ex) {
                         throw new WeatherApiException("When new event was added, error occured "
