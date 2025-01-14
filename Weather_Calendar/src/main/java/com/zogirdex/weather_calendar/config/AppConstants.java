@@ -28,7 +28,6 @@ public class AppConstants {
     
     // Resources settings
     public static final String RESOURCES_PATH = "/com/zogirdex/weather_calendar/";
-    
     public static final String CSS_STYLES_PATH = RESOURCES_PATH + "styles.css";
     public static final String CALENDAR_FXML_PATH = RESOURCES_PATH + "calendar.fxml";
     public static final String EVENT_FXML_PATH = RESOURCES_PATH + "event.fxml";

@@ -18,6 +18,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  *
@@ -28,25 +30,46 @@ import java.util.Map;
 public class WeatherManager {
     private static WeatherManager instance;
     private final ObservableMap<String, WeatherLocation> weatherLocations = FXCollections.observableHashMap();
+    private String apiQueryParamString;
+    
     
     private WeatherManager() throws WeatherApiException, GlobalStateException {
+        // tworzenie stringa z parametrami zapytania do api (parametry znajdują się w AppConstants)
+        StringBuilder builder = new StringBuilder().append("?");    
+        for (Map.Entry<String, String> entry : AppConstants.QUERY_PARAMS.entrySet()) {
+            builder.append(entry.getKey())
+                           .append("=")
+                           .append(entry.getValue())
+                           .append("&");
+        }
+        this.apiQueryParamString = builder.toString();
+        
         // inicjalizuje swój model na podstawie wczytanych eventów.
         if(AppConstants.WEATHER_API_AUTO_QUERY) {
-            try {
-                for(ScheduledEvent event : EventManager.getInstance().getEvents().values()) {
+                EventManager eventManager;
+                try {
+                    eventManager = EventManager.getInstance();
+                }
+                catch(GlobalStateException ex) {
+                    throw new GlobalStateException("Error with EventManager global state occured.", ex);
+                }
+                
+                // tworzę Set aby lokalizacje były unikalne - aby nie tworzyć wielu zapytań niepotrzebnie do tej samej lokalizacji.
+                Set <String> uniqueLocations = new HashSet();
+                for(ScheduledEvent event : eventManager.getEvents().values()) {
+                    uniqueLocations.add(event.getLocation());
+                }
+                
+                for(String uniqueLocation : uniqueLocations) {
                     try {
-                        this.makeQuery(event.getLocation());
+                        this.makeQuery(uniqueLocation);
                     }
                     catch(WeatherApiException ex) {
                         throw new WeatherApiException("Error performing weather api query while creating instance of "
                                 + "WeatherManager.", ex);
                     }
                 }
-            }
-            catch(GlobalStateException ex) {
-                throw new GlobalStateException("Error with EventManager global state occured.", ex);
-            }
-        }
+          }
     }
     
     // getInstance wzorca singleton (synchronized, aby ułatwić wielowątkowość, którą można by zaimplementować)
@@ -101,7 +124,7 @@ public class WeatherManager {
     }
     
     private void makeQuery(String location, LocalDate date, boolean readOneDate) throws WeatherApiException {
-        String finalUrl = AppConstants.WEATHER_API_BASE_URL + location + createParamString();
+        String finalUrl = AppConstants.WEATHER_API_BASE_URL + location + this.apiQueryParamString;
         //WeatherManager weatherManager = WeatherManager.getInstance();
 
         try {
@@ -151,15 +174,15 @@ public class WeatherManager {
         }
     }
     
-    private static String createParamString () {
-        StringBuilder builder = new StringBuilder();    
-        builder.append("?");
-        for (Map.Entry<String, String> entry : AppConstants.QUERY_PARAMS.entrySet()) {
-            builder.append(entry.getKey())
-                           .append("=")
-                           .append(entry.getValue())
-                           .append("&");
-            }
-        return builder.toString();
-    }
+//    private String createParamString () {
+//        StringBuilder builder = new StringBuilder();    
+//        builder.append("?");
+//        for (Map.Entry<String, String> entry : AppConstants.QUERY_PARAMS.entrySet()) {
+//            builder.append(entry.getKey())
+//                           .append("=")
+//                           .append(entry.getValue())
+//                           .append("&");
+//            }
+//        return builder.toString();
+//    }
 }

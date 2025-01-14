@@ -48,22 +48,17 @@ public class EventManager {
     }
 
     public void addEvent(LocalDate date, ScheduledEvent event) throws WeatherApiException{
-        if(events.put(date, event) != null) {
-            if(AppConstants.WEATHER_API_AUTO_QUERY) {
-                try {
-                    WeatherManager.getInstance().makeQuery(event.getLocation());
-                }
-                catch(WeatherApiException ex) {
-                        throw new WeatherApiException("When new event was added, error occured "
-                                + "while performing weather api query.", ex);
-                }
-                catch (GlobalStateException ex) {}
+        events.put(date, event);
+        
+        if(AppConstants.WEATHER_API_AUTO_QUERY) {
+            try {
+                WeatherManager.getInstance().makeQuery(event.getLocation());
             }
-        }
-        else {
-            throw new IllegalArgumentException("Cannot add event with the assigned date: " + date.toString());
-            // events.put zwraca null lub rzuca wyjątki jeśli nie mógł dodać do mapy
-            // mozna zrobic własną klase wyjątku
+            catch(WeatherApiException ex) {
+                    throw new WeatherApiException("When new event was added, error occured "
+                            + "while performing weather api query.", ex);
+            }
+            catch (GlobalStateException ex) {}
         }
     }
     
