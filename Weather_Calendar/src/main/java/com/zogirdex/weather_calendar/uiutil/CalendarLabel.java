@@ -1,9 +1,6 @@
 package com.zogirdex.weather_calendar.uiutil;
 
 import javafx.scene.control.Label;
-import javafx.scene.text.Font;
-import javafx.scene.paint.Color;
-import javafx.scene.text.FontWeight;
 
 public class CalendarLabel extends Label {
 

@@ -65,10 +65,7 @@ public class CalendarController implements Initializable {
         try {
             this.calendarService.generateCalendar(year, month, true, true).forEach(item -> {
                 CalendarButton button = item.getButton();
-                button.setOnAction(e -> dayButton_click(item));
-                //button.setMinSize(64, 64);
-                //button.setPrefSize(100, 50);  // Preferowany rozmiar przycisku
-                
+                button.setOnAction(e -> calendarButton_click(item));
                 this.gridPaneCalendar.add(button, item.getColumn(), item.getRow());
             });
         }
@@ -79,10 +76,15 @@ public class CalendarController implements Initializable {
     }
     
     @FXML
-    private void dayButton_click(CalendarItem item) {
+    private void calendarButton_click(CalendarItem item) {
         try {
          EventController controller = StageManager.getInstance().openNewStage(
-                 AppConstants.EVENT_FXML_PATH, item.getDate().toString(), true, 0.0, 0.0);
+                 AppConstants.EVENT_FXML_PATH, 
+                 item.getDate().toString(), 
+                 true, 
+                 AppConstants.ADD_EVENT_STAGE_MIN_WIDTH, 
+                 AppConstants.ADD_EVENT_STAGE_MIN_HEIGHT
+         );
          controller.loadData(item);
         }
        catch(Exception ex) {

@@ -7,11 +7,11 @@ import java.time.LocalDate;
  * @author tom3k
  */
 public class CalendarItem {
-    private LocalDate date;
-    private int column;
-    private int row;
-    private CalendarButton dayButton;
-    private String initialText;
+    private final LocalDate date;
+    private final int column;
+    private final int row;
+    private final CalendarButton dayButton;
+    private final String initialText;
     
     public CalendarItem(LocalDate date, int column, int row, CalendarButton dayButton, String initialText) {
         this.date = date;

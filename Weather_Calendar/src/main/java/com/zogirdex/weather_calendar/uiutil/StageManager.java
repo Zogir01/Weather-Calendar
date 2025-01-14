@@ -16,14 +16,7 @@ import javafx.event.ActionEvent;
  * 
  */
 public class StageManager {
-    /**
-     * Singleton pattern. Instance of WindowManager
-     */
     private static StageManager instance;
-
-     /**
-     * Singleton pattern. Private constructor to prevent new instances from being created
-     */
     private StageManager() {}
     
     /**
@@ -54,7 +47,7 @@ public class StageManager {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
         Parent root = loader.load();
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource(AppConstants.CSS_STYLES_PATH).toExternalForm());
+        this.loadCssStylesheet(scene);
         Stage stage = new Stage();
         stage.setTitle(title);
         stage.setScene(scene);
@@ -81,9 +74,13 @@ public class StageManager {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
         Parent root = loader.load();
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource(AppConstants.CSS_STYLES_PATH).toExternalForm());
+        this.loadCssStylesheet(scene);
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         return loader.getController();
      }
+    
+    public void loadCssStylesheet(Scene scene) {
+        scene.getStylesheets().add(getClass().getResource(AppConstants.CSS_STYLES_PATH).toExternalForm());
+    }
 }

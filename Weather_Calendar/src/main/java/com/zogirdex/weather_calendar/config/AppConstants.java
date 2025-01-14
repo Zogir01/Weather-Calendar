@@ -13,8 +13,17 @@ import java.util.Map;
 public class AppConstants {
 
     // App general settings
-//    public static final String APP_NAME = "Weather Calendar";
-//    public static final String APP_VERSION = "0.1";
+    public static final String CALENDAR_STAGE_NAME = "Kalendarz";
+    public static final int CALENDAR_STAGE_MIN_WIDTH = 640;
+    public static final int CALENDAR_STAGE_MIN_HEIGHT = 400;
+    
+    public static final String ADD_EVENT_STAGE_NAME = "Dodaj spotkanie";
+    public static final int ADD_EVENT_STAGE_MIN_WIDTH = 0;
+    public static final int ADD_EVENT_STAGE_MIN_HEIGHT = 0;
+    
+    public static final String APP_VERSION = "0.1";
+    
+    // Debug settings
     public static final boolean DEBUG_MODE = true;
     
     // Resources settings

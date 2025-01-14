@@ -21,7 +21,13 @@ public class App extends Application {
     
     @Override
     public void start(Stage stage) throws IOException {
-        StageManager.getInstance().openNewStage(AppConstants.CALENDAR_FXML_PATH, "Kalendarz", true, 650, 400);
+        StageManager.getInstance().openNewStage(
+                AppConstants.CALENDAR_FXML_PATH, 
+                AppConstants.CALENDAR_STAGE_NAME, 
+                true, 
+                AppConstants.CALENDAR_STAGE_MIN_WIDTH, 
+                AppConstants.CALENDAR_STAGE_MIN_HEIGHT
+        );
     }
     
     @Override

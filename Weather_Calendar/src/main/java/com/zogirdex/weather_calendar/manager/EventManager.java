@@ -6,14 +6,9 @@ import com.zogirdex.weather_calendar.util.GlobalStateException;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.util.WeatherApiAssistant;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
-import java.io.File;
-import java.io.FileNotFoundException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import java.time.LocalDate;
-import java.io.IOException;
-import java.lang.ClassNotFoundException;
-import java.util.LinkedList;
 
 /**
  *
