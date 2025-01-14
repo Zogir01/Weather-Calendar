@@ -9,6 +9,7 @@ import com.zogirdex.weather_calendar.util.WeatherApiException;
 import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.service.EventService;
 import com.zogirdex.weather_calendar.service.WeatherService;
+import com.zogirdex.weather_calendar.util.GlobalStateException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import java.net.URL;
@@ -35,7 +36,7 @@ public class CalendarController implements Initializable {
         try {
             this.calendarService = new CalendarService();
         }
-        catch(WeatherApiException ex) {
+        catch(WeatherApiException | GlobalStateException ex) {
             // ALERT
         }
         this.fillComboBoxMonths();

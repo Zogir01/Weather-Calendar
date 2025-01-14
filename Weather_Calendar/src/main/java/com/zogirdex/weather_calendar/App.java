@@ -33,8 +33,7 @@ public class App extends Application {
     @Override
     public void stop() {
         try {
-            GlobalStateAssistant.saveEventsState(EventManager.getInstance().getEvents());
-            //FileManager.getInstance().saveToNewFile(EventManager.getInstance().getEvents(), new File("events.json"));
+            EventManager.getInstance().saveEventsState();
         }
         catch (GlobalStateException ex) {
             ex.printStackTrace();

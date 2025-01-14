@@ -8,6 +8,7 @@ import com.zogirdex.weather_calendar.util.WeatherApiException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import java.time.LocalDate;
+import java.util.HashMap;
 
 /**
  *
@@ -20,20 +21,22 @@ public class EventManager {
     private static EventManager instance;
     private final ObservableMap<LocalDate, ScheduledEvent> events;
    
-    private EventManager() {
-        ObservableMap<LocalDate, ScheduledEvent> state;
+    private EventManager() throws GlobalStateException {
+        HashMap<LocalDate, ScheduledEvent> state;
         try {
-            state = GlobalStateAssistant.loadEventsState();
+             state = GlobalStateAssistant.loadState(AppConstants.EVENTS_STATE_PATH);
         }
         catch(GlobalStateException ex) {
-            state = FXCollections.observableHashMap();
+            this.events = FXCollections.observableHashMap();
+            throw new GlobalStateException("Error occured while loading global events state. Initializing with"
+                    + "an empty collection.", ex);
             // LOGGER?
         }
-        this.events = state;
+        this.events = javafx.collections.FXCollections.observableMap(state);
     }
     
     // getInstance wzorca singleton (synchronized, aby ułatwić wielowątkowość, którą można by zaimplementować)
-    public static synchronized EventManager getInstance() {
+    public static synchronized EventManager getInstance() throws GlobalStateException {
         if (instance == null) {
             instance = new EventManager();
         }
@@ -54,11 +57,12 @@ public class EventManager {
                         throw new WeatherApiException("When new event was added, error occured "
                                 + "while performing weather api query.", ex);
                 }
+                catch (GlobalStateException ex) {}
             }
         }
         else {
             throw new IllegalArgumentException("Cannot add event with the assigned date: " + date.toString());
-            // events.put zwraca null lub zwraca wyjątki jeśli nie mógł dodać do mapy
+            // events.put zwraca null lub rzuca wyjątki jeśli nie mógł dodać do mapy
             // mozna zrobic własną klase wyjątku
         }
     }
@@ -69,5 +73,12 @@ public class EventManager {
     
     public boolean eventExists(LocalDate date) {
         return this.events.containsKey(date);
+    }
+    
+    // wymagana jest zmiana z ObservableMap na HashMap, gdyż ObservableMap nie implementuje
+    // interfejsu Serializable.
+    public final void saveEventsState() throws GlobalStateException {
+        HashMap<LocalDate, ScheduledEvent> map = new HashMap<>(this.events);
+        GlobalStateAssistant.saveState(map, AppConstants.EVENTS_STATE_PATH);
     }
 }

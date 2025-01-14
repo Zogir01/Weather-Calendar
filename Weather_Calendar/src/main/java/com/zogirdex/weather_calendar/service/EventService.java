@@ -7,6 +7,7 @@ import com.zogirdex.weather_calendar.manager.WeatherManager;
 import com.zogirdex.weather_calendar.model.WeatherDay;
 import com.zogirdex.weather_calendar.uiutil.CalendarButton;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
+import com.zogirdex.weather_calendar.util.GlobalStateException;
 
 
 /**
@@ -17,13 +18,16 @@ public class EventService {
     private final EventManager eventManager;
     private final WeatherManager weatherManager;
     
-    public EventService() throws WeatherApiException{
-        this.eventManager = EventManager.getInstance();
+    public EventService() throws WeatherApiException, GlobalStateException {
         try {
+            this.eventManager = EventManager.getInstance();
             this.weatherManager = WeatherManager.getInstance();
         }
         catch(WeatherApiException ex) {
-            throw new WeatherApiException("Error while initalizing WeatherManager in EventService", ex);
+            throw new WeatherApiException("Wystąpił błąd komunikacji z api pogodowym.", ex);
+        }
+        catch(GlobalStateException ex) {
+            throw new GlobalStateException ("Wystapił błąd podczas ładowania danych aplikacji.", ex);
         }
     }
     

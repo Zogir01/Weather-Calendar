@@ -20,21 +20,7 @@ public class GlobalStateAssistant {
     public GlobalStateAssistant() {}
     // pomyslec nad tym: getClass().getClassLoader().getResourceAsStream(EVENTS_STATE_FILE);
     
-    // wymagana jest zmiana z ObservableMap na HashMap, gdyż ObservableMap nie implementuje
-    // interfejsu Serializable.
-    public static final void saveEventsState(ObservableMap<LocalDate, ScheduledEvent> observableMap) throws GlobalStateException {
-        HashMap<LocalDate, ScheduledEvent> map = new HashMap<>(observableMap);
-        GlobalStateAssistant.saveState(map, AppConstants.EVENTS_STATE_PATH);
-    }
-
-    // wymagana jest zmiana z ObservableMap na HashMap, gdyż ObservableMap nie implementuje
-    // interfejsu Serializable.
-    public static final ObservableMap<LocalDate, ScheduledEvent> loadEventsState() throws GlobalStateException {
-        HashMap<LocalDate, ScheduledEvent> loadedMap = GlobalStateAssistant.loadState(AppConstants.EVENTS_STATE_PATH);
-        return javafx.collections.FXCollections.observableMap(loadedMap);
-    }
-    
-    private static <T> T loadState(String path) throws GlobalStateException {
+    public static <T> T loadState(String path) throws GlobalStateException {
         // konstrukcja try-with-resources
         try (FileInputStream fileStream = new FileInputStream(path);
             ObjectInputStream objectStream = new ObjectInputStream(fileStream)) {
@@ -48,7 +34,7 @@ public class GlobalStateAssistant {
         }
     }
     
-    private static void saveState(Object obj, String path) throws GlobalStateException {
+    public static void saveState(Object obj, String path) throws GlobalStateException {
         // konstrukcja try-with-resources
         try (FileOutputStream fileStream = new FileOutputStream(path)) {
             ObjectOutputStream data = new ObjectOutputStream(fileStream);

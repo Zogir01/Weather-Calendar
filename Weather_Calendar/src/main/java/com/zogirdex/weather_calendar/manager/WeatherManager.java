@@ -7,6 +7,7 @@ import com.zogirdex.weather_calendar.model.WeatherLocation;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.model.WeatherQuery;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
+import com.zogirdex.weather_calendar.util.GlobalStateException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -28,23 +29,28 @@ public class WeatherManager {
     private static WeatherManager instance;
     private final ObservableMap<String, WeatherLocation> weatherLocations = FXCollections.observableHashMap();
     
-    private WeatherManager() throws WeatherApiException {
+    private WeatherManager() throws WeatherApiException, GlobalStateException {
         // inicjalizuje swój model na podstawie wczytanych eventów.
         if(AppConstants.WEATHER_API_AUTO_QUERY) {
-             for(ScheduledEvent event : EventManager.getInstance().getEvents().values()) {
-                try {
-                    this.makeQuery(event.getLocation());
+            try {
+                for(ScheduledEvent event : EventManager.getInstance().getEvents().values()) {
+                    try {
+                        this.makeQuery(event.getLocation());
+                    }
+                    catch(WeatherApiException ex) {
+                        throw new WeatherApiException("Error performing weather api query while creating instance of "
+                                + "WeatherManager.", ex);
+                    }
                 }
-                catch(WeatherApiException ex) {
-                    throw new WeatherApiException("Error performing weather api query while creating instance of "
-                            + "WeatherManager.", ex);
-                }
+            }
+            catch(GlobalStateException ex) {
+                throw new GlobalStateException("Error with EventManager global state occured.", ex);
             }
         }
     }
     
     // getInstance wzorca singleton (synchronized, aby ułatwić wielowątkowość, którą można by zaimplementować)
-    public static synchronized WeatherManager getInstance() throws WeatherApiException {
+    public static synchronized WeatherManager getInstance() throws WeatherApiException, GlobalStateException {
         if (instance == null) {
             instance = new WeatherManager();
         }
