@@ -32,7 +32,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         StageManager.getInstance().openNewStage(
-                AppConstants.CALENDAR_FXML_PATH, 
+                AppConstants.PATH_FXML_CALENDAR, 
                 AppConstants.CALENDAR_STAGE_NAME, 
                 true, 
                 AppConstants.CALENDAR_STAGE_MIN_WIDTH, 

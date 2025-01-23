@@ -36,7 +36,7 @@ public class WeatherManager {
     private WeatherManager() throws WeatherApiException {
         // tworzenie stringa z parametrami zapytania do api (parametry znajdują się w AppConstants)
         StringBuilder builder = new StringBuilder().append("?");    
-        for (Map.Entry<String, String> entry : AppConstants.QUERY_PARAMS.entrySet()) {
+        for (Map.Entry<String, String> entry : AppConstants.WEATHER_API_QUERY_PARAMS.entrySet()) {
             builder.append(entry.getKey())
                            .append("=")
                            .append(entry.getValue())

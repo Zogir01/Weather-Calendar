@@ -85,7 +85,7 @@ public class CalendarController implements Initializable {
     private void calendarButton_click(CalendarItem item) {
         try {
          EventController controller = StageManager.getInstance().openNewStage(
-                 AppConstants.EVENT_FXML_PATH, 
+                 AppConstants.PATH_FXML_EVENT, 
                  item.getDate().toString(), 
                  true, 
                  AppConstants.ADD_EVENT_STAGE_MIN_WIDTH, 

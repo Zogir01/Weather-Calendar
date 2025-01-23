@@ -2,9 +2,6 @@ package com.zogirdex.weather_calendar.config;
 
 import java.util.Map;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
-
 /**
  *
  * @author tom3k
@@ -14,7 +11,6 @@ import java.util.Collections;
  * 
  */
 public class AppConstants {
-
     //----------------------------------- STAGE --------------------------------------------------------
     public static final String CALENDAR_STAGE_NAME = "Kalendarz";
     public static final int CALENDAR_STAGE_MIN_WIDTH = 640;
@@ -24,10 +20,10 @@ public class AppConstants {
     public static final int ADD_EVENT_STAGE_MIN_WIDTH = 0;
     public static final int ADD_EVENT_STAGE_MIN_HEIGHT = 0;
    
-    
     //----------------------------------- GENERAL ----------------------------------------------------
     public static final String APP_VERSION = "0.1";
     
+    //----------------------------------- USER INTERFACE -----------------------------------------
     public static final List<String> LOCATIONS = List.of("Gliwice", "Katowice", "Zabrze", "Paniówki");
     public static final int YEARS_FORWARD_SCOPE = 4;
     
@@ -35,30 +31,22 @@ public class AppConstants {
     public static final boolean DEBUG_MODE = true;
     
     //----------------------------------- RESOURCE -------------------------------------------------
-    public static final String RESOURCES_PATH = "/com/zogirdex/weather_calendar/";
-    public static final String CSS_STYLES_PATH = RESOURCES_PATH + "styles.css";
-    public static final String CALENDAR_FXML_PATH = RESOURCES_PATH + "calendar.fxml";
-    public static final String EVENT_FXML_PATH = RESOURCES_PATH + "event.fxml";
-    
-    public static final String EVENTS_STATE_PATH = "eventmanager.dat"; // przerobić aby te ścieżki były także w RESOURCES_PATH
-    public static final String FILES_STATE_PATH = "filemanager.dat"; // przerobić aby te ścieżki były także w RESOURCES_PATH
+    public static final String PATH_RESOURCES = "/com/zogirdex/weather_calendar/";
+    public static final String PATH_CSS_STYLES = PATH_RESOURCES + "styles.css";
+    public static final String PATH_FXML_CALENDAR = PATH_RESOURCES + "calendar.fxml";
+    public static final String PATH_FXML_EVENT = PATH_RESOURCES + "event.fxml";
+    public static final String PATH_EVENTS_STATE = "eventmanager.dat"; // przerobić aby te ścieżki były także w RESOURCES_PATH
+    public static final String PATH_FILES_STATE = "filemanager.dat"; // przerobić aby te ścieżki były także w RESOURCES_PATH
 
-    //----------------------------------- API -------------------------------------------------------------
+    //----------------------------------- WEATHER API -----------------------------------------------
     public static final String WEATHER_API_BASE_URL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/";
     public static final boolean WEATHER_API_AUTO_QUERY = true;
-    
-    public static final Map<String, String> QUERY_PARAMS = Map.of(
+    public static final Map<String, String> WEATHER_API_QUERY_PARAMS = Map.of(
         "unitGroup", "metric",
         "elements", "datetime%2Cname%2Ctemp%2Chumidity%2Cprecip%2Cprecipprob%2Csnow%2Cpressure%2Ccloudcover%2Csunrise%2Csunset%2Cconditions%2Cdescription%2Cicon",
         "include", "days%2Cfcst",
         "key", "VHEMMB29AXXDT86HR399VV4RT",
         "contentType", "json"
     );
-    
-    //public static final int WEATHER_API_TIMEOUT = 5000; // moze by sie przydalo w przyszlosci
     //String url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/%s?unitGroup=metric&elements=datetime%2Cname%2Ctemp%2Chumidity%2Cprecip%2Cprecipprob%2Csnow%2Cpressure%2Ccloudcover%2Csunrise%2Csunset%2Cconditions%2Cdescription%2Cicon&include=days%2Cfcst&key=VHEMMB29AXXDT86HR399VV4RT&contentType=json";
-    
-    // Logger settings - moze w przyszlosci
-//    public static final String LOG_LEVEL = "INFO";
-//    public static final String LOG_FILE = "logs/app.log";
 }

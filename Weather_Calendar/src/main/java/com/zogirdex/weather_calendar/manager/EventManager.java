@@ -38,7 +38,7 @@ public class EventManager {
     private EventManager() {
         HashMap<LocalDate, ScheduledEvent> state;
         try {
-             state = GlobalStateAssistant.loadState(AppConstants.EVENTS_STATE_PATH);
+             state = GlobalStateAssistant.loadState(AppConstants.PATH_EVENTS_STATE);
         }
         catch(GlobalStateException ex) {
             state = new HashMap();    
@@ -84,6 +84,6 @@ public class EventManager {
     // wymagana jest zmiana z ObservableMap na HashMap, gdyż ObservableMap nie implementuje
     // interfejsu Serializable.
     public final void saveEventsState() throws GlobalStateException {
-        GlobalStateAssistant.saveState(new HashMap<>(this.events), AppConstants.EVENTS_STATE_PATH);
+        GlobalStateAssistant.saveState(new HashMap<>(this.events), AppConstants.PATH_EVENTS_STATE);
     }
 }
