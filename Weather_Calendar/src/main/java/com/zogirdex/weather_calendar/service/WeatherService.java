@@ -1,13 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.zogirdex.weather_calendar.service;
 
 import com.zogirdex.weather_calendar.manager.WeatherManager;
 import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.model.WeatherDay;
-import com.zogirdex.weather_calendar.util.GlobalStateException;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
 import java.time.LocalDate;
 
@@ -18,32 +13,38 @@ import java.time.LocalDate;
 public class WeatherService {
     private final WeatherManager weatherManager;
     
-    public WeatherService() throws WeatherApiException, GlobalStateException {
+    public WeatherService() throws WeatherApiException {
         try {
             this.weatherManager = WeatherManager.getInstance();
         }
         catch(WeatherApiException ex) {
             throw new WeatherApiException("Wystąpił błąd komunikacji z api pogodowym.", ex);
         }
-        catch(GlobalStateException ex) {
-            throw new GlobalStateException ("Wystapił błąd podczas ładowania danych aplikacji.", ex);
-        }
     }
     
     public WeatherDay getWeatherDay(CalendarItem item, String location)  {
-        CalendarService.validateCalendarItem(item);
+        this.validateCalendarItem(item);
         LocalDate date = item.getDate();
         WeatherDay weatherDay = this.weatherManager.getWeatherDay(date, location);
-        
-        if(weatherDay == null) {
-            // można by logować te informacje
-            // np. logger.println("Brak danych pogody dla daty:" + localDate, tworze nowy obiekt.)
-            // lub zamiast tworzenia nowego pustego WeatherDay, rzucić wyjątek?
-            weatherDay = new WeatherDay(
+        return weatherDay != null ? weatherDay : new WeatherDay(
                     date.toString(), 
                     0, 0, 0, 0, 0, 0, 0, 
                     "brak danych", "brak danych" ,"brak danych", "brak danych", "brak danych");
+    }
+    
+    public void bindWeatherIconToCalendarItem(CalendarItem item, String location) {
+        WeatherDay weatherDay = getWeatherDay(item, location);
+        if (weatherDay != null) {
+            item.getButton().setBackgroundImage("img/weather-icon-trsp/" + weatherDay.getIcon() + ".png");
+            weatherDay.iconProperty().addListener((observable, oldVal, newVal) -> {
+                item.getButton().setBackgroundImage("img/weather-icon-trsp/"  + newVal + ".png");
+            });
         }
-        return weatherDay;
+    }
+    
+    private void validateCalendarItem(CalendarItem item) {
+        if (item == null) {
+            throw new IllegalArgumentException("Przekazano pusty CalendarItem.");
+        }
     }
 }

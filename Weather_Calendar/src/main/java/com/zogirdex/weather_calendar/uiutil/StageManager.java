@@ -81,6 +81,6 @@ public class StageManager {
      }
     
     public void loadCssStylesheet(Scene scene) {
-        scene.getStylesheets().add(getClass().getResource(AppConstants.CSS_STYLES_PATH).toExternalForm());
+        scene.getStylesheets().add(getClass().getResource(AppConstants.PATH_CSS_STYLES).toExternalForm());
     }
 }

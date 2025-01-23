@@ -1,13 +1,10 @@
 package com.zogirdex.weather_calendar.service;
 
+import com.zogirdex.weather_calendar.manager.EventManager;
 import com.zogirdex.weather_calendar.uiutil.CalendarButton;
 import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
-import com.zogirdex.weather_calendar.manager.EventManager;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
-import com.zogirdex.weather_calendar.manager.WeatherManager;
-import com.zogirdex.weather_calendar.model.WeatherDay;
-import com.zogirdex.weather_calendar.util.GlobalStateException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
@@ -19,30 +16,16 @@ import java.util.ArrayList;
  * @author tom3k
  */
 public class CalendarService {
-    //List<List<CalendarItem>> Calendars;
-    // lub np. map<YearMonth, List<CalendarItem>
-    // jakbyśmy chcieli stworzyć listę kalendarzy - czyli zapisywać je w pamięci, żeby ich na nowo nie generować.
-    // przyda się też wtedy coś w stylu:     public void update(CalendarItem)
-    private final EventManager eventManager;
-    private final WeatherManager weatherManager;
+    private final EventService eventService;
+    private final WeatherService weatherService;
     
-    public CalendarService() throws WeatherApiException, GlobalStateException {
-        try {
-            this.eventManager = EventManager.getInstance();
-            this.weatherManager = WeatherManager.getInstance();
-        }
-        catch(WeatherApiException ex) {
-            throw new WeatherApiException("Wystąpił błąd komunikacji z api pogodowym.", ex);
-        }
-        catch(GlobalStateException ex) {
-            throw new GlobalStateException ("Wystapił błąd podczas ładowania danych aplikacji.", ex);
-        }
+    public CalendarService() throws WeatherApiException {
+        this.eventService = new EventService();
+        this.weatherService = new WeatherService();
     }
     
-    public List<CalendarItem> generateCalendar(Year year, Month month, boolean showDayNumbers, 
-            boolean bindToEvent) throws WeatherApiException {
+    public List<CalendarItem> generateCalendar(Year year, Month month, boolean showDayNumbers, boolean bindToEvent) throws WeatherApiException {
             List<CalendarItem> calendarItems = new ArrayList<>();
-
             int daysInMonth = month.length(year.isLeap());
             int shift = LocalDate.of(year.getValue(), month, 1).getDayOfWeek().getValue() - 1;
             int row = 1;
@@ -63,19 +46,9 @@ public class CalendarService {
                 }
 
                 CalendarItem item = new CalendarItem(date, (col - 1) % 7, row, button, initialText);
-                ScheduledEvent event = this.eventManager.getEvent(date);
-                
-                if(event != null) {
-                    button.textProperty().bind(event.calendarTextProperty());
-                    WeatherDay weatherDay = this.weatherManager.getWeatherDay(date, event.getLocation());
-                    
-                    if(weatherDay != null) {
-                        button.setBackgroundImage("/img/weather-icon/" + weatherDay.getIcon() + ".png");
-
-                        weatherDay.iconProperty().addListener((observable, oldVal, newVal) -> {
-                            button.setBackgroundImage("/img/weather-icon/" + newVal + ".png");
-                        });
-                    }
+                if (bindToEvent) {
+                    bindEventToCalendarItem(item);
+                    bindWeatherIconToCalendarItem(item);
                 }
                 calendarItems.add(item);
 
@@ -85,10 +58,16 @@ public class CalendarService {
          }
          return calendarItems;
     }
-    
-    public static void validateCalendarItem(CalendarItem item) {
-        if (item == null) {
-            throw new IllegalArgumentException("Przekazano pusty CalendarItem.");
+
+    private void bindEventToCalendarItem(CalendarItem item) {
+        eventService.bindEventToCalendarItem(item);
+    }
+
+    // wyjątkowo CalendarService używa EventManager do pobrania lokalizacji
+    private void bindWeatherIconToCalendarItem(CalendarItem item) {
+        ScheduledEvent event = EventManager.getInstance().getEvent(item.getDate());
+        if(event != null) {
+            weatherService.bindWeatherIconToCalendarItem(item, event.getLocation());
         }
     }
 }

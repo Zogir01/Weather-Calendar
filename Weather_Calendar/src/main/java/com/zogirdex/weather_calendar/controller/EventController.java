@@ -1,17 +1,15 @@
 package com.zogirdex.weather_calendar.controller;
 
+import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.model.WeatherDay;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.service.EventService;
 import com.zogirdex.weather_calendar.service.WeatherService;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
-import com.zogirdex.weather_calendar.util.GlobalStateException;
+
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -40,19 +38,15 @@ public class EventController implements Initializable{
             this.eventService = new EventService();
             this.weatherService = new WeatherService();
         }
-        catch(WeatherApiException | GlobalStateException ex) {
+        catch(WeatherApiException ex) {
             // ALERT
         }
-
         this.selectedItem = null;
         this.fillComboBoxLocation();
     } 
     
     private void fillComboBoxLocation() {
-        List<String> locations = new ArrayList<String>() ;
-        Collections.addAll(locations, "Gliwice", "Katowice", "Zabrze", "Paniówki");
-        
-        this.comboBoxLocation.setItems(FXCollections.observableArrayList(locations));
+        this.comboBoxLocation.setItems(FXCollections.observableArrayList(AppConstants.LOCATIONS));
         if(!this.comboBoxLocation.getItems().isEmpty()){
             this.comboBoxLocation.getSelectionModel().select(0);
         }
@@ -61,9 +55,8 @@ public class EventController implements Initializable{
         }
     }
     
-    public void loadData(CalendarItem item) {
+    public void loadCalendarItem(CalendarItem item) {
         this.selectedItem = item;
-        
         try {
             ScheduledEvent event = this.eventService.getEvent(this.selectedItem);
             String eventName = event.getEventName();
@@ -73,7 +66,6 @@ public class EventController implements Initializable{
             this.labelEventName.setText(eventName);
             this.labelEventDesc.setText(eventDesc);
             this.labelLocation.setText(location);
-            
             this.textFieldEventName.setText(eventName);
             this.textAreaEventDesc.setText(eventDesc);
             this.comboBoxLocation.getSelectionModel().select(location);
@@ -85,7 +77,6 @@ public class EventController implements Initializable{
             System.out.println("ikona: " + weather.getIcon());
         }
         catch(Exception ex) { // lub zlapac jakies ogólne wyjątki
-            ex.printStackTrace();
             // SHOW ALERT
         }
     }
@@ -94,12 +85,12 @@ public class EventController implements Initializable{
     private void saveData() {
         try {
             String location = this.comboBoxLocation.getSelectionModel().getSelectedItem();
-            
             this.eventService.addEvent(selectedItem, this.textFieldEventName.getText(), this.textAreaEventDesc.getText(), 
                     location);
+            this.weatherService.bindWeatherIconToCalendarItem(selectedItem, location);
+            this.eventService.bindEventToCalendarItem(selectedItem);
          }
         catch(Exception ex) {
-            ex.printStackTrace();
             // SHOW ALERT
         }
     }

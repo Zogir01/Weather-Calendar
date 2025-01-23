@@ -7,9 +7,6 @@ import com.zogirdex.weather_calendar.uiutil.StageManager;
 import com.zogirdex.weather_calendar.service.CalendarService;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
 import com.zogirdex.weather_calendar.config.AppConstants;
-import com.zogirdex.weather_calendar.service.EventService;
-import com.zogirdex.weather_calendar.service.WeatherService;
-import com.zogirdex.weather_calendar.util.GlobalStateException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import java.net.URL;
@@ -25,20 +22,19 @@ import javafx.event.ActionEvent;
 
 public class CalendarController implements Initializable {
     private CalendarService calendarService;
-    private final int YEARS_RANGE = 4;
-    
+
     @FXML private ComboBox<Month> comboBoxMonths;
     @FXML private ComboBox<Year> comboBoxYears;
     @FXML private GridPane gridPaneCalendar;
 
     @Override
     public void initialize​(URL location, ResourceBundle resources) {
-        try {
+       try {
             this.calendarService = new CalendarService();
         }
-        catch(WeatherApiException | GlobalStateException ex) {
-            // ALERT
-        }
+       catch(WeatherApiException ex) {
+            //ALERT
+       }
         this.fillComboBoxMonths();
         this.fillComboBoxYears();
         this.addDayLabels();
@@ -67,9 +63,7 @@ public class CalendarController implements Initializable {
     public void loadCalendarData(){
         Year year = this.comboBoxYears.getSelectionModel().getSelectedItem();
         Month month = this.comboBoxMonths.getSelectionModel().getSelectedItem();
-
         this.cleanCalendar();
-        
         try {
             this.calendarService.generateCalendar(year, month, true, true).forEach(item -> {
                 CalendarButton button = item.getButton();
@@ -78,7 +72,6 @@ public class CalendarController implements Initializable {
             });
         }
         catch(WeatherApiException ex) {
-            ex.printStackTrace();
             // SHOW ALERT
         }
     }
@@ -87,13 +80,13 @@ public class CalendarController implements Initializable {
     private void calendarButton_click(CalendarItem item) {
         try {
          EventController controller = StageManager.getInstance().openNewStage(
-                 AppConstants.EVENT_FXML_PATH, 
+                 AppConstants.PATH_FXML_EVENT, 
                  item.getDate().toString(), 
                  true, 
                  AppConstants.ADD_EVENT_STAGE_MIN_WIDTH, 
                  AppConstants.ADD_EVENT_STAGE_MIN_HEIGHT
          );
-         controller.loadData(item);
+         controller.loadCalendarItem(item);
         }
        catch(Exception ex) {
            ex.printStackTrace();
@@ -113,7 +106,7 @@ public class CalendarController implements Initializable {
     private void fillComboBoxYears() {
         ObservableList years = FXCollections.observableArrayList();
         int curYear = Year.now().getValue();
-        for (int i = 0; i < this.YEARS_RANGE; i++) {
+        for (int i = 0; i < AppConstants.YEARS_FORWARD_SCOPE; i++) {
            years.add(Year.of(curYear + i));
         }
         this.comboBoxYears.setItems(years);

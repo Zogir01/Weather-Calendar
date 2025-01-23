@@ -1,15 +1,10 @@
 package com.zogirdex.weather_calendar.util;
 
-import com.zogirdex.weather_calendar.model.ScheduledEvent;
-import com.zogirdex.weather_calendar.config.AppConstants;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.HashMap;
-import javafx.collections.ObservableMap;
-import java.time.LocalDate;
 
 /**
  *
