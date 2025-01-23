@@ -1,12 +1,13 @@
 package com.zogirdex.weather_calendar.controller;
 
+import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.model.WeatherDay;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.service.EventService;
 import com.zogirdex.weather_calendar.service.WeatherService;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
-import com.zogirdex.weather_calendar.util.GlobalStateException;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.List;
@@ -50,10 +51,7 @@ public class EventController implements Initializable{
     } 
     
     private void fillComboBoxLocation() {
-        List<String> locations = new ArrayList<String>() ;
-        Collections.addAll(locations, "Gliwice", "Katowice", "Zabrze", "Paniówki");
-        
-        this.comboBoxLocation.setItems(FXCollections.observableArrayList(locations));
+        this.comboBoxLocation.setItems(FXCollections.observableArrayList(AppConstants.LOCATIONS));
         if(!this.comboBoxLocation.getItems().isEmpty()){
             this.comboBoxLocation.getSelectionModel().select(0);
         }
@@ -64,7 +62,6 @@ public class EventController implements Initializable{
     
     public void loadData(CalendarItem item) {
         this.selectedItem = item;
-        
         try {
             ScheduledEvent event = this.eventService.getEvent(this.selectedItem);
             String eventName = event.getEventName();

@@ -18,10 +18,6 @@ import java.util.ArrayList;
  * @author tom3k
  */
 public class CalendarService {
-    //List<List<CalendarItem>> Calendars;
-    // lub np. map<YearMonth, List<CalendarItem>
-    // jakbyśmy chcieli stworzyć listę kalendarzy - czyli zapisywać je w pamięci, żeby ich na nowo nie generować.
-    // przyda się też wtedy coś w stylu:     public void update(CalendarItem)
     private final EventManager eventManager;
     private final WeatherManager weatherManager;
     

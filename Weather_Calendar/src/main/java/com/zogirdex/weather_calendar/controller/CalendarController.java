@@ -1,5 +1,6 @@
 package com.zogirdex.weather_calendar.controller;
 
+import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.uiutil.CalendarLabel;
 import com.zogirdex.weather_calendar.uiutil.CalendarButton;
@@ -7,9 +8,6 @@ import com.zogirdex.weather_calendar.uiutil.StageManager;
 import com.zogirdex.weather_calendar.service.CalendarService;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
 import com.zogirdex.weather_calendar.config.AppConstants;
-import com.zogirdex.weather_calendar.service.EventService;
-import com.zogirdex.weather_calendar.service.WeatherService;
-import com.zogirdex.weather_calendar.util.GlobalStateException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import java.net.URL;
@@ -25,7 +23,7 @@ import javafx.event.ActionEvent;
 
 public class CalendarController implements Initializable {
     private CalendarService calendarService;
-    private final int YEARS_RANGE = 4;
+    //private final int YEARS_RANGE = 4;
     
     @FXML private ComboBox<Month> comboBoxMonths;
     @FXML private ComboBox<Year> comboBoxYears;
@@ -113,7 +111,7 @@ public class CalendarController implements Initializable {
     private void fillComboBoxYears() {
         ObservableList years = FXCollections.observableArrayList();
         int curYear = Year.now().getValue();
-        for (int i = 0; i < this.YEARS_RANGE; i++) {
+        for (int i = 0; i < AppConstants.YEARS_FORWARD_SCOPE; i++) {
            years.add(Year.of(curYear + i));
         }
         this.comboBoxYears.setItems(years);
