@@ -23,7 +23,7 @@ public class AppConstants {
     //----------------------------------- GENERAL ----------------------------------------------------
     public static final String APP_VERSION = "0.1";
     
-    //----------------------------------- USER INTERFACE -----------------------------------------
+    //----------------------------------- USER ----------------------------------------------------------
     public static final List<String> LOCATIONS = List.of("Gliwice", "Katowice", "Zabrze", "Paniówki");
     public static final int YEARS_FORWARD_SCOPE = 4;
     
@@ -37,6 +37,7 @@ public class AppConstants {
     public static final String PATH_FXML_EVENT = PATH_RESOURCES + "event.fxml";
     public static final String PATH_EVENTS_STATE = "eventmanager.dat"; // przerobić aby te ścieżki były także w RESOURCES_PATH
     public static final String PATH_FILES_STATE = "filemanager.dat"; // przerobić aby te ścieżki były także w RESOURCES_PATH
+    //public static final 
 
     //----------------------------------- WEATHER API -----------------------------------------------
     public static final String WEATHER_API_BASE_URL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/";

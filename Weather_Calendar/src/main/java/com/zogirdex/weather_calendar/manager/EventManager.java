@@ -5,7 +5,6 @@ import com.zogirdex.weather_calendar.util.GlobalStateAssistant;
 import com.zogirdex.weather_calendar.util.GlobalStateException;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -30,8 +29,8 @@ public class EventManager {
    
     
     /*
-    * Prywatny konstruktor EventManager, który jest wywoływany tylko raz, w metodzie getInstance() klasy EventManager.
-    * Jest to podstawowy zamysł wzorca Singleton. W konstruktorze tym, odczytywany jest stan kolekcji events z pliku binarnego,
+    * Prywatny konstruktor EventManager, który jest wywoływany tylko raz, w metodzie getInstance() klasy EventManager
+    (singleton). W konstruktorze tym, odczytywany jest stan kolekcji events z pliku binarnego,
     w przypadku niepowodzenia wczytywania stanu, events jest inicjalizowany jako pusty observableHashMap.
     @return instancja EventManager.
     */
@@ -75,10 +74,6 @@ public class EventManager {
     
     public ObservableMap<LocalDate, ScheduledEvent> getEvents() {
         return events;
-    }
-    
-    public boolean eventExists(LocalDate date) {
-        return this.events.containsKey(date);
     }
     
     // wymagana jest zmiana z ObservableMap na HashMap, gdyż ObservableMap nie implementuje

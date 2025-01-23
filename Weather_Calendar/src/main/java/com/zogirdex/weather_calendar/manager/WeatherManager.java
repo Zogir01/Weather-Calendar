@@ -7,7 +7,6 @@ import com.zogirdex.weather_calendar.model.WeatherLocation;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.model.WeatherQuery;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
-import com.zogirdex.weather_calendar.util.GlobalStateException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -46,10 +45,7 @@ public class WeatherManager {
         
         // inicjalizuje swój model na podstawie wczytanych eventów.
         if(AppConstants.WEATHER_API_AUTO_QUERY) {
-                EventManager eventManager;
-                eventManager = EventManager.getInstance();
-
-                
+                EventManager eventManager = EventManager.getInstance();
                 // tworzę Set aby lokalizacje były unikalne - aby nie tworzyć wielu zapytań niepotrzebnie do tej samej lokalizacji.
                 Set <String> uniqueLocations = new HashSet();
                 for(ScheduledEvent event : eventManager.getEvents().values()) {
@@ -83,17 +79,10 @@ public class WeatherManager {
     public void addWeatherLocation(WeatherLocation weatherLocation) {
         this.weatherLocations.put(weatherLocation.getLocation(), weatherLocation);
     }
-    
-    public boolean weatherLocationExists(String location) {
-        return this.weatherLocations.containsKey(location);
-    }
 
     public WeatherDay getWeatherDay(LocalDate date, String location) {
         WeatherLocation weatherLocation = this.weatherLocations.getOrDefault(location, null);
-        if(weatherLocation == null) {
-            return null;
-        }  
-        return weatherLocation.getWeatherDay(date);
+        return weatherLocation != null ? weatherLocation.getWeatherDay(date) : null;
     }
 
     public void addWeatherDay(String location, WeatherDay weatherDay) {
@@ -121,42 +110,36 @@ public class WeatherManager {
     
     private void makeQuery(String location, LocalDate date, boolean readOneDate) throws WeatherApiException {
         String finalUrl = AppConstants.WEATHER_API_BASE_URL + location + this.apiQueryParamString;
-        //WeatherManager weatherManager = WeatherManager.getInstance();
-
         try {
             URL endpoint = new URL(finalUrl);
             HttpURLConnection conn = (HttpURLConnection) endpoint.openConnection();
-            conn.setRequestProperty("Accept", "application/json");
             
+            conn.setRequestProperty("Accept", "application/json");
             if (conn.getResponseCode() == 200) {  
                 BufferedReader br = new BufferedReader(new InputStreamReader(
                         conn.getInputStream(), 
                         Charset.forName("UTF-8"))
                 );
-                
                 Gson gson = new Gson();
                 WeatherQuery query = gson.fromJson(br, WeatherQuery.class);
-                
                 WeatherLocation weatherLocation = this.getWeatherLocation(location);
                 
-                // mozna by to lepiej zoptymalizowac - tzn. jeśli WeatherManager nie ma takiego WeatherLocation (=null), to
-                // tworzymy ten obiekt i dodajemy mu WeatherDay, a dopiero na samym końcu wstawiamy ten obiekt do 
-                // WeatherManager.
                 if (weatherLocation == null) {
-                    this.addWeatherLocation(new WeatherLocation(location));
+                    weatherLocation = new WeatherLocation(location);
+                    this.addWeatherLocation(weatherLocation);
                 }
-                if(!readOneDate) { // dodaje 14 nowych WeatherDay
-                    for(WeatherDay day : query.getDays()) {
-                        this.addWeatherDay(location, day);
-                    }
-                }
-                else { // dodaje jeden WeatherDay do określonej daty
-                    for(WeatherDay day : query.getDays()) {
+                if(readOneDate) { // dodaje jeden WeatherDay do określonej daty
+                     for(WeatherDay day : query.getDays()) {
                         LocalDate dateFromQuery = LocalDate.parse(day.getDatetime());
                         if(dateFromQuery.equals(date)) {
-                            this.addWeatherDay(location, day);
+                            weatherLocation.addWeatherDay(day);
                         }
                     }  
+                }
+                else { // dodaje 14 nowych WeatherDay
+                   for(WeatherDay day : query.getDays()) {
+                       weatherLocation.addWeatherDay(day);
+                   }
                 }
                 conn.disconnect();
             }
@@ -169,16 +152,4 @@ public class WeatherManager {
             throw new WeatherApiException("Error while creating weather API query.", ex);
         }
     }
-    
-//    private String createParamString () {
-//        StringBuilder builder = new StringBuilder();    
-//        builder.append("?");
-//        for (Map.Entry<String, String> entry : AppConstants.QUERY_PARAMS.entrySet()) {
-//            builder.append(entry.getKey())
-//                           .append("=")
-//                           .append(entry.getValue())
-//                           .append("&");
-//            }
-//        return builder.toString();
-//    }
 }

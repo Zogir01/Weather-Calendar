@@ -24,8 +24,6 @@ public class CalendarButton extends Button {
     }
     
     public void setBackgroundImage(String url) {
-        System.out.println("ustawiam tlo przyciskow");
-        
         this.setStyle(this.getStyle()
                 + String.format("-fx-background-image: url('%s');", url)    
         );

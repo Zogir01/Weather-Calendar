@@ -1,6 +1,5 @@
 package com.zogirdex.weather_calendar.controller;
 
-import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.uiutil.CalendarLabel;
 import com.zogirdex.weather_calendar.uiutil.CalendarButton;
@@ -23,20 +22,19 @@ import javafx.event.ActionEvent;
 
 public class CalendarController implements Initializable {
     private CalendarService calendarService;
-    //private final int YEARS_RANGE = 4;
-    
+
     @FXML private ComboBox<Month> comboBoxMonths;
     @FXML private ComboBox<Year> comboBoxYears;
     @FXML private GridPane gridPaneCalendar;
 
     @Override
     public void initialize​(URL location, ResourceBundle resources) {
-        try {
+       try {
             this.calendarService = new CalendarService();
         }
-        catch(WeatherApiException ex) {
-            
-        }
+       catch(WeatherApiException ex) {
+            //ALERT
+       }
         this.fillComboBoxMonths();
         this.fillComboBoxYears();
         this.addDayLabels();
@@ -65,9 +63,7 @@ public class CalendarController implements Initializable {
     public void loadCalendarData(){
         Year year = this.comboBoxYears.getSelectionModel().getSelectedItem();
         Month month = this.comboBoxMonths.getSelectionModel().getSelectedItem();
-
         this.cleanCalendar();
-        
         try {
             this.calendarService.generateCalendar(year, month, true, true).forEach(item -> {
                 CalendarButton button = item.getButton();
@@ -76,7 +72,6 @@ public class CalendarController implements Initializable {
             });
         }
         catch(WeatherApiException ex) {
-            ex.printStackTrace();
             // SHOW ALERT
         }
     }
@@ -91,7 +86,7 @@ public class CalendarController implements Initializable {
                  AppConstants.ADD_EVENT_STAGE_MIN_WIDTH, 
                  AppConstants.ADD_EVENT_STAGE_MIN_HEIGHT
          );
-         controller.loadData(item);
+         controller.loadCalendarItem(item);
         }
        catch(Exception ex) {
            ex.printStackTrace();
