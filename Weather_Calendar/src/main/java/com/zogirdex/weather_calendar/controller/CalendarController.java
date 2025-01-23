@@ -36,8 +36,8 @@ public class CalendarController implements Initializable {
         try {
             this.calendarService = new CalendarService();
         }
-        catch(WeatherApiException | GlobalStateException ex) {
-            // ALERT
+        catch(WeatherApiException ex) {
+            
         }
         this.fillComboBoxMonths();
         this.fillComboBoxYears();

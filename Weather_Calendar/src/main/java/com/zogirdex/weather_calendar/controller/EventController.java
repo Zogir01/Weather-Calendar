@@ -40,8 +40,9 @@ public class EventController implements Initializable{
             this.eventService = new EventService();
             this.weatherService = new WeatherService();
         }
-        catch(WeatherApiException | GlobalStateException ex) {
+        catch(WeatherApiException ex) {
             // ALERT
+            ex.printStackTrace();
         }
 
         this.selectedItem = null;

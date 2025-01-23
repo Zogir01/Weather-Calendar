@@ -33,7 +33,7 @@ public class WeatherManager {
     private String apiQueryParamString;
     
     
-    private WeatherManager() throws WeatherApiException, GlobalStateException {
+    private WeatherManager() throws WeatherApiException {
         // tworzenie stringa z parametrami zapytania do api (parametry znajdują się w AppConstants)
         StringBuilder builder = new StringBuilder().append("?");    
         for (Map.Entry<String, String> entry : AppConstants.QUERY_PARAMS.entrySet()) {
@@ -47,12 +47,8 @@ public class WeatherManager {
         // inicjalizuje swój model na podstawie wczytanych eventów.
         if(AppConstants.WEATHER_API_AUTO_QUERY) {
                 EventManager eventManager;
-                try {
-                    eventManager = EventManager.getInstance();
-                }
-                catch(GlobalStateException ex) {
-                    throw new GlobalStateException("Error with EventManager global state occured.", ex);
-                }
+                eventManager = EventManager.getInstance();
+
                 
                 // tworzę Set aby lokalizacje były unikalne - aby nie tworzyć wielu zapytań niepotrzebnie do tej samej lokalizacji.
                 Set <String> uniqueLocations = new HashSet();
@@ -73,7 +69,7 @@ public class WeatherManager {
     }
     
     // getInstance wzorca singleton (synchronized, aby ułatwić wielowątkowość, którą można by zaimplementować)
-    public static synchronized WeatherManager getInstance() throws WeatherApiException, GlobalStateException {
+    public static synchronized WeatherManager getInstance() throws WeatherApiException{
         if (instance == null) {
             instance = new WeatherManager();
         }

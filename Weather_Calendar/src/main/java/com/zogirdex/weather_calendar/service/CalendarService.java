@@ -7,7 +7,6 @@ import com.zogirdex.weather_calendar.manager.EventManager;
 import com.zogirdex.weather_calendar.util.WeatherApiException;
 import com.zogirdex.weather_calendar.manager.WeatherManager;
 import com.zogirdex.weather_calendar.model.WeatherDay;
-import com.zogirdex.weather_calendar.util.GlobalStateException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
@@ -26,16 +25,13 @@ public class CalendarService {
     private final EventManager eventManager;
     private final WeatherManager weatherManager;
     
-    public CalendarService() throws WeatherApiException, GlobalStateException {
+    public CalendarService() throws WeatherApiException {
+        this.eventManager = EventManager.getInstance();
         try {
-            this.eventManager = EventManager.getInstance();
             this.weatherManager = WeatherManager.getInstance();
         }
         catch(WeatherApiException ex) {
             throw new WeatherApiException("Wystąpił błąd komunikacji z api pogodowym.", ex);
-        }
-        catch(GlobalStateException ex) {
-            throw new GlobalStateException ("Wystapił błąd podczas ładowania danych aplikacji.", ex);
         }
     }
     
