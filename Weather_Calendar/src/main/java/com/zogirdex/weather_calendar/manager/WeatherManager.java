@@ -14,8 +14,7 @@ import java.util.Set;
 /**
  *
  * @author tom3k
- * Nowa wersja, aby możliwe było pobierania pogody dla różnych lokalizacji dodano Pair<LocalDate, String>
- * -edit: usunięto tą parę i dodano nową klasę WeatherLocation
+ * 
  */
 public class WeatherManager {
     private static WeatherManager instance;
@@ -59,15 +58,17 @@ public class WeatherManager {
 //        }
 //    }
     
-    public final void updateWeather(Set<String> locations) throws ApiException {
+    // zaaktualizuje tylko jedną date, dla kolekcji lokalizacji
+   public final void updateWeather(Set<String> locations, LocalDate date) throws ApiException {
         for(String location : locations) {
-            this.updateWeather(location);
+            this.updateWeather(location, date);
         }
     }
     
-    public final void updateWeather(Set<String> locations, LocalDate date) throws ApiException {
+   // zaaktualizuje 14 dat w przód, dla jednej lokalizacji (na tyle pozwala api)
+    public final void updateWeather(Set<String> locations) throws ApiException {
         for(String location : locations) {
-            this.updateWeather(location, date);
+            this.updateWeather(location);
         }
     }
     
@@ -95,7 +96,7 @@ public class WeatherManager {
      private WeatherLocation getOrCreateWeatherLocation(String location) {
         WeatherLocation weatherLocation = this.getWeatherLocation(location);
           if (weatherLocation == null) {
-                weatherLocation = new WeatherLocation(location);
+                weatherLocation = new WeatherLocation();
                 this.weatherLocations.put(location, weatherLocation);
           }
           return weatherLocation;

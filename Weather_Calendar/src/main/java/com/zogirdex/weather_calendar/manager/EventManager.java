@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Map;
 
 /**
  * EventManager przechowuje globalny stan aplikacji odnośnie utworzonych spotkań. Jest to klasa singleton, a więc
@@ -19,23 +20,9 @@ import java.util.Set;
  * (W projekcie założono, że z klas typu "Manager" mogą korzystać tylko klasy typu "Service" lub klasa "App".)
  */
 public class EventManager {
-    /*
-    * Instancja klasy singleton EventManager.
-    */
     private static EventManager instance;
-    
-    /*
-    *  Model danych aplikacji - kolekcja spotkań jako obiekt ObservableMap.
-    */
     private final ObservableMap<LocalDate, ScheduledEvent> events;
    
-    
-    /*
-    * Prywatny konstruktor EventManager, który jest wywoływany tylko raz, w metodzie getInstance() klasy EventManager
-    (singleton). W konstruktorze tym, odczytywany jest stan kolekcji events z pliku binarnego,
-    w przypadku niepowodzenia wczytywania stanu, events jest inicjalizowany jako pusty observableHashMap.
-    @return instancja EventManager.
-    */
     private EventManager() {
         HashMap<LocalDate, ScheduledEvent> state;
         try {
@@ -43,12 +30,9 @@ public class EventManager {
         }
         catch(GlobalStateException ex) {
             state = new HashMap();    
-            // LOGUJ: "Error occured while loading global events state. Initializing with" + "an empty collection." + ex.what()
         }
         this.events = javafx.collections.FXCollections.observableMap(state);
     }
-    
-    // getInstance wzorca singleton (synchronized, aby ułatwić wielowątkowość, którą można by zaimplementować)
     public static synchronized EventManager getInstance() {
         if (instance == null) {
             instance = new EventManager();
@@ -59,10 +43,22 @@ public class EventManager {
     public ScheduledEvent getEvent(LocalDate date) {
         return events.getOrDefault(date, null);
     }
+    
+    public ObservableMap<LocalDate, ScheduledEvent> getEvents() {
+        return this.events;
+     }
+    
+    // Zwraca unikalną kolekcje lokalizacji zapisanych w mapie events.
+    public Set<String> getLocations() {
+        Set <String> locations = new HashSet();
+        for(ScheduledEvent event : this.events.values()) {
+            locations.add(event.getLocation());
+        }
+        return locations;
+     }
 
     public void addEvent(LocalDate date, ScheduledEvent event) throws ApiException{
         events.put(date, event);
-        
         if(AppConstants.WEATHER_API_AUTO_QUERY) {
             try {
                 WeatherManager.getInstance().updateWeather(event.getLocation());
@@ -74,20 +70,8 @@ public class EventManager {
         }
     }
     
-    public ObservableMap<LocalDate, ScheduledEvent> getEvents() {
-        return this.events;
-    }
-    
-    public Set<String> getLocations() {
-        Set <String> locations = new HashSet();
-        for(ScheduledEvent event : this.events.values()) {
-            locations.add(event.getLocation());
-        }
-        return locations;
-    }
-    
     // wymagana jest zmiana z ObservableMap na HashMap, gdyż ObservableMap nie implementuje
-    // interfejsu Serializable.
+    // interfejsu Serializable. Przydałoby się aby ten kod wykonywała jakaś inna klasa.
     public final void saveEventsState() throws GlobalStateException {
         GlobalStateAssistant.saveState(new HashMap<>(this.events), AppConstants.PATH_EVENTS_STATE);
     }
