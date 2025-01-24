@@ -47,8 +47,14 @@ public class CalendarService {
 
                 CalendarItem item = new CalendarItem(date, (col - 1) % 7, row, button, initialText);
                 if (bindToEvent) {
-                    bindEventToCalendarItem(item);
-                    bindWeatherIconToCalendarItem(item);
+                    try {
+                        ScheduledEvent event = eventService.getEvent(item);
+                        eventService.bindEventToCalendarItem(item, event);
+                        weatherService.bindWeatherIconToCalendarItem(item, weatherService.getWeatherDay(item, event.getLocation()));     
+                    }
+                     catch(Exception ex) {
+                         
+                     }           
                 }
                 calendarItems.add(item);
 
@@ -57,17 +63,5 @@ public class CalendarService {
                 }
          }
          return calendarItems;
-    }
-
-    private void bindEventToCalendarItem(CalendarItem item) {
-        eventService.bindEventToCalendarItem(item);
-    }
-
-    // wyjątkowo CalendarService używa EventManager do pobrania lokalizacji
-    private void bindWeatherIconToCalendarItem(CalendarItem item) {
-        ScheduledEvent event = EventManager.getInstance().getEvent(item.getDate());
-        if(event != null) {
-            weatherService.bindWeatherIconToCalendarItem(item, event.getLocation());
-        }
     }
 }

@@ -3,7 +3,7 @@ package com.zogirdex.weather_calendar.controller;
 import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.uiutil.CalendarLabel;
 import com.zogirdex.weather_calendar.uiutil.CalendarButton;
-import com.zogirdex.weather_calendar.uiutil.StageManager;
+import com.zogirdex.weather_calendar.uiutil.StageAssistant;
 import com.zogirdex.weather_calendar.service.CalendarService;
 import com.zogirdex.weather_calendar.util.ApiException;
 import com.zogirdex.weather_calendar.config.AppConstants;
@@ -79,7 +79,7 @@ public class CalendarController implements Initializable {
     @FXML
     private void calendarButton_click(CalendarItem item) {
         try {
-         EventController controller = StageManager.getInstance().openNewStage(
+         EventController controller = StageAssistant.getInstance().openNewStage(
                  AppConstants.PATH_FXML_EVENT, 
                  item.getDate().toString(), 
                  true, 

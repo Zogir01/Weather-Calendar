@@ -6,6 +6,7 @@ import com.zogirdex.weather_calendar.util.GlobalStateException;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.util.ApiException;
 import javafx.collections.ObservableMap;
+import javafx.collections.FXCollections;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,17 +22,10 @@ import java.util.Map;
  */
 public class EventManager {
     private static EventManager instance;
-    private final ObservableMap<LocalDate, ScheduledEvent> events;
+    private ObservableMap<LocalDate, ScheduledEvent> events;
    
     private EventManager() {
-        HashMap<LocalDate, ScheduledEvent> state;
-        try {
-             state = GlobalStateAssistant.loadState(AppConstants.PATH_EVENTS_STATE);
-        }
-        catch(GlobalStateException ex) {
-            state = new HashMap();    
-        }
-        this.events = javafx.collections.FXCollections.observableMap(state);
+        this.events = FXCollections.observableHashMap();
     }
     public static synchronized EventManager getInstance() {
         if (instance == null) {
@@ -57,17 +51,12 @@ public class EventManager {
         return locations;
      }
 
-    public void addEvent(LocalDate date, ScheduledEvent event) throws ApiException{
+    public void addEvent(LocalDate date, ScheduledEvent event) {
         events.put(date, event);
-        if(AppConstants.WEATHER_API_AUTO_QUERY) {
-            try {
-                WeatherManager.getInstance().updateWeather(event.getLocation());
-            }
-            catch(ApiException ex) {
-                    throw new ApiException("When new event was added, error occured "
-                            + "while performing weather api query.", ex);
-            }
-        }
+    }
+    
+    public final void loadEventsState() throws GlobalStateException {
+          this.events = FXCollections.observableMap(GlobalStateAssistant.loadState(AppConstants.PATH_EVENTS_STATE));
     }
     
     // wymagana jest zmiana z ObservableMap na HashMap, gdyż ObservableMap nie implementuje

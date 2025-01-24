@@ -87,8 +87,7 @@ public class EventController implements Initializable{
             String location = this.comboBoxLocation.getSelectionModel().getSelectedItem();
             this.eventService.addEvent(selectedItem, this.textFieldEventName.getText(), this.textAreaEventDesc.getText(), 
                     location);
-            this.weatherService.bindWeatherIconToCalendarItem(selectedItem, location);
-            this.eventService.bindEventToCalendarItem(selectedItem);
+            this.weatherService.updateWeather(selectedItem, location);
          }
         catch(Exception ex) {
             // SHOW ALERT

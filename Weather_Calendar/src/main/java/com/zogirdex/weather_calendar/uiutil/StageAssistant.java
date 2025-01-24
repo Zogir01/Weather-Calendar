@@ -15,18 +15,18 @@ import javafx.event.ActionEvent;
  * @author tom3k
  * 
  */
-public class StageManager {
-    private static StageManager instance;
-    private StageManager() {}
+public class StageAssistant {
+    private static StageAssistant instance;
+    private StageAssistant() {}
     
     /**
      * Singleton pattern. Method to get instance of WindowManager, if instance is null, new instance will be created.
      * 
      * @return Instance of WindowManager.
      */
-    public static StageManager getInstance() {
+    public static StageAssistant getInstance() {
         if (instance == null) {
-            instance = new StageManager();
+            instance = new StageAssistant();
         }
         return instance;
     }

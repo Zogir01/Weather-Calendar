@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.DoubleProperty;
+import java.time.LocalDate;
 
 public class WeatherDay {
 
@@ -42,6 +43,9 @@ public class WeatherDay {
     public StringProperty datetimeProperty() { return new SimpleStringProperty(datetime); }
     public String getDatetime() { return datetime; } 
     public void setDatetime(String datetime) { this.datetime = datetime; }
+//    public LocalDate getDatetimeAsLocalDate() {
+//        return LocalDate.parse(this.getDatetime());
+//    }
 
     public DoubleProperty tempProperty() { return new SimpleDoubleProperty(temp); }
     public double getTemp() { return temp; } 

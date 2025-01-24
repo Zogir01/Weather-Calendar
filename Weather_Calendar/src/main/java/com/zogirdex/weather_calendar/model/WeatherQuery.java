@@ -97,15 +97,15 @@ this.description = description;
 public List<WeatherDay> getDays() {
 return days;
 }
-
-public WeatherDay getDay(LocalDate date) {
-    for(WeatherDay day : this.days) {
-        if(date.equals(LocalDate.parse(day.getDatetime()))) {
-            return day;
-        }
-    }
-    return null;
-}
+//
+//public WeatherDay getDay(LocalDate date) {
+//    for(WeatherDay day : this.days) {
+//        if(date.equals(day.getDatetimeAsLocalDate())) {
+//            return day;
+//        }
+//    }
+//    return null;
+//}
 
 public void setDays(List<WeatherDay> days) {
 this.days = days;
