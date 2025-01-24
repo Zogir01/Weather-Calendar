@@ -6,7 +6,7 @@ import com.zogirdex.weather_calendar.model.WeatherDay;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.service.EventService;
 import com.zogirdex.weather_calendar.service.WeatherService;
-import com.zogirdex.weather_calendar.util.WeatherApiException;
+import com.zogirdex.weather_calendar.util.ApiException;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -38,7 +38,7 @@ public class EventController implements Initializable{
             this.eventService = new EventService();
             this.weatherService = new WeatherService();
         }
-        catch(WeatherApiException ex) {
+        catch(ApiException ex) {
             // ALERT
         }
         this.selectedItem = null;

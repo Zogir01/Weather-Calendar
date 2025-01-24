@@ -6,19 +6,19 @@ import java.util.Map;
 
 public class WeatherLocation {
     private String location;
-    private final Map<LocalDate, WeatherDay> weatherDaysMap;
+    private final Map<LocalDate, WeatherDay> weatherDays;
 
     public WeatherLocation(String location) {
         this.location = location;
-        this.weatherDaysMap = new HashMap<>();
+        this.weatherDays = new HashMap<>();
     }
 
     public void addWeatherDay(WeatherDay weatherDay) {
-        weatherDaysMap.put(LocalDate.parse(weatherDay.getDatetime()), weatherDay);
+        weatherDays.put(LocalDate.parse(weatherDay.getDatetime()), weatherDay);
     }
 
     public WeatherDay getWeatherDay(LocalDate date) {
-        return weatherDaysMap.get(date);  
+        return weatherDays.get(date);  
     }
     
     public String getLocation() {

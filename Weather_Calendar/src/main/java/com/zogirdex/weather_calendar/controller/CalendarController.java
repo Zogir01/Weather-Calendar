@@ -5,7 +5,7 @@ import com.zogirdex.weather_calendar.uiutil.CalendarLabel;
 import com.zogirdex.weather_calendar.uiutil.CalendarButton;
 import com.zogirdex.weather_calendar.uiutil.StageManager;
 import com.zogirdex.weather_calendar.service.CalendarService;
-import com.zogirdex.weather_calendar.util.WeatherApiException;
+import com.zogirdex.weather_calendar.util.ApiException;
 import com.zogirdex.weather_calendar.config.AppConstants;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -32,7 +32,7 @@ public class CalendarController implements Initializable {
        try {
             this.calendarService = new CalendarService();
         }
-       catch(WeatherApiException ex) {
+       catch(ApiException ex) {
             //ALERT
        }
         this.fillComboBoxMonths();
@@ -71,7 +71,7 @@ public class CalendarController implements Initializable {
                 this.gridPaneCalendar.add(button, item.getColumn(), item.getRow());
             });
         }
-        catch(WeatherApiException ex) {
+        catch(ApiException ex) {
             // SHOW ALERT
         }
     }

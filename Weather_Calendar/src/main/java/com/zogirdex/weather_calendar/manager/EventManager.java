@@ -4,10 +4,12 @@ import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.util.GlobalStateAssistant;
 import com.zogirdex.weather_calendar.util.GlobalStateException;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
-import com.zogirdex.weather_calendar.util.WeatherApiException;
+import com.zogirdex.weather_calendar.util.ApiException;
 import javafx.collections.ObservableMap;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * EventManager przechowuje globalny stan aplikacji odnośnie utworzonych spotkań. Jest to klasa singleton, a więc
@@ -58,22 +60,30 @@ public class EventManager {
         return events.getOrDefault(date, null);
     }
 
-    public void addEvent(LocalDate date, ScheduledEvent event) throws WeatherApiException{
+    public void addEvent(LocalDate date, ScheduledEvent event) throws ApiException{
         events.put(date, event);
         
         if(AppConstants.WEATHER_API_AUTO_QUERY) {
             try {
-                WeatherManager.getInstance().makeQuery(event.getLocation());
+                WeatherManager.getInstance().updateWeather(event.getLocation());
             }
-            catch(WeatherApiException ex) {
-                    throw new WeatherApiException("When new event was added, error occured "
+            catch(ApiException ex) {
+                    throw new ApiException("When new event was added, error occured "
                             + "while performing weather api query.", ex);
             }
         }
     }
     
     public ObservableMap<LocalDate, ScheduledEvent> getEvents() {
-        return events;
+        return this.events;
+    }
+    
+    public Set<String> getLocations() {
+        Set <String> locations = new HashSet();
+        for(ScheduledEvent event : this.events.values()) {
+            locations.add(event.getLocation());
+        }
+        return locations;
     }
     
     // wymagana jest zmiana z ObservableMap na HashMap, gdyż ObservableMap nie implementuje

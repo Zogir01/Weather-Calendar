@@ -3,7 +3,7 @@ package com.zogirdex.weather_calendar.service;
 import com.zogirdex.weather_calendar.manager.WeatherManager;
 import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.model.WeatherDay;
-import com.zogirdex.weather_calendar.util.WeatherApiException;
+import com.zogirdex.weather_calendar.util.ApiException;
 import java.time.LocalDate;
 
 /**
@@ -13,12 +13,12 @@ import java.time.LocalDate;
 public class WeatherService {
     private final WeatherManager weatherManager;
     
-    public WeatherService() throws WeatherApiException {
+    public WeatherService() throws ApiException {
         try {
             this.weatherManager = WeatherManager.getInstance();
         }
-        catch(WeatherApiException ex) {
-            throw new WeatherApiException("Wystąpił błąd komunikacji z api pogodowym.", ex);
+        catch(ApiException ex) {
+            throw new ApiException("Wystąpił błąd komunikacji z api pogodowym.", ex);
         }
     }
     

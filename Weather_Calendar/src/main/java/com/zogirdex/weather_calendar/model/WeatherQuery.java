@@ -1,4 +1,5 @@
 package com.zogirdex.weather_calendar.model;
+import java.time.LocalDate;
 
 import java.util.List;
 
@@ -95,6 +96,15 @@ this.description = description;
 
 public List<WeatherDay> getDays() {
 return days;
+}
+
+public WeatherDay getDay(LocalDate date) {
+    for(WeatherDay day : this.days) {
+        if(date.equals(LocalDate.parse(day.getDatetime()))) {
+            return day;
+        }
+    }
+    return null;
 }
 
 public void setDays(List<WeatherDay> days) {

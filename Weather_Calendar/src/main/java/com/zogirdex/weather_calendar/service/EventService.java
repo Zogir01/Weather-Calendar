@@ -3,7 +3,7 @@ package com.zogirdex.weather_calendar.service;
 import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.manager.EventManager;
-import com.zogirdex.weather_calendar.util.WeatherApiException;
+import com.zogirdex.weather_calendar.util.ApiException;
 
 /**
  *
@@ -16,7 +16,7 @@ public class EventService {
         this.eventManager = EventManager.getInstance();
     }
     
-    public void addEvent(CalendarItem item, String eventName, String eventDesc, String location) throws WeatherApiException {
+    public void addEvent(CalendarItem item, String eventName, String eventDesc, String location) throws ApiException {
         this.validateCalendarItem(item);
         
         if(eventName.length() <= 3) {
@@ -27,8 +27,8 @@ public class EventService {
         try {
             this.eventManager.addEvent(item.getDate(), newEvent);
         }
-        catch (WeatherApiException ex) {
-            throw new WeatherApiException("Wystąpił błąd podczas pobierania danych pogodowych dla nowo dodanego spotkania.", ex);
+        catch (ApiException ex) {
+            throw new ApiException("Wystąpił błąd podczas pobierania danych pogodowych dla nowo dodanego spotkania.", ex);
         }
     }
         
