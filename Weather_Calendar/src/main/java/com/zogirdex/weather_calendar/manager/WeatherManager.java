@@ -1,15 +1,8 @@
 package com.zogirdex.weather_calendar.manager;
 
-import com.zogirdex.weather_calendar.config.AppConstants;
-import com.zogirdex.weather_calendar.model.WeatherDay;
 import com.zogirdex.weather_calendar.model.WeatherLocation;
-import com.zogirdex.weather_calendar.model.WeatherQuery;
-import com.zogirdex.weather_calendar.util.ApiException;
-import com.zogirdex.weather_calendar.util.QueryAssistant;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
-import java.time.LocalDate;
-import java.util.Set;
 
 /**
  *

@@ -2,7 +2,6 @@ package com.zogirdex.weather_calendar.util;
 
 import com.google.gson.Gson;
 import com.zogirdex.weather_calendar.config.AppConstants;
-import com.zogirdex.weather_calendar.model.WeatherQuery;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

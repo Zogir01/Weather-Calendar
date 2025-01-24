@@ -4,14 +4,12 @@ import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.util.GlobalStateAssistant;
 import com.zogirdex.weather_calendar.util.GlobalStateException;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
-import com.zogirdex.weather_calendar.util.ApiException;
 import javafx.collections.ObservableMap;
 import javafx.collections.FXCollections;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Map;
 
 /**
  * EventManager przechowuje globalny stan aplikacji odnośnie utworzonych spotkań. Jest to klasa singleton, a więc

@@ -1,6 +1,5 @@
 package com.zogirdex.weather_calendar.service;
 
-import com.zogirdex.weather_calendar.manager.EventManager;
 import com.zogirdex.weather_calendar.uiutil.CalendarButton;
 import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
