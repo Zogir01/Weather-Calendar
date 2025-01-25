@@ -15,21 +15,18 @@ import java.io.ObjectStreamException;
 public class ScheduledEvent implements Serializable {
     private transient StringProperty eventName;
     private transient StringProperty eventDesc;
-    private transient StringProperty dayOfMonth;
     private transient StringProperty location;
     
     public ScheduledEvent() {
         this.eventName = new SimpleStringProperty("");
         this.eventDesc = new SimpleStringProperty("");
-        this.dayOfMonth = new SimpleStringProperty("");
         this.location = new SimpleStringProperty("");
     }
     
-    public ScheduledEvent(String eventName, String eventDesc, String location, String dayOfMonth) {
+    public ScheduledEvent(String eventName, String eventDesc, String location) {
         this.eventName = new SimpleStringProperty(eventName);
         this.eventDesc = new SimpleStringProperty(eventDesc);
         this.location = new SimpleStringProperty(location);
-        this.dayOfMonth = new SimpleStringProperty(dayOfMonth);
     }
     
     public StringProperty eventNameProperty() { return this.eventName; }
@@ -40,38 +37,26 @@ public class ScheduledEvent implements Serializable {
     public String getEventDesc() { return this.eventDesc.get(); }
     public void setEventDesc(String eventDesc) { this.eventDesc.set(eventDesc); }
     
-    public StringProperty dayOfMonthProperty() { return this.dayOfMonth; }
-    public String getDayOfMonth() { return this.dayOfMonth.get(); }
-    public void setDayOfMonth(String dayOfMonth) { this.dayOfMonth.set(dayOfMonth); }
-    
     public StringProperty locationProperty() { return this.location; }
     public String getLocation() { return this.location.get(); }
     public void setLocation(String dayOfMonth) { this.location.set(dayOfMonth); }
     
-    public StringProperty calendarTextProperty() {
-        StringProperty fullText = new SimpleStringProperty();
-        fullText.bind(dayOfMonth.concat("\n").concat(eventName));
-        return fullText;
-    }
     private void writeObject(ObjectOutputStream out) throws IOException{
         out.defaultWriteObject();
         out.writeUTF(eventName.get());
         out.writeUTF(eventDesc.get());
-        out.writeUTF(dayOfMonth.get());
         out.writeUTF(location.get());
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
         this.eventName = new SimpleStringProperty(in.readUTF());
         this.eventDesc = new SimpleStringProperty(in.readUTF());
-        this.dayOfMonth = new SimpleStringProperty(in.readUTF());
         this.location = new SimpleStringProperty(in.readUTF());
     }
 
     private void readObjectNoData() throws ObjectStreamException{
         this.eventName = new SimpleStringProperty();
         this.eventDesc = new SimpleStringProperty();
-        this.dayOfMonth = new SimpleStringProperty();
         this.location = new SimpleStringProperty();
     }
 }

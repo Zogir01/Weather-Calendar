@@ -78,8 +78,8 @@ public class EventController implements Initializable{
             System.out.println("opis: " + weather.getDescription());
             System.out.println("ikona: " + weather.getIcon());
         }
-        catch(Exception ex) { // lub zlapac jakies ogólne wyjątki
-            
+        catch(Exception ex) { 
+            new AlertException(ex).showAndWait();
         }
     }
     
@@ -87,11 +87,10 @@ public class EventController implements Initializable{
     private void saveData() {
         try {
             String location = this.comboBoxLocation.getSelectionModel().getSelectedItem();
-            this.eventService.addEvent(selectedItem, this.textFieldEventName.getText(), this.textAreaEventDesc.getText(), 
-                    location);
+            this.eventService.addEvent(selectedItem, this.textFieldEventName.getText(), 
+                    this.textAreaEventDesc.getText(), location);
             this.weatherService.updateWeather(selectedItem, location);
-            new AlertSucces("Pomyślnie udało się zapisać nowe spotkanie.").showAndWait();
-            
+            new AlertSucces("Pomyślnie udało się zapisać nowe spotkanie.").showAndWait();   
          }
         catch(Exception ex) {
             new AlertException(ex).showAndWait();

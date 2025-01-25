@@ -22,8 +22,7 @@ public class EventService {
         this.validateEventDesc(eventDesc);
         this.validateLocation(location);
         
-        ScheduledEvent newEvent = new ScheduledEvent(eventName, eventDesc, location,
-                String.valueOf(item.getDate().getDayOfMonth()));
+        ScheduledEvent newEvent = new ScheduledEvent(eventName, eventDesc, location);
 
         this.eventManager.addEvent(item.getDate(), newEvent);
         this.bindEventToCalendarItem(item, newEvent);
@@ -39,7 +38,13 @@ public class EventService {
     }
     
     public void bindEventToCalendarItem(CalendarItem item, ScheduledEvent event) {
-            item.getButton().textProperty().bind(event.calendarTextProperty());
+         final String text =String.valueOf(item.getDate().getDayOfMonth())
+                    .concat("\n")
+                    .concat(event.getEventName());
+        item.getButton().setText(text);
+        event.eventNameProperty().addListener((observable, oldVal, newVal) -> {
+            item.getButton().setText(text);
+        });
     }
     
     private void validateEventName(String eventName) {

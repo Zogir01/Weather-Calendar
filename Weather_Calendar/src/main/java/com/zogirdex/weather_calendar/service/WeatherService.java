@@ -54,9 +54,10 @@ public class WeatherService {
     }
     
     public void bindWeatherIconToCalendarItem(CalendarItem item, WeatherDay weatherDay) throws ApiException{
-        item.getButton().setBackgroundImage("img/weather-icon-trsp/" + weatherDay.getIcon() + ".png");
+        String imagePath = "img/weather-icon-trsp/" + weatherDay.getIcon() + ".png";
+        item.getButton().setBackgroundImage(imagePath);
         weatherDay.iconProperty().addListener((observable, oldVal, newVal) -> {
-            item.getButton().setBackgroundImage("img/weather-icon-trsp/"  + newVal + ".png");
+            item.getButton().setBackgroundImage(imagePath);
         });
     }
     
