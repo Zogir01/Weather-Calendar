@@ -41,7 +41,7 @@ public class WeatherService {
             for(WeatherDay weatherDay : result.getDays()) {
                 LocalDate date = item.getDate();
                 LocalDate queryDate = LocalDate.parse(weatherDay.getDatetime());
-                if(date == queryDate) {
+                if(date.equals(queryDate)) {
                     // aktualizacja modelu tylko dla określonego dnia
                     weatherLocation.addWeatherDay(weatherDay);
                     this.bindWeatherIconToCalendarItem(item, weatherDay);
@@ -54,11 +54,14 @@ public class WeatherService {
     }
     
     public void bindWeatherIconToCalendarItem(CalendarItem item, WeatherDay weatherDay) throws ApiException{
-        String imagePath = "img/weather-icon-trsp/" + weatherDay.getIcon() + ".png";
-        item.getButton().setBackgroundImage(imagePath);
+        this.setCalendarItemBgImage(item, weatherDay.getIcon());
         weatherDay.iconProperty().addListener((observable, oldVal, newVal) -> {
-            item.getButton().setBackgroundImage(imagePath);
+            this.setCalendarItemBgImage(item, newVal);
+            System.out.print(newVal);
         });
+    }
+    private void setCalendarItemBgImage(CalendarItem item, String iconName) {
+        item.getButton().setBackgroundImage("img/weather-icon-trsp/" + iconName + ".png");
     }
     
     private void validateCalendarItem(CalendarItem item) {

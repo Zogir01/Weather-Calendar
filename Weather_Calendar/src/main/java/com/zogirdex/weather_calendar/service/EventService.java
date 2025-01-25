@@ -21,9 +21,7 @@ public class EventService {
         this.validateEventName(eventName);
         this.validateEventDesc(eventDesc);
         this.validateLocation(location);
-        
         ScheduledEvent newEvent = new ScheduledEvent(eventName, eventDesc, location);
-
         this.eventManager.addEvent(item.getDate(), newEvent);
         this.bindEventToCalendarItem(item, newEvent);
     }
@@ -38,13 +36,16 @@ public class EventService {
     }
     
     public void bindEventToCalendarItem(CalendarItem item, ScheduledEvent event) {
-         final String text =String.valueOf(item.getDate().getDayOfMonth())
-                    .concat("\n")
-                    .concat(event.getEventName());
-        item.getButton().setText(text);
+        this.setCalendarItemText(item, event.getEventName());
         event.eventNameProperty().addListener((observable, oldVal, newVal) -> {
-            item.getButton().setText(text);
+            this.setCalendarItemText(item, newVal);
         });
+    }
+    
+    private void setCalendarItemText(CalendarItem item, String eventName) {
+        item.getButton().setText(String.valueOf(item.getDate().getDayOfMonth())
+                    .concat("\n")
+                    .concat(eventName));
     }
     
     private void validateEventName(String eventName) {
