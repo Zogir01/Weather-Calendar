@@ -19,12 +19,14 @@ import java.util.Set;
 import java.time.LocalDate;
 
 /**
- * Główna klasa aplikacji JavaFX. Otwierane jest tutaj pierwsze okno oraz zapisywany jest stan modelu (danych) do
- * pliku binarnego.
+ * Główna klasa aplikacji JavaFX. W klasie tej zaimplementowano inicjalizacje oraz zapis stanu aplikacji.
  */
 public class App extends Application {
       /**
-     * Metoda inicjalizacyjna aplikacji, wykonująca się po stworzeniu instancji klasy Application.
+     * Metoda inicjalizacyjna aplikacji, wykonująca się po stworzeniu instancji klasy Application. Ładowany jest stan
+     * klas singleton EventManager oraz WeatherManager. Do stanu w WeatherManager jest zapisywane 14 dat
+     * z pogodą dla każdej unikalnej lokalizacji z klasy EventManager. Ważne jest aby najpierw EventManager odczytał
+     * swój stan, a w przypadku gdy takowego nie ma (brak lokalizacji), nie wykonywać wtedy odczytu z API.
      */
     @Override
     public void init() {
@@ -54,8 +56,9 @@ public class App extends Application {
     }
     
      /**
-     * Metoda wykonująca się po metodzie init, w parametrze otrzymujemy obiekt Stage, czyli obiekt
-     * otwartego okna. W metodzie tej otwierane jest okno za pomocą klasy singleton StageManager.
+     * Metoda wykonująca się po metodzie init. W metodzie tej wykorzystano klasę StageAssistant do otwarcia pierwszego,
+     * głównego okna aplikacji. Parametrami przekazanymi do openNewStage są stałe zmienne, określone w pliku
+     * AppConstants.
      * @param stage Obiekt nowo otwartego okna.
      * @throws IOException 
      */
@@ -72,7 +75,7 @@ public class App extends Application {
     
      /**
      * Metoda wykonująca się po zamknięciu aplikacji, czyli gdy ostatnie otwarte okno zostanie zamknięte lub
-     * wywołano metodę Platform.exit(). W stop zapisywany jest stan danych aplikacji do pliku binarnego, 
+     * wywołano metodę Platform.exit(). W metodzie tej zapisywany jest stan danych aplikacji do pliku binarnego, 
      * za pomocą klasy singleton EventManager.
      */
     @Override

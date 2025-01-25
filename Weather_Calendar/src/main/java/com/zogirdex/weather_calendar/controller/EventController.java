@@ -7,6 +7,8 @@ import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.service.EventService;
 import com.zogirdex.weather_calendar.service.WeatherService;
 import com.zogirdex.weather_calendar.util.ApiException;
+import com.zogirdex.weather_calendar.uiutil.AlertException;
+import com.zogirdex.weather_calendar.uiutil.AlertSucces;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -77,7 +79,7 @@ public class EventController implements Initializable{
             System.out.println("ikona: " + weather.getIcon());
         }
         catch(Exception ex) { // lub zlapac jakies ogólne wyjątki
-            // SHOW ALERT
+            
         }
     }
     
@@ -88,9 +90,11 @@ public class EventController implements Initializable{
             this.eventService.addEvent(selectedItem, this.textFieldEventName.getText(), this.textAreaEventDesc.getText(), 
                     location);
             this.weatherService.updateWeather(selectedItem, location);
+            new AlertSucces("Pomyślnie udało się zapisać nowe spotkanie.").showAndWait();
+            
          }
         catch(Exception ex) {
-            // SHOW ALERT
+            new AlertException(ex).showAndWait();
         }
     }
 }
