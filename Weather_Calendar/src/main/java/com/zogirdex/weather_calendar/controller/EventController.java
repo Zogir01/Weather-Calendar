@@ -6,7 +6,9 @@ import com.zogirdex.weather_calendar.model.WeatherDay;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.service.EventService;
 import com.zogirdex.weather_calendar.service.WeatherService;
-import com.zogirdex.weather_calendar.util.WeatherApiException;
+import com.zogirdex.weather_calendar.util.ApiException;
+import com.zogirdex.weather_calendar.uiutil.AlertException;
+import com.zogirdex.weather_calendar.uiutil.AlertSucces;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -38,7 +40,7 @@ public class EventController implements Initializable{
             this.eventService = new EventService();
             this.weatherService = new WeatherService();
         }
-        catch(WeatherApiException ex) {
+        catch(ApiException ex) {
             // ALERT
         }
         this.selectedItem = null;
@@ -76,8 +78,8 @@ public class EventController implements Initializable{
             System.out.println("opis: " + weather.getDescription());
             System.out.println("ikona: " + weather.getIcon());
         }
-        catch(Exception ex) { // lub zlapac jakies ogólne wyjątki
-            // SHOW ALERT
+        catch(Exception ex) { 
+            new AlertException(ex).showAndWait();
         }
     }
     
@@ -85,13 +87,13 @@ public class EventController implements Initializable{
     private void saveData() {
         try {
             String location = this.comboBoxLocation.getSelectionModel().getSelectedItem();
-            this.eventService.addEvent(selectedItem, this.textFieldEventName.getText(), this.textAreaEventDesc.getText(), 
-                    location);
-            this.weatherService.bindWeatherIconToCalendarItem(selectedItem, location);
-            this.eventService.bindEventToCalendarItem(selectedItem);
+            this.eventService.addEvent(selectedItem, this.textFieldEventName.getText(), 
+                    this.textAreaEventDesc.getText(), location);
+            this.weatherService.updateWeather(selectedItem, location);
+            new AlertSucces("Pomyślnie udało się zapisać nowe spotkanie.").showAndWait();   
          }
         catch(Exception ex) {
-            // SHOW ALERT
+            new AlertException(ex).showAndWait();
         }
     }
 }

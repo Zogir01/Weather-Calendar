@@ -1,71 +1,23 @@
 package com.zogirdex.weather_calendar.manager;
 
-import com.google.gson.Gson;
-import com.zogirdex.weather_calendar.config.AppConstants;
-import com.zogirdex.weather_calendar.model.WeatherDay;
 import com.zogirdex.weather_calendar.model.WeatherLocation;
-import com.zogirdex.weather_calendar.model.ScheduledEvent;
-import com.zogirdex.weather_calendar.model.WeatherQuery;
-import com.zogirdex.weather_calendar.util.WeatherApiException;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.Charset;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
-import java.time.LocalDate;
-import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
 
 /**
  *
  * @author tom3k
- * Nowa wersja, aby możliwe było pobierania pogody dla różnych lokalizacji dodano Pair<LocalDate, String>
- * -edit: usunięto tą parę i dodano nową klasę WeatherLocation
+ * 
  */
 public class WeatherManager {
     private static WeatherManager instance;
-    private final ObservableMap<String, WeatherLocation> weatherLocations = FXCollections.observableHashMap();
-    private String apiQueryParamString;
+    private final ObservableMap<String, WeatherLocation> weatherLocations;
     
-    
-    private WeatherManager() throws WeatherApiException {
-        // tworzenie stringa z parametrami zapytania do api (parametry znajdują się w AppConstants)
-        StringBuilder builder = new StringBuilder().append("?");    
-        for (Map.Entry<String, String> entry : AppConstants.WEATHER_API_QUERY_PARAMS.entrySet()) {
-            builder.append(entry.getKey())
-                           .append("=")
-                           .append(entry.getValue())
-                           .append("&");
-        }
-        this.apiQueryParamString = builder.toString();
-        
-        // inicjalizuje swój model na podstawie wczytanych eventów.
-        if(AppConstants.WEATHER_API_AUTO_QUERY) {
-                EventManager eventManager = EventManager.getInstance();
-                // tworzę Set aby lokalizacje były unikalne - aby nie tworzyć wielu zapytań niepotrzebnie do tej samej lokalizacji.
-                Set <String> uniqueLocations = new HashSet();
-                for(ScheduledEvent event : eventManager.getEvents().values()) {
-                    uniqueLocations.add(event.getLocation());
-                }
-                
-                for(String uniqueLocation : uniqueLocations) {
-                    try {
-                        this.makeQuery(uniqueLocation);
-                    }
-                    catch(WeatherApiException ex) {
-                        throw new WeatherApiException("Error performing weather api query while creating instance of "
-                                + "WeatherManager.", ex);
-                    }
-                }
-          }
+    private WeatherManager() {
+        this.weatherLocations = FXCollections.observableHashMap();
     }
     
-    // getInstance wzorca singleton (synchronized, aby ułatwić wielowątkowość, którą można by zaimplementować)
-    public static synchronized WeatherManager getInstance() throws WeatherApiException{
+    public static synchronized WeatherManager getInstance() {
         if (instance == null) {
             instance = new WeatherManager();
         }
@@ -76,80 +28,73 @@ public class WeatherManager {
         return this.weatherLocations.getOrDefault(location, null);
     }
     
-    public void addWeatherLocation(WeatherLocation weatherLocation) {
-        this.weatherLocations.put(weatherLocation.getLocation(), weatherLocation);
-    }
-
-    public WeatherDay getWeatherDay(LocalDate date, String location) {
-        WeatherLocation weatherLocation = this.weatherLocations.getOrDefault(location, null);
-        return weatherLocation != null ? weatherLocation.getWeatherDay(date) : null;
-    }
-
-    public void addWeatherDay(String location, WeatherDay weatherDay) {
-        WeatherLocation weatherLocation = this.weatherLocations.getOrDefault(location, null);
-        if(weatherLocation != null) {
-            weatherLocation.addWeatherDay(weatherDay);
-        }
+    public void addWeatherLocation(String location, WeatherLocation weatherLocation) {
+        this.weatherLocations.put(location, weatherLocation);
     }
     
-    // zaaktualizuje tylko jedną date, dla jednej lokalizacji
-    public final void makeQuery(String location, LocalDate date) throws WeatherApiException {
-       if(AppConstants.DEBUG_MODE) {
-           System.out.println(String.format("Performing query to weather API: location = %s, date = %s", location, date.toString()));
-       }
-        makeQuery(location, date, true);
-    }
+    public WeatherLocation getOrCreateWeatherLocation(String location) {
+        WeatherLocation weatherLocation = this.getWeatherLocation(location);
+          if (weatherLocation == null) {
+              weatherLocation = new WeatherLocation();
+                this.addWeatherLocation(location, weatherLocation);
+          }
+          return weatherLocation;
+      }
     
-    // zaaktualizuje 14 dat w przód dla jednej lokalizacji
-   public final void makeQuery(String location) throws WeatherApiException {
-       if(AppConstants.DEBUG_MODE) {
-           System.out.println(String.format("Performing query to weather API: location = %s", location));
-       }
-        makeQuery(location, null, false);
-    }
+//    public WeatherDay getWeatherDay(LocalDate date, String location) {
+//        WeatherLocation weatherLocation = this.weatherLocations.getOrDefault(location, null);
+//        return weatherLocation != null ? weatherLocation.getWeatherDay(date) : null;
+//    }
     
-    private void makeQuery(String location, LocalDate date, boolean readOneDate) throws WeatherApiException {
-        String finalUrl = AppConstants.WEATHER_API_BASE_URL + location + this.apiQueryParamString;
-        try {
-            URL endpoint = new URL(finalUrl);
-            HttpURLConnection conn = (HttpURLConnection) endpoint.openConnection();
-            
-            conn.setRequestProperty("Accept", "application/json");
-            if (conn.getResponseCode() == 200) {  
-                BufferedReader br = new BufferedReader(new InputStreamReader(
-                        conn.getInputStream(), 
-                        Charset.forName("UTF-8"))
-                );
-                Gson gson = new Gson();
-                WeatherQuery query = gson.fromJson(br, WeatherQuery.class);
-                WeatherLocation weatherLocation = this.getWeatherLocation(location);
-                
-                if (weatherLocation == null) {
-                    weatherLocation = new WeatherLocation(location);
-                    this.addWeatherLocation(weatherLocation);
-                }
-                if(readOneDate) { // dodaje jeden WeatherDay do określonej daty
-                     for(WeatherDay day : query.getDays()) {
-                        LocalDate dateFromQuery = LocalDate.parse(day.getDatetime());
-                        if(dateFromQuery.equals(date)) {
-                            weatherLocation.addWeatherDay(day);
-                        }
-                    }  
-                }
-                else { // dodaje 14 nowych WeatherDay
-                   for(WeatherDay day : query.getDays()) {
-                       weatherLocation.addWeatherDay(day);
-                   }
-                }
-                conn.disconnect();
-            }
-            else {
-                // można by obsłużyć jeszcze więcej http status codes.
-                throw new WeatherApiException("Error while creating weather API query, get response status code = " 
-                        + conn.getResponseCode());
-            }
-        } catch (IOException ex) {
-            throw new WeatherApiException("Error while creating weather API query.", ex);
-        }
-    }
+//    public void addWeatherLocation(WeatherLocation weatherLocation) {
+//        this.weatherLocations.put(weatherLocation.getLocation(), weatherLocation);
+//    }
+//    public void addWeatherDay(String location, WeatherDay weatherDay) {
+//        WeatherLocation weatherLocation = this.weatherLocations.getOrDefault(location, null);
+//        if(weatherLocation != null) {
+//            weatherLocation.addWeatherDay(weatherDay);
+//        }
+//    }
+    
+//    // zaaktualizuje tylko jedną date, dla kolekcji lokalizacji
+//   public final void updateWeather(Set<String> locations, LocalDate date) throws ApiException {
+//        for(String location : locations) {
+//            this.updateWeather(location, date);
+//        }
+//    }
+//    
+//   // zaaktualizuje 14 dat w przód, dla jednej lokalizacji (na tyle pozwala api)
+//    public final void updateWeather(Set<String> locations) throws ApiException {
+//        for(String location : locations) {
+//            this.updateWeather(location);
+//        }
+//    }
+//    
+//    // zaaktualizuje tylko jedną date, dla jednej lokalizacji
+//    public final void updateWeather(String location, LocalDate date) throws ApiException {
+//        this.printDebug(String.format("Performing query to weather API: location = %s, date = %s", location, date.toString()));
+//        WeatherQuery result = this.makeQuery(location);
+//        this.getOrCreateWeatherLocation(location).addWeatherDay(result.getDay(date));
+//    }
+//    
+//    // zaaktualizuje 14 dat w przód dla jednej lokalizacji (na tyle pozwala api)
+//   public final void updateWeather(String location) throws ApiException {
+//        this.printDebug(String.format("Performing query to weather API: location = %s", location));
+//        WeatherQuery result = this.makeQuery(location);
+//        WeatherLocation weatherLocation = this.getOrCreateWeatherLocation(location);
+//        result.getDays().forEach(weatherLocation::addWeatherDay);
+//    }
+//   
+//    private void printDebug(String message) {
+//        if(AppConstants.DEBUG_MODE) {
+//            System.out.println(message);
+//         }
+//    }
+   
+//   private WeatherQuery makeQuery(String location) throws ApiException {
+//        String url = QueryAssistant.buildUrl(AppConstants.WEATHER_API_BASE_URL + location, 
+//               AppConstants.WEATHER_API_QUERY_PARAMS);
+//       
+//        return QueryAssistant.makeQuery(url, WeatherQuery.class);
+//   }
 }

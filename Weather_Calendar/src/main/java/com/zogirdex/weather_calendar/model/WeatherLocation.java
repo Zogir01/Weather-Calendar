@@ -5,28 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WeatherLocation {
-    private String location;
-    private final Map<LocalDate, WeatherDay> weatherDaysMap;
-
-    public WeatherLocation(String location) {
-        this.location = location;
-        this.weatherDaysMap = new HashMap<>();
-    }
+    private final Map<LocalDate, WeatherDay> weatherDays = new HashMap();
 
     public void addWeatherDay(WeatherDay weatherDay) {
-        weatherDaysMap.put(LocalDate.parse(weatherDay.getDatetime()), weatherDay);
+        weatherDays.put(LocalDate.parse(weatherDay.getDatetime()), weatherDay);
     }
 
     public WeatherDay getWeatherDay(LocalDate date) {
-        return weatherDaysMap.get(date);  
+        return weatherDays.get(date);  
     }
-    
-    public String getLocation() {
-        return this.location;
-    }
-    
-    public void setLocation(String location) {
-        this.location = location;
-    }     
 }
 
