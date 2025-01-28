@@ -18,7 +18,7 @@ import java.lang.IllegalArgumentException;
 public class WeatherService {
     private final WeatherManager weatherManager;
     
-    public WeatherService() throws ApiException {
+    public WeatherService() {
          this.weatherManager = WeatherManager.getInstance();
     }
     

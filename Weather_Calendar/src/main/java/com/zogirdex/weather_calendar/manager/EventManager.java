@@ -33,7 +33,7 @@ public class EventManager {
     }
 
     public ScheduledEvent getEvent(LocalDate date) {
-        return events.getOrDefault(date, null);
+        return this.events.getOrDefault(date, null);
     }
     
     public ObservableMap<LocalDate, ScheduledEvent> getEvents() {

@@ -7,34 +7,28 @@ import com.zogirdex.weather_calendar.uiutil.StageAssistant;
 import com.zogirdex.weather_calendar.service.CalendarService;
 import com.zogirdex.weather_calendar.util.ApiException;
 import com.zogirdex.weather_calendar.config.AppConstants;
+import com.zogirdex.weather_calendar.uiutil.AlertError;
+import com.zogirdex.weather_calendar.uiutil.AlertException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.GridPane;
-import java.time.LocalDate;
-import java.time.Month;
 import java.time.Year;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 
 public class CalendarController implements Initializable {
     private CalendarService calendarService;
 
-    @FXML private ComboBox<Month> comboBoxMonths;
+    @FXML private ComboBox<String> comboBoxMonths;
     @FXML private ComboBox<Year> comboBoxYears;
     @FXML private GridPane gridPaneCalendar;
 
     @Override
     public void initialize​(URL location, ResourceBundle resources) {
-       try {
-            this.calendarService = new CalendarService();
-        }
-       catch(ApiException ex) {
-            //ALERT
-       }
+        this.calendarService = new CalendarService();
         this.fillComboBoxMonths();
         this.fillComboBoxYears();
         this.addDayLabels();
@@ -62,7 +56,7 @@ public class CalendarController implements Initializable {
     @FXML
     public void loadCalendarData(){
         Year year = this.comboBoxYears.getSelectionModel().getSelectedItem();
-        Month month = this.comboBoxMonths.getSelectionModel().getSelectedItem();
+        String month = this.comboBoxMonths.getSelectionModel().getSelectedItem();
         this.cleanCalendar();
         try {
             this.calendarService.generateCalendar(year, month, true, true).forEach(item -> {
@@ -72,7 +66,7 @@ public class CalendarController implements Initializable {
             });
         }
         catch(ApiException ex) {
-            // SHOW ALERT
+            new AlertException(ex).showAndWait();
         }
     }
     
@@ -89,34 +83,44 @@ public class CalendarController implements Initializable {
          controller.loadCalendarItem(item);
         }
        catch(Exception ex) {
-           ex.printStackTrace();
+           new AlertException(ex).showAndWait();
        }
     }
     
-    private void fillComboBoxMonths() {
-        this.comboBoxMonths.setItems(FXCollections.observableArrayList(Month.values()));
+   private void fillComboBoxMonths() {
+        this.comboBoxMonths.setItems(FXCollections.observableArrayList(this.calendarService.getAvailableMonthsTranslated()));
         if(!this.comboBoxMonths.getItems().isEmpty()){
-            this.comboBoxMonths.getSelectionModel().select(LocalDate.now().getMonth());
+            this.comboBoxMonths.getSelectionModel().select(this.calendarService.getCurrentMonthTranslated());
         }
         else {
-            // SHOW ALERT
+            new AlertError("Wystąpił błąd z pobraniem dostepnych miesięcy w kalendarzu.").showAndWait();
         }
     }
     
     private void fillComboBoxYears() {
-        ObservableList years = FXCollections.observableArrayList();
-        int curYear = Year.now().getValue();
-        for (int i = 0; i < AppConstants.YEARS_FORWARD_SCOPE; i++) {
-           years.add(Year.of(curYear + i));
-        }
-        this.comboBoxYears.setItems(years);
+        this.comboBoxYears.setItems(FXCollections.observableArrayList(this.calendarService.getAvailableYears()));
         if(!this.comboBoxYears.getItems().isEmpty()){
-            this.comboBoxYears.getSelectionModel().select(Year.now());
+            this.comboBoxYears.getSelectionModel().select(this.calendarService.getCurrentYear());
         }
         else {
-            // SHOW ALERT
+            new AlertError("Wystąpił błąd z pobraniem dostepnych lat w kalendarzu.").showAndWait();
         }
-    }
+     }
+    
+//    private void fillComboBoxYears() {
+//        ObservableList years = FXCollections.observableArrayList();
+//        int curYear = Year.now().getValue();
+//        for (int i = 0; i < AppConstants.YEARS_FORWARD_SCOPE; i++) {
+//           years.add(Year.of(curYear + i));
+//        }
+//        this.comboBoxYears.setItems(years);
+//        if(!this.comboBoxYears.getItems().isEmpty()){
+//            this.comboBoxYears.getSelectionModel().select(Year.now());
+//        }
+//        else {
+//            // SHOW ALERT
+//        }
+//    }
     
     private void addDayLabels() {
         this.gridPaneCalendar.add(new CalendarLabel("Poniedziałek"), 0, 0);

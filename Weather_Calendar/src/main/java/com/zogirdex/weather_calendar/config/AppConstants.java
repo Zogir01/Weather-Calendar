@@ -24,7 +24,6 @@ public class AppConstants {
     public static final String APP_VERSION = "0.1";
     
     //----------------------------------- USER ----------------------------------------------------------
-    public static final List<String> LOCATIONS = List.of("Gliwice", "Katowice", "Zabrze", "Paniówki");
     public static final int YEARS_FORWARD_SCOPE = 4;
     
     //----------------------------------- DEBUG -------------------------------------------------------

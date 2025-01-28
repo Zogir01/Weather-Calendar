@@ -3,7 +3,7 @@ package com.zogirdex.weather_calendar.service;
 import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.manager.EventManager;
-import com.zogirdex.weather_calendar.config.AppConstants;
+import java.util.List;
 
 /**
  *
@@ -11,9 +11,15 @@ import com.zogirdex.weather_calendar.config.AppConstants;
  */
 public class EventService {
     private final EventManager eventManager;
+    private final List<String> locations;
     
     public EventService() {
         this.eventManager = EventManager.getInstance();
+        
+        // póki co lokalizacje w ten sposób. W przyszłości możnaby dodać pobieranie dostępnych lokalizacji z API.
+        // Zastanowić się też, czy nie trzymać tych lokalizacji w managerze, gdyż weatherService także operuje 
+        // na lokalizacjach.
+        this.locations = List.of("Gliwice", "Katowice", "Zabrze", "Paniówki");
     }
     
     public void addEvent(CalendarItem item, String eventName, String eventDesc, String location) {
@@ -40,6 +46,10 @@ public class EventService {
         event.eventNameProperty().addListener((observable, oldVal, newVal) -> {
             this.setCalendarItemText(item, newVal);
         });
+    }
+    
+    public List<String> getAvailableLocations() {
+        return this.locations;
     }
     
     private void setCalendarItemText(CalendarItem item, String eventName) {
@@ -69,7 +79,7 @@ public class EventService {
     }
     
     private void validateLocation(String location) {
-        if (location == null || !AppConstants.LOCATIONS.contains(location)) {
+        if (location == null || !this.locations.contains(location)) {
             throw new IllegalArgumentException("Podana lokalizacja nie jest dostępna.");
         }
     }

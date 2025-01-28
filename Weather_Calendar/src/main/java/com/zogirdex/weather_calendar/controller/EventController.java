@@ -1,13 +1,12 @@
 package com.zogirdex.weather_calendar.controller;
 
-import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.model.WeatherDay;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.service.EventService;
 import com.zogirdex.weather_calendar.service.WeatherService;
-import com.zogirdex.weather_calendar.util.ApiException;
 import com.zogirdex.weather_calendar.uiutil.AlertException;
+import com.zogirdex.weather_calendar.uiutil.AlertError;
 import com.zogirdex.weather_calendar.uiutil.AlertSucces;
 
 import java.net.URL;
@@ -36,24 +35,19 @@ public class EventController implements Initializable{
     
     @Override
     public void initialize​(URL location, ResourceBundle resources) {
-        try {
-            this.eventService = new EventService();
-            this.weatherService = new WeatherService();
-        }
-        catch(ApiException ex) {
-            // ALERT
-        }
+        this.eventService = new EventService();
+        this.weatherService = new WeatherService();
         this.selectedItem = null;
         this.fillComboBoxLocation();
     } 
     
     private void fillComboBoxLocation() {
-        this.comboBoxLocation.setItems(FXCollections.observableArrayList(AppConstants.LOCATIONS));
+        this.comboBoxLocation.setItems(FXCollections.observableArrayList(this.eventService.getAvailableLocations()));
         if(!this.comboBoxLocation.getItems().isEmpty()){
             this.comboBoxLocation.getSelectionModel().select(0);
         }
         else {
-            // SHOW ALERT
+           new AlertError("Nie udało się pobrać lokalizacji.").showAndWait();
         }
     }
     
