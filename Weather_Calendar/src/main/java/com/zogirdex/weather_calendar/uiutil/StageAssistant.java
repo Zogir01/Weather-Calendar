@@ -47,6 +47,15 @@ public class StageAssistant {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
         Parent root = loader.load();
         Scene scene = new Scene(root);
+        
+        // Dodanie stylów CSS
+//        URL cssResource = getClass().getResource("/styles.css");
+//        if (cssResource != null) {
+//            scene.getStylesheets().add(cssResource.toExternalForm());
+//        } else {
+//            System.err.println("Nie znaleziono pliku styles.css");
+//        }
+        
         this.loadCssStylesheet(scene);
         Stage stage = new Stage();
         stage.setTitle(title);

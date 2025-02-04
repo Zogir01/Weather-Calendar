@@ -1,7 +1,9 @@
 package com.zogirdex.weather_calendar.util;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.zogirdex.weather_calendar.config.AppConstants;
+import com.zogirdex.weather_calendar.model.WeatherDay;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -38,7 +40,12 @@ public class QueryAssistant {
                         conn.getInputStream(), 
                         Charset.forName("UTF-8"))
                 );
-                Gson gson = new Gson();
+//                Gson gson = new Gson();
+//                T object = gson.fromJson(br, classOfT);
+
+                Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(WeatherDay.class, new WeatherDayAdapter())
+                    .create();
                 T object = gson.fromJson(br, classOfT);
                 conn.disconnect();
                 return object;

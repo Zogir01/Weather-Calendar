@@ -3,6 +3,7 @@ package com.zogirdex.weather_calendar.service;
 import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.manager.EventManager;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -19,7 +20,13 @@ public class EventService {
         // póki co lokalizacje w ten sposób. W przyszłości możnaby dodać pobieranie dostępnych lokalizacji z API.
         // Zastanowić się też, czy nie trzymać tych lokalizacji w managerze, gdyż weatherService także operuje 
         // na lokalizacjach.
-        this.locations = List.of("Gliwice", "Katowice", "Zabrze", "Paniówki");
+        this.locations = List.of("Gliwice", "Katowice", "Zabrze", "Gdynia");
+    }
+    
+    public boolean eventExists(CalendarItem item) {
+        this.validateCalendarItem(item);
+        // przenieść tą logikę do funkcji event managera "eventExists"
+        return this.eventManager.getEvents().containsKey(item.getDate());
     }
     
     public void addEvent(CalendarItem item, String eventName, String eventDesc, String location) {
@@ -30,6 +37,30 @@ public class EventService {
         ScheduledEvent newEvent = new ScheduledEvent(eventName, eventDesc, location);
         this.eventManager.addEvent(item.getDate(), newEvent);
         this.bindEventToCalendarItem(item, newEvent);
+    }
+    
+    public void deleteEvent(CalendarItem item) {
+        this.validateCalendarItem(item);
+        try {
+            this.eventManager.deleteEvent(item.getDate());
+        }
+        catch(IllegalArgumentException ex) {
+            throw new IllegalArgumentException("Błąd podczas usuwania spotkania.", ex);
+        }
+    }
+    
+    public void editEvent(CalendarItem item, String eventName, String eventDesc, String location) {
+        this.validateCalendarItem(item);
+        this.validateEventName(eventName);
+        this.validateEventDesc(eventDesc);
+        this.validateLocation(location);
+        try {
+            this.eventManager.editEvent(item.getDate(), eventName, eventDesc, location);
+        }
+        catch(IllegalArgumentException ex) {
+            throw new IllegalArgumentException("Wystąpił błąd podczas edytowania spotkania.", ex);
+        }
+        
     }
         
     public ScheduledEvent getEvent(CalendarItem item) {

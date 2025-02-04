@@ -43,7 +43,7 @@ public class WeatherService {
                 LocalDate queryDate = LocalDate.parse(weatherDay.getDatetime());
                 if(date.equals(queryDate)) {
                     // aktualizacja modelu tylko dla określonego dnia
-                    weatherLocation.addWeatherDay(weatherDay);
+                    weatherLocation.addOrUpdateWeatherDay(weatherDay);
                     this.bindWeatherIconToCalendarItem(item, weatherDay);
                 }
             }

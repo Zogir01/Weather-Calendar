@@ -11,14 +11,29 @@ import java.util.List;
  * 
  */
 public class AppConstants {
+    //----------------------------------- RESOURCE -------------------------------------------------
+    public static final String PATH_RESOURCES = "/com/zogirdex/weather_calendar/";
+    public static final String PATH_CSS_STYLES = PATH_RESOURCES + "styles.css";
+    public static final String PATH_EVENTS_STATE = "eventmanager.dat"; // przerobić aby te ścieżki były także w RESOURCES_PATH
+    public static final String PATH_FILES_STATE = "filemanager.dat"; // przerobić aby te ścieżki były także w RESOURCES_PATH
+    //public static final 
+    
     //----------------------------------- STAGE --------------------------------------------------------
     public static final String CALENDAR_STAGE_NAME = "Kalendarz";
     public static final int CALENDAR_STAGE_MIN_WIDTH = 640;
     public static final int CALENDAR_STAGE_MIN_HEIGHT = 400;
+    public static final String PATH_FXML_CALENDAR = PATH_RESOURCES + "calendar.fxml";
     
-    public static final String ADD_EVENT_STAGE_NAME = "Dodaj spotkanie";
-    public static final int ADD_EVENT_STAGE_MIN_WIDTH = 0;
-    public static final int ADD_EVENT_STAGE_MIN_HEIGHT = 0;
+    public static final String EVENT_STAGE_NAME = "Wybrane spotkanie";
+    public static final int EVENT_STAGE_MIN_WIDTH = 0;
+    public static final int EVENT_STAGE_MIN_HEIGHT = 0;
+    public static final String PATH_FXML_EVENT = PATH_RESOURCES + "event.fxml";
+    
+    
+    public static final String NEW_EVENT_STAGE_NAME = "Nowe spotkanie";
+    public static final int NEW_EVENT_STAGE_MIN_WIDTH = 0;
+    public static final int NEW_EVENT_STAGE_MIN_HEIGHT = 0;
+    public static final String PATH_FXML_NEW_EVENT = PATH_RESOURCES + "newevent.fxml";
    
     //----------------------------------- GENERAL ----------------------------------------------------
     public static final String APP_VERSION = "0.1";
@@ -28,15 +43,6 @@ public class AppConstants {
     
     //----------------------------------- DEBUG -------------------------------------------------------
     public static final boolean DEBUG_MODE = true;
-    
-    //----------------------------------- RESOURCE -------------------------------------------------
-    public static final String PATH_RESOURCES = "/com/zogirdex/weather_calendar/";
-    public static final String PATH_CSS_STYLES = PATH_RESOURCES + "styles.css";
-    public static final String PATH_FXML_CALENDAR = PATH_RESOURCES + "calendar.fxml";
-    public static final String PATH_FXML_EVENT = PATH_RESOURCES + "event.fxml";
-    public static final String PATH_EVENTS_STATE = "eventmanager.dat"; // przerobić aby te ścieżki były także w RESOURCES_PATH
-    public static final String PATH_FILES_STATE = "filemanager.dat"; // przerobić aby te ścieżki były także w RESOURCES_PATH
-    //public static final 
 
     //----------------------------------- WEATHER API -----------------------------------------------
     public static final String WEATHER_API_BASE_URL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/";

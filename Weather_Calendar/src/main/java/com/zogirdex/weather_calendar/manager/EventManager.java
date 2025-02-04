@@ -53,6 +53,25 @@ public class EventManager {
         events.put(date, event);
     }
     
+    public void deleteEvent(LocalDate date) {
+        if (events.containsKey(date)) {
+            events.remove(date);
+        } else {
+            throw new IllegalArgumentException("Cannot find event for expected date.");
+        }
+    }
+    
+   public void editEvent(LocalDate date, String newEventName, String newEventDesc, String newLocation) {
+    ScheduledEvent event = events.get(date);
+    if (event != null) {
+        event.setEventName(newEventName);
+        event.setEventDesc(newEventDesc);
+        event.setLocation(newLocation);
+    } else {
+        throw new IllegalArgumentException("Cannot find event for expected date.");
+    }
+}
+    
     public final void loadEventsState() throws GlobalStateException {
           this.events = FXCollections.observableMap(GlobalStateAssistant.loadState(AppConstants.PATH_EVENTS_STATE));
     }

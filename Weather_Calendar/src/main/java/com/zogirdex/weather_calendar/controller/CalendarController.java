@@ -5,6 +5,7 @@ import com.zogirdex.weather_calendar.uiutil.CalendarLabel;
 import com.zogirdex.weather_calendar.uiutil.CalendarButton;
 import com.zogirdex.weather_calendar.uiutil.StageAssistant;
 import com.zogirdex.weather_calendar.service.CalendarService;
+import com.zogirdex.weather_calendar.service.EventService;
 import com.zogirdex.weather_calendar.util.ApiException;
 import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.uiutil.AlertError;
@@ -18,6 +19,7 @@ import javafx.scene.layout.GridPane;
 import java.time.Year;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import java.io.IOException;
 
 public class CalendarController implements Initializable {
     private CalendarService calendarService;
@@ -73,18 +75,39 @@ public class CalendarController implements Initializable {
     @FXML
     private void calendarButton_click(CalendarItem item) {
         try {
-         EventController controller = StageAssistant.getInstance().openNewStage(
-                 AppConstants.PATH_FXML_EVENT, 
-                 item.getDate().toString(), 
-                 true, 
-                 AppConstants.ADD_EVENT_STAGE_MIN_WIDTH, 
-                 AppConstants.ADD_EVENT_STAGE_MIN_HEIGHT
-         );
-         controller.loadCalendarItem(item);
+            EventService eventService = new EventService();
+            if(eventService.eventExists(item)) {
+                this.openEventController(item);
+             }
+            else {
+                this.openNewEventController(item);
+            }
         }
        catch(Exception ex) {
            new AlertException(ex).showAndWait();
        }
+    }
+    
+    private void openEventController(CalendarItem item) throws IOException {
+       EventController controller = StageAssistant.getInstance().openNewStage(
+            AppConstants.PATH_FXML_EVENT, 
+            item.getDate().toString(), 
+            true, 
+            AppConstants.EVENT_STAGE_MIN_WIDTH, 
+            AppConstants.EVENT_STAGE_MIN_HEIGHT
+       );
+       controller.loadCalendarItem(item);
+    }
+    
+    private void openNewEventController(CalendarItem item) throws IOException {
+        NewEventController controller = StageAssistant.getInstance().openNewStage(
+            AppConstants.PATH_FXML_NEW_EVENT, 
+            item.getDate().toString(), 
+            true, 
+            AppConstants.NEW_EVENT_STAGE_MIN_WIDTH, 
+            AppConstants.NEW_EVENT_STAGE_MIN_HEIGHT
+        );
+        controller.loadCalendarItem(item);
     }
     
    private void fillComboBoxMonths() {
@@ -106,21 +129,6 @@ public class CalendarController implements Initializable {
             new AlertError("Wystąpił błąd z pobraniem dostepnych lat w kalendarzu.").showAndWait();
         }
      }
-    
-//    private void fillComboBoxYears() {
-//        ObservableList years = FXCollections.observableArrayList();
-//        int curYear = Year.now().getValue();
-//        for (int i = 0; i < AppConstants.YEARS_FORWARD_SCOPE; i++) {
-//           years.add(Year.of(curYear + i));
-//        }
-//        this.comboBoxYears.setItems(years);
-//        if(!this.comboBoxYears.getItems().isEmpty()){
-//            this.comboBoxYears.getSelectionModel().select(Year.now());
-//        }
-//        else {
-//            // SHOW ALERT
-//        }
-//    }
     
     private void addDayLabels() {
         this.gridPaneCalendar.add(new CalendarLabel("Poniedziałek"), 0, 0);
