@@ -45,14 +45,7 @@ public class AppConstants {
     public static final boolean DEBUG_MODE = true;
 
     //----------------------------------- WEATHER API -----------------------------------------------
-    public static final String WEATHER_API_BASE_URL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/";
     public static final boolean WEATHER_API_AUTO_QUERY = true;
-    public static final Map<String, String> WEATHER_API_QUERY_PARAMS = Map.of(
-        "unitGroup", "metric",
-        "elements", "datetime%2Cname%2Ctemp%2Chumidity%2Cprecip%2Cprecipprob%2Csnow%2Cpressure%2Ccloudcover%2Csunrise%2Csunset%2Cconditions%2Cdescription%2Cicon",
-        "include", "days%2Cfcst",
-        "key", "VHEMMB29AXXDT86HR399VV4RT",
-        "contentType", "json"
-    );
+
     //String url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/%s?unitGroup=metric&elements=datetime%2Cname%2Ctemp%2Chumidity%2Cprecip%2Cprecipprob%2Csnow%2Cpressure%2Ccloudcover%2Csunrise%2Csunset%2Cconditions%2Cdescription%2Cicon&include=days%2Cfcst&key=VHEMMB29AXXDT86HR399VV4RT&contentType=json";
 }

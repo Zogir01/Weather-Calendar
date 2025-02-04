@@ -15,6 +15,8 @@ public class WeatherLocation {
         LocalDate date = LocalDate.parse(weatherDay.getDatetime()); 
         WeatherDay existingDay = this.weatherDays.get(date);
     
+        // robione w ten sposób, gdyż metoda addWeatherDay stworzy na nowo obiekt, co oznacza
+        // usunięcie przypisanych "Observables".
         if(existingDay != null) {
             existingDay.setCloudcover(weatherDay.getCloudcover());
             existingDay.setConditions(weatherDay.getConditions());

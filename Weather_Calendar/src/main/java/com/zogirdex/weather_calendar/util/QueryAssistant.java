@@ -20,7 +20,7 @@ public class QueryAssistant {
     
     public static String buildUrl(String baseUrl, Map<String, String> params) {
         StringBuilder builder = new StringBuilder().append("?");    
-        for (Map.Entry<String, String> entry : AppConstants.WEATHER_API_QUERY_PARAMS.entrySet()) {
+        for (Map.Entry<String, String> entry : params.entrySet()) {
             builder.append(entry.getKey())
                            .append("=")
                            .append(entry.getValue())

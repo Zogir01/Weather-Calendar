@@ -8,6 +8,8 @@ import com.zogirdex.weather_calendar.model.WeatherDay;
 import com.google.gson.*;
 import java.lang.reflect.Type;
 
+// klasa konwertera WeatherDay, aby możliwe było zdeserializowanie typów prostych do
+// typów typu "Observable" z JavaFX.
 class WeatherDayAdapter implements JsonDeserializer<WeatherDay> {
     @Override
     public WeatherDay deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
