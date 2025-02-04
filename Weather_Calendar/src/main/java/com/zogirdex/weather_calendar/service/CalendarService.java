@@ -94,6 +94,29 @@ public class CalendarService {
          }
          return calendarItems;
     }
+    
+    public void bindCalendarItem(CalendarItem item)  throws ApiException {
+        try {
+            ScheduledEvent event = eventService.getEvent(item);
+            if (event != null) {
+                this.eventService.bindEventToCalendarItem(item, event);
+                this.weatherService.bindWeatherIconToCalendarItem(item, weatherService.getWeatherDay(item, event.getLocation())); 
+            }
+        }
+       
+        catch (ApiException ex) {
+                throw new ApiException("Nie udało się odnaleźć pogody dla podanego spotkania.", ex);
+         }
+    }
+    
+    public static void unbindCalendarItem(CalendarItem item) {
+        // może działać troche nie tak jak powinno bo nie usuwamy listenera, który ustawia weatherService
+        // w metodzie "bindWeatherIconToCalendarItem".
+          item.getButton().textProperty().unbind();
+          item.getButton().setText(String.valueOf(item.getDate().getDayOfMonth()));
+          item.getButton().unsetBackgroundImage();
+           
+    }
       
     public List<Year> getAvailableYears() {
         return this.availableYears;

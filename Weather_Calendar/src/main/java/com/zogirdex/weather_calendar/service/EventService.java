@@ -3,7 +3,6 @@ package com.zogirdex.weather_calendar.service;
 import com.zogirdex.weather_calendar.uiutil.CalendarItem;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.manager.EventManager;
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -51,16 +50,19 @@ public class EventService {
     
     public void editEvent(CalendarItem item, String eventName, String eventDesc, String location) {
         this.validateCalendarItem(item);
-        this.validateEventName(eventName);
-        this.validateEventDesc(eventDesc);
-        this.validateLocation(location);
-        try {
-            this.eventManager.editEvent(item.getDate(), eventName, eventDesc, location);
-        }
-        catch(IllegalArgumentException ex) {
-            throw new IllegalArgumentException("Wystąpił błąd podczas edytowania spotkania.", ex);
-        }
+
+        ScheduledEvent event = eventManager.getEvent(item.getDate());
+        if (event != null) {
+            this.validateEventName(eventName);
+            this.validateEventDesc(eventDesc);
+            this.validateLocation(location);
         
+            event.setEventName(eventName);
+            event.setEventDesc(eventDesc);
+            event.setLocation(location);
+        } else {
+            throw new IllegalArgumentException("Spotkanie o podanej dacie nie istnieje, nie można edytować spotkania.");
+        }        
     }
         
     public ScheduledEvent getEvent(CalendarItem item) {

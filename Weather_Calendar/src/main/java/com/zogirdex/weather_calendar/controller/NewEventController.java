@@ -14,6 +14,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 /**
  *
@@ -27,6 +29,7 @@ public class NewEventController  implements Initializable {
     @FXML private TextField textFieldEventName;
     @FXML private TextArea textAreaEventDesc;
     @FXML private ComboBox<String> comboBoxLocation;
+    @FXML private Button buttonAddEvent;
     
     @Override
     public void initialize​(URL location, ResourceBundle resources) {
@@ -49,6 +52,11 @@ public class NewEventController  implements Initializable {
             
             this.eventService.addEvent(selectedItem, eventName, eventDesc, location);
             this.weatherService.updateWeather(selectedItem, location);
+            
+            // Zamknięcie okna
+            Stage currentStage = (Stage) buttonAddEvent.getScene().getWindow();
+            currentStage.close();  
+            
             new AlertSucces("Pomyślnie udało się zapisać nowe spotkanie.").showAndWait();   
          }
         catch(Exception ex) {
