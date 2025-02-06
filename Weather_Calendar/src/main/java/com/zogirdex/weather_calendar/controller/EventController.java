@@ -1,24 +1,21 @@
 package com.zogirdex.weather_calendar.controller;
 
-import com.zogirdex.weather_calendar.uiutil.CalendarItem;
+import com.zogirdex.weather_calendar.model.CalendarItem;
 import com.zogirdex.weather_calendar.model.WeatherDay;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.service.EventService;
 import com.zogirdex.weather_calendar.service.WeatherService;
 import com.zogirdex.weather_calendar.service.CalendarService;
 import com.zogirdex.weather_calendar.uiutil.AlertException;
-import com.zogirdex.weather_calendar.uiutil.AlertError;
 import com.zogirdex.weather_calendar.uiutil.AlertSucces;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import javafx.fxml.Initializable;
@@ -31,7 +28,7 @@ public class EventController implements Initializable{
     
     @FXML private TextField textFieldEditEventName;
     @FXML private TextArea textAreaEditEventDesc;
-    @FXML private ComboBox<String> comboBoxEditLocation;
+    @FXML private TextField textFieldEditEventLocation;
     
     @FXML private Label labelEventName;
     @FXML private Label labelEventDesc;
@@ -57,23 +54,10 @@ public class EventController implements Initializable{
     public void initialize​(URL location, ResourceBundle resources) {
         this.eventService = new EventService();
         this.weatherService = new WeatherService();
-        this.selectedItem = null;
-        this.fillComboBoxLocation();
     } 
-    
-    private void fillComboBoxLocation() {
-        this.comboBoxEditLocation.setItems(FXCollections.observableArrayList(this.eventService.getAvailableLocations()));
-        if(!this.comboBoxEditLocation.getItems().isEmpty()){
-            this.comboBoxEditLocation.getSelectionModel().select(0);
-        }
-        else {
-           new AlertError("Nie udało się pobrać lokalizacji.").showAndWait();
-        }
-    }
     
     public void init(CalendarItem item) {
         this.selectedItem = item;
-
         try {
             this.setControls();
         }
@@ -90,10 +74,8 @@ public class EventController implements Initializable{
             Stage currentStage = (Stage) buttonDeleteEvent.getScene().getWindow();
             currentStage.close();  
             
-            // nie wiem czy opłacalne jest tworzenie nowego obiektu CalendarService.
-            // Może lepiej byłoby przenieść metodę "unbindCalendarItem" do klas kontrolerów.
-            CalendarService.unbindCalendarItem(this.selectedItem);
-            
+            this.selectedItem.unbind();
+           
             new AlertSucces("Pomyślnie udało się usunąć spotkanie.").showAndWait();   
         }
         catch(Exception ex) {
@@ -104,7 +86,7 @@ public class EventController implements Initializable{
     @FXML
     private void editEvent() {
         try {
-            String location = this.comboBoxEditLocation.getSelectionModel().getSelectedItem();
+            String location = this.textFieldEditEventLocation.getText();
             this.eventService.editEvent(this.selectedItem, this.textFieldEditEventName.getText(), 
                     this.textAreaEditEventDesc.getText(), location);
             this.weatherService.updateWeather(this.selectedItem, location);
@@ -125,7 +107,7 @@ public class EventController implements Initializable{
             
             this.textFieldEditEventName.setText(event.getEventName());
             this.textAreaEditEventDesc.setText(event.getEventDesc());
-            this.comboBoxEditLocation.getSelectionModel().select(event.getLocation());
+            this.textFieldEditEventLocation.setText(event.getLocation());
             
             WeatherDay weather = this.weatherService.getWeatherDay(this.selectedItem, event.getLocation());
             

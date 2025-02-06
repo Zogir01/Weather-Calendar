@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class WeatherLocation {
     private final Map<LocalDate, WeatherDay> weatherDays = new HashMap();
-
+    
     public void addWeatherDay(WeatherDay weatherDay) {
         weatherDays.put(LocalDate.parse(weatherDay.getDatetime()), weatherDay);
     }

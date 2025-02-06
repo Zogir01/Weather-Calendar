@@ -2,7 +2,7 @@ package com.zogirdex.weather_calendar.service;
 
 import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.uiutil.CalendarButton;
-import com.zogirdex.weather_calendar.uiutil.CalendarItem;
+import com.zogirdex.weather_calendar.model.CalendarItem;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.util.ApiException;
 import java.time.LocalDate;
@@ -65,26 +65,11 @@ public class CalendarService {
         for (int col = 1 + shift; col <= daysInMonth + shift; col++) {
             int day = col - shift;
             LocalDate date = LocalDate.of(year.getValue(), month, day);
-            String initialText;
-            CalendarButton button;
+            
+           CalendarItem item = createCalendarItem(date, col, row, showDayNumbers);
 
-            if(showDayNumbers) {
-                initialText = String.valueOf(date.getDayOfMonth()).concat("\n");
-                button = new CalendarButton(String.valueOf(date.getDayOfMonth()), date.toString());
-            }
-            else {
-                initialText = "";
-                button = new CalendarButton("", date.toString());
-            }
-
-            CalendarItem item = new CalendarItem(date, (col - 1) % 7, row, button, initialText);
             if (bindToEvent) {
-                try {
-                    ScheduledEvent event = eventService.getEvent(item);
-                    eventService.bindEventToCalendarItem(item, event);
-                    weatherService.bindWeatherIconToCalendarItem(item, weatherService.getWeatherDay(item, event.getLocation()));     
-                }
-                 catch(Exception ex) {} //        
+                this.bindEventAndWeatherToCalendarItem(item);
             }
             calendarItems.add(item);
 
@@ -95,29 +80,6 @@ public class CalendarService {
          return calendarItems;
     }
     
-    public void bindCalendarItem(CalendarItem item)  throws ApiException {
-        try {
-            ScheduledEvent event = eventService.getEvent(item);
-            if (event != null) {
-                this.eventService.bindEventToCalendarItem(item, event);
-                this.weatherService.bindWeatherIconToCalendarItem(item, weatherService.getWeatherDay(item, event.getLocation())); 
-            }
-        }
-       
-        catch (ApiException ex) {
-                throw new ApiException("Nie udało się odnaleźć pogody dla podanego spotkania.", ex);
-         }
-    }
-    
-    public static void unbindCalendarItem(CalendarItem item) {
-        // może działać troche nie tak jak powinno bo nie usuwamy listenera, który ustawia weatherService
-        // w metodzie "bindWeatherIconToCalendarItem".
-          item.getButton().textProperty().unbind();
-          item.getButton().setText(String.valueOf(item.getDate().getDayOfMonth()));
-          item.getButton().unsetBackgroundImage();
-           
-    }
-      
     public List<Year> getAvailableYears() {
         return this.availableYears;
     }
@@ -149,6 +111,31 @@ public class CalendarService {
     
     public String getCurrentMonthTranslated() {
         return this.availableMonths.get(this.getCurrentMonth());
+    }
+    
+    private void bindEventAndWeatherToCalendarItem(CalendarItem item) {
+        try {
+            ScheduledEvent event = this.eventService.getEvent(item);
+            if (event != null) {
+                this.eventService.bindEventToCalendarItem(item, event);
+                this.weatherService.bindWeatherIconToCalendarItem(item, weatherService.getWeatherDay(item, event.getLocation()));
+            }
+        } catch (Exception ex) {}
+    }
+    
+    private CalendarItem createCalendarItem(LocalDate date, int col, int row, boolean showDayNumbers) {
+        String initialText;
+        CalendarButton button;
+
+        if (showDayNumbers) {
+            initialText = String.valueOf(date.getDayOfMonth()).concat("\n");
+            button = new CalendarButton(String.valueOf(date.getDayOfMonth()), date.toString());
+        } else {
+            initialText = "";
+            button = new CalendarButton("", date.toString());
+        }
+
+        return new CalendarItem(date, (col - 1) % 7, row, button, initialText);
     }
     
     private void validateYear(Year year) {

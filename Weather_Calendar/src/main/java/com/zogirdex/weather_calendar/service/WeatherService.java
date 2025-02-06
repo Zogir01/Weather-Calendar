@@ -2,7 +2,7 @@ package com.zogirdex.weather_calendar.service;
 
 import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.manager.WeatherManager;
-import com.zogirdex.weather_calendar.uiutil.CalendarItem;
+import com.zogirdex.weather_calendar.model.CalendarItem;
 import com.zogirdex.weather_calendar.model.WeatherDay;
 import com.zogirdex.weather_calendar.model.WeatherLocation;
 import com.zogirdex.weather_calendar.model.WeatherQuery;
@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.lang.IllegalArgumentException;
 import java.util.Set;
 import java.util.Map;
+import java.util.List;
 
 /**
  *
@@ -20,9 +21,9 @@ import java.util.Map;
 public class WeatherService {
     
     private final WeatherManager weatherManager;
-    
     private final String apiBaseUrl;
     private final Map<String, String> apiQueryParams;
+
     
     public WeatherService() {
          this.weatherManager = WeatherManager.getInstance();
@@ -39,60 +40,73 @@ public class WeatherService {
     public WeatherDay getWeatherDay(CalendarItem item, String location)  {
         this.validateCalendarItem(item);
         LocalDate date = item.getDate();
-        WeatherDay weatherDay = this.weatherManager.getWeatherLocation(location).getWeatherDay(date);
+        
+        WeatherLocation weatherLocation = this.weatherManager.getWeatherLocation(location);
+        if(weatherLocation == null) {
+            throw new IllegalArgumentException("Nie udało się odnaleźć pogody dla określonej lokalizacji: " + location);
+        }
+        
+        WeatherDay weatherDay = weatherLocation.getWeatherDay(date);
         if(weatherDay == null) {
-            throw new IllegalArgumentException("Brak pogody dla określonego spotkania.");
+            throw new IllegalArgumentException("Nie udało się odnaleźć pogody dla określonego dnia: " + date.toString());
         }
         return weatherDay;
     }
     
-    public void updateWeather(CalendarItem item, String location) throws ApiException{
+    // zaktualizuje pogodę dla 1 dnia (określonego dla CalendarItem) dla podanej lokalizacji
+    public void updateWeather(CalendarItem item, String location) throws ApiException {
         this.validateCalendarItem(item);
-         try {
-            WeatherQuery result = this.makeQuery(location);
+           WeatherQuery result;
+            try {
+                result = this.makeQuery(location);
+            }
+            catch(ApiException ex) {
+              throw new ApiException("Wystąpił błąd podczas aktualizowania danych pogodowych dla lokalizacji: " + location, ex);
+            }
+            
             WeatherLocation weatherLocation = this.weatherManager.getOrCreateWeatherLocation(location);
             
             for(WeatherDay weatherDay : result.getDays()) {
                 LocalDate date = item.getDate();
                 LocalDate queryDate = LocalDate.parse(weatherDay.getDatetime());
                 if(date.equals(queryDate)) {
-                    // aktualizacja modelu tylko dla określonego dnia
                     weatherLocation.addOrUpdateWeatherDay(weatherDay);
                     this.bindWeatherIconToCalendarItem(item, weatherDay);
                 }
             }
-          } 
-          catch(ApiException ex) {
-              throw new ApiException("Wystąpił błąd podczas aktualizowania danych pogodowych.", ex);
-          }
     }
     
+    // zaaktualizuje wszystkie 14 dni dla podanych lokalizacji
     public void updateWeather(Set<String> locations) throws ApiException{
         if(locations.isEmpty()) {
             throw new IllegalArgumentException("Nie można zaaktualizować pogody dla nieistniejących lokalizacji.");
         }
-        
-        try {
-            for (String location : locations) {
-                WeatherQuery result = this.makeQuery(location);
-                 WeatherLocation weatherLocation = weatherManager.getOrCreateWeatherLocation(location);
-                 for(WeatherDay day : result.getDays()) {
-                     weatherLocation.addWeatherDay(day);
-                 }
+
+        for (String location : locations) {
+            WeatherQuery result;
+            try {
+                result = this.makeQuery(location);
+            }
+            catch(ApiException ex) {
+                  throw new ApiException("Wystąpił błąd podczas aktualizowania danych pogodowych. Upewnij się, że podano poprawną lokalizację.", ex);
+            }
+            
+             WeatherLocation weatherLocation = weatherManager.getOrCreateWeatherLocation(location);
+             
+             for(WeatherDay day : result.getDays()) {
+                 weatherLocation.addOrUpdateWeatherDay(day);
              }
-        }
-        catch(ApiException ex) {
-              throw new ApiException("Wystąpił błąd podczas aktualizowania danych pogodowych.", ex);
-        }
+         }
     }
     
-    public void bindWeatherIconToCalendarItem(CalendarItem item, WeatherDay weatherDay) throws ApiException{
+    public void bindWeatherIconToCalendarItem(CalendarItem item, WeatherDay weatherDay) {
         this.setCalendarItemBgImage(item, weatherDay.getIcon());
         weatherDay.iconProperty().addListener((observable, oldVal, newVal) -> {
             this.setCalendarItemBgImage(item, newVal);
             System.out.print(newVal);
         });
     }
+    
     private void setCalendarItemBgImage(CalendarItem item, String iconName) {
         item.getButton().setBackgroundImage("img/weather-icon-trsp/" + iconName + ".png");
     }
@@ -104,7 +118,7 @@ public class WeatherService {
     }
     
     private WeatherQuery makeQuery(String location) throws ApiException {
-        String url = QueryAssistant.buildUrl(this.apiBaseUrl + location, this.apiQueryParams);
+        String url = QueryAssistant.buildUrl(this.apiBaseUrl, location, this.apiQueryParams);
         return QueryAssistant.makeQuery(url, WeatherQuery.class);
     }
 }

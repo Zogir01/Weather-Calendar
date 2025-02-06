@@ -3,14 +3,9 @@ package com.zogirdex.weather_calendar;
 import com.zogirdex.weather_calendar.uiutil.StageAssistant;
 import com.zogirdex.weather_calendar.util.GlobalStateException;
 import com.zogirdex.weather_calendar.manager.EventManager;
-import com.zogirdex.weather_calendar.manager.WeatherManager;
 import com.zogirdex.weather_calendar.service.WeatherService;
 import com.zogirdex.weather_calendar.config.AppConstants;
-import com.zogirdex.weather_calendar.model.WeatherDay;
-import com.zogirdex.weather_calendar.model.WeatherLocation;
-import com.zogirdex.weather_calendar.model.WeatherQuery;
 import com.zogirdex.weather_calendar.util.ApiException;
-import com.zogirdex.weather_calendar.util.QueryAssistant;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -40,7 +35,7 @@ public class AppService extends Application {
             weatherService.updateWeather(locations);
         }
         catch(GlobalStateException | ApiException ex) {
-            // LOGUJ
+
         }
     }
     
@@ -73,7 +68,7 @@ public class AppService extends Application {
             EventManager.getInstance().saveEventsState();
         }
         catch (GlobalStateException ex) {
-            // LOGUJ
+
         }
         System.out.println("Aplikacja zakonczona.");
     }

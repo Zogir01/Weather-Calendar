@@ -1,7 +1,5 @@
 package com.zogirdex.weather_calendar.config;
 
-import java.util.Map;
-import java.util.List;
 /**
  *
  * @author tom3k

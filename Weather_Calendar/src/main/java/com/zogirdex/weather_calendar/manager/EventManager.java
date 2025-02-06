@@ -54,11 +54,10 @@ public class EventManager {
     }
     
     public void deleteEvent(LocalDate date) {
-        if (events.containsKey(date)) {
-            events.remove(date);
-        } else {
-            throw new IllegalArgumentException("Cannot find event for expected date.");
-        }
+        if (!events.containsKey(date)) {
+            throw new IllegalArgumentException("Event not found for the given date: " + date);
+        } 
+        events.remove(date);
     }
     
     public final void loadEventsState() throws GlobalStateException {

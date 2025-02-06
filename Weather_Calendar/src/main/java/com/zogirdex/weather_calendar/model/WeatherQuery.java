@@ -5,15 +5,15 @@ import java.util.List;
 
 public class WeatherQuery {
 
-public int queryCost;
-public double latitude;
-public double longitude;
-public String resolvedAddress;
-public String address;
-public String timezone;
-public double tzoffset;
-public String description;
-public List<WeatherDay> days;
+private int queryCost;
+private double latitude;
+private double longitude;
+private String resolvedAddress;
+private String address;
+private String timezone;
+private double tzoffset;
+private String description;
+private List<WeatherDay> days;
 
     public WeatherQuery() {}
 
@@ -100,6 +100,20 @@ return days;
 
 public void setDays(List<WeatherDay> days) {
 this.days = days;
+}
+
+@Override
+public String toString() {
+    return "WeatherQuery{" +
+            "queryCost=" + queryCost +
+            ", latitude=" + latitude +
+            ", longitude=" + longitude +
+            ", resolvedAddress='" + resolvedAddress + '\'' +
+            ", address='" + address + '\'' +
+            ", timezone='" + timezone + '\'' +
+            ", tzoffset=" + tzoffset +
+            ", description='" + description + '\'' +
+            '}';
 }
 
 }

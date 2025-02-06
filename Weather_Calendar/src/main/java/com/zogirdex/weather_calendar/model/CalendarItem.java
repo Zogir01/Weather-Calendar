@@ -1,5 +1,6 @@
-package com.zogirdex.weather_calendar.uiutil;
+package com.zogirdex.weather_calendar.model;
 
+import com.zogirdex.weather_calendar.uiutil.CalendarButton;
 import java.time.LocalDate;
 
 /**
@@ -26,4 +27,10 @@ public class CalendarItem {
     public CalendarButton getButton() { return this.dayButton; }
     public LocalDate getDate() { return this.date; }
     public String getInitialText() { return this.initialText; }
+    
+    public void unbind() {
+          this.dayButton.textProperty().unbind();
+          this.dayButton.setText(String.valueOf(date.getDayOfMonth()));
+          this.dayButton.unsetBackgroundImage();
+    }
 } 

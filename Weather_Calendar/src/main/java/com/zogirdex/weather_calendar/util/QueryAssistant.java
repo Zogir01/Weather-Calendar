@@ -11,6 +11,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Map;
+import java.net.URLEncoder;
+import java.io.UnsupportedEncodingException;
 
 /**
  *
@@ -18,15 +20,41 @@ import java.util.Map;
  */
 public class QueryAssistant {
     
-    public static String buildUrl(String baseUrl, Map<String, String> params) {
-        StringBuilder builder = new StringBuilder().append("?");    
+    public static String buildUrl(String baseUrl, String endpoint, Map<String, String> params) throws ApiException {
+        if(params == null) {
+            throw new ApiException("Params map cannot be null.");
+        }
+        if(params.isEmpty()) {
+            throw new ApiException("Params map cannot be empty.");
+        }
+        
+        StringBuilder builder = new StringBuilder();    
+        builder.append(baseUrl);
+        
+        if(baseUrl.charAt(baseUrl.length()  - 1) != '/') {
+            builder.append("/");
+        }
+        
+        try {
+            builder.append(URLEncoder.encode(endpoint, "UTF-8"));
+        }
+        catch(UnsupportedEncodingException ex) {
+            throw new ApiException("Error while encoding endpoint to UTF-8", ex);
+        }
+        
+        builder.append("?");
+        
         for (Map.Entry<String, String> entry : params.entrySet()) {
             builder.append(entry.getKey())
-                           .append("=")
-                           .append(entry.getValue())
-                           .append("&");
+                       .append("=")
+                       .append(entry.getValue())
+                       .append("&");
         }
-        return baseUrl + builder.toString();
+        
+        // Usuwanie ostatniego "&"
+        //builder.deleteCharAt(builder.length() - 1);
+        System.out.println("full url=" + builder.toString());
+        return builder.toString();
     }
     
     public static <T> T makeQuery(String url, Class<T> classOfT) throws ApiException {
