@@ -45,8 +45,14 @@ public class NewEventController  implements Initializable {
             String eventName = this.textFieldEventName.getText();
             String eventDesc = this.textAreaEventDesc.getText();
             
+            // Dodawanie nowego spotkania
             this.eventService.addEvent(selectedItem, eventName, eventDesc, location);
-            this.weatherService.updateWeather(selectedItem, location);
+            
+            // Aktualizacja pogody
+            this.weatherService.updateWeatherForLocation(location);
+
+            // Powiązanie pogody z elementem kalendarza
+            this.weatherService.bindWeatherIconToCalendarItem(selectedItem, location);
             
             // Zamknięcie okna
             Stage currentStage = (Stage) buttonAddEvent.getScene().getWindow();

@@ -1,8 +1,12 @@
 package com.zogirdex.weather_calendar.manager;
 
-import com.zogirdex.weather_calendar.model.WeatherLocation;
+import com.zogirdex.weather_calendar.model.WeatherForecast;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.HashMap;
+import java.time.Duration;
 
 /**
  *
@@ -11,7 +15,9 @@ import javafx.collections.ObservableMap;
  */
 public class WeatherManager {
     private static WeatherManager instance;
-    private final ObservableMap<String, WeatherLocation> weatherLocations;
+    private final ObservableMap<String, WeatherForecast> weatherLocations;
+    private final Map<String, LocalDateTime> lastUpdateTimes = new HashMap<>();
+    
     
     private WeatherManager() {
         this.weatherLocations = FXCollections.observableHashMap();
@@ -24,20 +30,30 @@ public class WeatherManager {
         return instance;
     }
     
-    public WeatherLocation getWeatherLocation(String location) {
+    public WeatherForecast getWeatherForecast(String location) {
         return this.weatherLocations.getOrDefault(location, null);
     }
     
-    public void addWeatherLocation(String location, WeatherLocation weatherLocation) {
+    public void addWeatherForecast(String location, WeatherForecast weatherLocation) {
         this.weatherLocations.put(location, weatherLocation);
     }
     
-    public WeatherLocation getOrCreateWeatherLocation(String location) {
-        WeatherLocation weatherLocation = this.getWeatherLocation(location);
-          if (weatherLocation == null) {
-              weatherLocation = new WeatherLocation();
-                this.addWeatherLocation(location, weatherLocation);
-          }
-          return weatherLocation;
+    public WeatherForecast getOrCreateWeatherForecast(String location) {
+        return weatherLocations.computeIfAbsent(location, k -> new WeatherForecast());
+//        WeatherForecast weatherLocation = this.getWeatherForecast(location);
+//          if (weatherLocation == null) {
+//              weatherLocation = new WeatherForecast();
+//                this.addWeatherForecast(location, weatherLocation);
+//          }
+//          return weatherLocation;
       }
+    
+    public boolean shouldUpdate(String location, Duration minUpdateInterval) {
+        LocalDateTime lastUpdate = lastUpdateTimes.get(location);
+        return lastUpdate == null || Duration.between(lastUpdate, LocalDateTime.now()).compareTo(minUpdateInterval) > 0;
+    }
+
+    public void markUpdated(String location) {
+        lastUpdateTimes.put(location, LocalDateTime.now());
+    }
 }

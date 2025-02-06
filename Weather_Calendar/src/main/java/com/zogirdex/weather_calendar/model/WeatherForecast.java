@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WeatherLocation {
+public class WeatherForecast {
     private final Map<LocalDate, WeatherDay> weatherDays = new HashMap();
     
     public void addWeatherDay(WeatherDay weatherDay) {

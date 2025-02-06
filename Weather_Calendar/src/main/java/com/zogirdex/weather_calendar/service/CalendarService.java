@@ -118,7 +118,7 @@ public class CalendarService {
             ScheduledEvent event = this.eventService.getEvent(item);
             if (event != null) {
                 this.eventService.bindEventToCalendarItem(item, event);
-                this.weatherService.bindWeatherIconToCalendarItem(item, weatherService.getWeatherDay(item, event.getLocation()));
+                this.weatherService.bindWeatherIconToCalendarItem(item, event.getLocation());
             }
         } catch (Exception ex) {}
     }

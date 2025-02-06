@@ -4,7 +4,7 @@ import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.manager.WeatherManager;
 import com.zogirdex.weather_calendar.model.CalendarItem;
 import com.zogirdex.weather_calendar.model.WeatherDay;
-import com.zogirdex.weather_calendar.model.WeatherLocation;
+import com.zogirdex.weather_calendar.model.WeatherForecast;
 import com.zogirdex.weather_calendar.model.WeatherQuery;
 import com.zogirdex.weather_calendar.util.ApiException;
 import com.zogirdex.weather_calendar.util.QueryAssistant;
@@ -24,7 +24,6 @@ public class WeatherService {
     private final String apiBaseUrl;
     private final Map<String, String> apiQueryParams;
 
-    
     public WeatherService() {
          this.weatherManager = WeatherManager.getInstance();
          this.apiBaseUrl = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/";
@@ -41,7 +40,7 @@ public class WeatherService {
         this.validateCalendarItem(item);
         LocalDate date = item.getDate();
         
-        WeatherLocation weatherLocation = this.weatherManager.getWeatherLocation(location);
+        WeatherForecast weatherLocation = this.weatherManager.getWeatherForecast(location);
         if(weatherLocation == null) {
             throw new IllegalArgumentException("Nie udało się odnaleźć pogody dla określonej lokalizacji: " + location);
         }
@@ -53,9 +52,7 @@ public class WeatherService {
         return weatherDay;
     }
     
-    // zaktualizuje pogodę dla 1 dnia (określonego dla CalendarItem) dla podanej lokalizacji
-    public void updateWeather(CalendarItem item, String location) throws ApiException {
-        this.validateCalendarItem(item);
+    public void updateWeatherForLocation(String location) throws ApiException {
            WeatherQuery result;
             try {
                 result = this.makeQuery(location);
@@ -64,42 +61,19 @@ public class WeatherService {
               throw new ApiException("Wystąpił błąd podczas aktualizowania danych pogodowych dla lokalizacji: " + location, ex);
             }
             
-            WeatherLocation weatherLocation = this.weatherManager.getOrCreateWeatherLocation(location);
+            WeatherForecast weatherLocation = this.weatherManager.getOrCreateWeatherForecast(location);
             
             for(WeatherDay weatherDay : result.getDays()) {
-                LocalDate date = item.getDate();
-                LocalDate queryDate = LocalDate.parse(weatherDay.getDatetime());
-                if(date.equals(queryDate)) {
-                    weatherLocation.addOrUpdateWeatherDay(weatherDay);
-                    this.bindWeatherIconToCalendarItem(item, weatherDay);
-                }
-            }
-    }
-    
-    // zaaktualizuje wszystkie 14 dni dla podanych lokalizacji
-    public void updateWeather(Set<String> locations) throws ApiException{
-        if(locations.isEmpty()) {
-            throw new IllegalArgumentException("Nie można zaaktualizować pogody dla nieistniejących lokalizacji.");
-        }
+                weatherLocation.addOrUpdateWeatherDay(weatherDay);
 
-        for (String location : locations) {
-            WeatherQuery result;
-            try {
-                result = this.makeQuery(location);
             }
-            catch(ApiException ex) {
-                  throw new ApiException("Wystąpił błąd podczas aktualizowania danych pogodowych. Upewnij się, że podano poprawną lokalizację.", ex);
-            }
-            
-             WeatherLocation weatherLocation = weatherManager.getOrCreateWeatherLocation(location);
-             
-             for(WeatherDay day : result.getDays()) {
-                 weatherLocation.addOrUpdateWeatherDay(day);
-             }
-         }
     }
     
-    public void bindWeatherIconToCalendarItem(CalendarItem item, WeatherDay weatherDay) {
+    public void bindWeatherIconToCalendarItem(CalendarItem item, String location) {
+        this.validateCalendarItem(item);
+        
+        WeatherDay weatherDay = this.getWeatherDay(item, location);
+        
         this.setCalendarItemBgImage(item, weatherDay.getIcon());
         weatherDay.iconProperty().addListener((observable, oldVal, newVal) -> {
             this.setCalendarItemBgImage(item, newVal);

@@ -87,9 +87,18 @@ public class EventController implements Initializable{
     private void editEvent() {
         try {
             String location = this.textFieldEditEventLocation.getText();
-            this.eventService.editEvent(this.selectedItem, this.textFieldEditEventName.getText(), 
-                    this.textAreaEditEventDesc.getText(), location);
-            this.weatherService.updateWeather(this.selectedItem, location);
+            String eventName = this.textFieldEditEventName.getText();
+            String eventDesc = this.textAreaEditEventDesc.getText();
+            
+            // Edycja spotkania
+            this.eventService.editEvent(this.selectedItem, eventName, eventDesc, location);
+            
+            // Aktualizacja pogody
+            this.weatherService.updateWeatherForLocation(location);
+
+            // Powiązanie pogody z elementem kalendarza
+            this.weatherService.bindWeatherIconToCalendarItem(selectedItem, location);
+            
             this.setControls();
             
             new AlertSucces("Pomyślnie udało się edytować spotkanie.").showAndWait();   

@@ -4,6 +4,7 @@ import com.zogirdex.weather_calendar.uiutil.StageAssistant;
 import com.zogirdex.weather_calendar.util.GlobalStateException;
 import com.zogirdex.weather_calendar.manager.EventManager;
 import com.zogirdex.weather_calendar.service.WeatherService;
+import com.zogirdex.weather_calendar.service.AutoWeatherService;
 import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.util.ApiException;
 import javafx.application.Application;
@@ -15,6 +16,7 @@ import java.util.Set;
  * Główna klasa aplikacji JavaFX. W klasie tej zaimplementowano inicjalizacje oraz zapis stanu aplikacji.
  */
 public class AppService extends Application {
+    private AutoWeatherService autoWeatherService;
       /**
      * Metoda inicjalizacyjna aplikacji, wykonująca się po stworzeniu instancji klasy Application. Ładowany jest stan
      * klas singleton EventManager oraz WeatherManager. Do stanu w WeatherManager jest zapisywane 14 dat
@@ -28,13 +30,10 @@ public class AppService extends Application {
         try {
             // zaladuj najpierw stan EventManager
             eventManager.loadEventsState();
-            
-            Set<String> locations = eventManager.getLocations();
-            
-            WeatherService weatherService = new WeatherService();
-            weatherService.updateWeather(locations);
+        
+            this.autoWeatherService = new AutoWeatherService();
         }
-        catch(GlobalStateException | ApiException ex) {
+        catch(GlobalStateException ex) {
 
         }
     }
@@ -66,6 +65,7 @@ public class AppService extends Application {
     public void stop() {
         try {
             EventManager.getInstance().saveEventsState();
+            autoWeatherService.shutdown();
         }
         catch (GlobalStateException ex) {
 
