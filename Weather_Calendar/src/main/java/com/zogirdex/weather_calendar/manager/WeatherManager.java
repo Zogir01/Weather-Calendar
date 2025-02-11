@@ -16,6 +16,8 @@ import java.time.Duration;
 public class WeatherManager {
     private static WeatherManager instance;
     private final ObservableMap<String, WeatherForecast> weatherLocations;
+    
+    // nie wykorzystywane
     private final Map<String, LocalDateTime> lastUpdateTimes = new HashMap<>();
     
     
@@ -48,11 +50,13 @@ public class WeatherManager {
 //          return weatherLocation;
       }
     
+    // nie wykorzystywane
     public boolean shouldUpdate(String location, Duration minUpdateInterval) {
         LocalDateTime lastUpdate = lastUpdateTimes.get(location);
         return lastUpdate == null || Duration.between(lastUpdate, LocalDateTime.now()).compareTo(minUpdateInterval) > 0;
     }
 
+    // nie wykorzystywane
     public void markUpdated(String location) {
         lastUpdateTimes.put(location, LocalDateTime.now());
     }

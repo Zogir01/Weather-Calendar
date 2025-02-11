@@ -110,10 +110,10 @@ public class EventController implements Initializable{
     
     private void setControls() {
             ScheduledEvent event = this.eventService.getEvent(this.selectedItem);
+            
             this.labelEventName.textProperty().bind(event.eventNameProperty());
             this.labelEventDesc.textProperty().bind(event.eventDescProperty());
             this.labelLocation.textProperty().bind(event.locationProperty());
-            
             this.textFieldEditEventName.setText(event.getEventName());
             this.textAreaEditEventDesc.setText(event.getEventDesc());
             this.textFieldEditEventLocation.setText(event.getLocation());
@@ -132,8 +132,8 @@ public class EventController implements Initializable{
             this.labelSunset.textProperty().bind(weather.sunsetProperty());
             this.labelConditions.textProperty().bind(weather.conditionsProperty());
             this.labelDescription.textProperty().bind(weather.descriptionProperty());
-            // trzeba zbindować ikonę!!
             this.imageView.setImage(new Image("img/weather-icon-trsp/" + weather.getIcon() + ".png"));
-
     }
 }
+
+

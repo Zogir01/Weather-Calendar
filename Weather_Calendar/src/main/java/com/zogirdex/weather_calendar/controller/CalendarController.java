@@ -96,7 +96,7 @@ public class CalendarController implements Initializable {
             AppConstants.NEW_EVENT_STAGE_MIN_WIDTH, 
             AppConstants.NEW_EVENT_STAGE_MIN_HEIGHT
         );
-        controller.loadCalendarItem(item);
+        controller.init(item);
     }
     
    private void initializeComboBoxMonths() {

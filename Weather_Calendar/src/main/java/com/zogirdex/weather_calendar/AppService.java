@@ -28,14 +28,10 @@ public class AppService extends Application {
         System.out.println("Inicjalizacja aplikacji");
         EventManager eventManager = EventManager.getInstance();
         try {
-            // zaladuj najpierw stan EventManager
             eventManager.loadEventsState();
-        
             this.autoWeatherService = new AutoWeatherService();
         }
-        catch(GlobalStateException ex) {
-
-        }
+        catch(GlobalStateException ex) {}
     }
     
      /**

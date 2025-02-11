@@ -34,7 +34,7 @@ public class NewEventController  implements Initializable {
         this.weatherService = new WeatherService();
     } 
     
-    public void loadCalendarItem(CalendarItem item) {
+    public void init(CalendarItem item) {
         this.selectedItem = item;
     }
     
@@ -44,20 +44,12 @@ public class NewEventController  implements Initializable {
             String location = this.textFieldEventLocation.getText();
             String eventName = this.textFieldEventName.getText();
             String eventDesc = this.textAreaEventDesc.getText();
-            
-            // Dodawanie nowego spotkania
             this.eventService.addEvent(selectedItem, eventName, eventDesc, location);
-            
-            // Aktualizacja pogody
             this.weatherService.updateWeatherForLocation(location);
-
-            // Powiązanie pogody z elementem kalendarza
             this.weatherService.bindWeatherIconToCalendarItem(selectedItem, location);
             
-            // Zamknięcie okna
             Stage currentStage = (Stage) buttonAddEvent.getScene().getWindow();
             currentStage.close();  
-            
             new AlertSucces("Pomyślnie udało się zapisać nowe spotkanie.").showAndWait();   
          }
         catch(Exception ex) {

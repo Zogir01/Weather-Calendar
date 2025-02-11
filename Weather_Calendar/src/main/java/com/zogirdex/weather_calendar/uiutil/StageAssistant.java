@@ -43,19 +43,12 @@ public class StageAssistant {
      * @return Controller of new opened window assigned to input fxml file.
      * @throws IOException if FXML file wasn't loaded correctly.
      */
-    public <T> T openNewStage(String fxmlPath, String title, boolean isModal, double minWidth, double minHeight) throws IOException {        
+    public <T> T openNewStage(String fxmlPath, String title, boolean isModal, 
+            double minWidth, double minHeight) throws IOException 
+    {        
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
         Parent root = loader.load();
         Scene scene = new Scene(root);
-        
-        // Dodanie stylów CSS
-//        URL cssResource = getClass().getResource("/styles.css");
-//        if (cssResource != null) {
-//            scene.getStylesheets().add(cssResource.toExternalForm());
-//        } else {
-//            System.err.println("Nie znaleziono pliku styles.css");
-//        }
-        
         this.loadCssStylesheet(scene);
         Stage stage = new Stage();
         stage.setTitle(title);

@@ -55,23 +55,22 @@ public class WeatherService {
     public void updateWeatherForLocation(String location) throws ApiException {
            WeatherQuery result;
             try {
-                result = this.makeQuery(location);
+                String url = QueryAssistant.buildUrl(this.apiBaseUrl, location, this.apiQueryParams);
+                result = QueryAssistant.makeQuery(url, WeatherQuery.class);
             }
             catch(ApiException ex) {
-              throw new ApiException("Wystąpił błąd podczas aktualizowania danych pogodowych dla lokalizacji: " + location, ex);
+              throw new ApiException(
+                      "Wystąpił błąd podczas aktualizowania danych pogodowych dla lokalizacji: " + location, ex);
             }
             
             WeatherForecast weatherLocation = this.weatherManager.getOrCreateWeatherForecast(location);
             
             for(WeatherDay weatherDay : result.getDays()) {
                 weatherLocation.addOrUpdateWeatherDay(weatherDay);
-
             }
     }
     
-    public void bindWeatherIconToCalendarItem(CalendarItem item, String location) {
-        this.validateCalendarItem(item);
-        
+    public void bindWeatherIconToCalendarItem(CalendarItem item, String location) {   
         WeatherDay weatherDay = this.getWeatherDay(item, location);
         
         this.setCalendarItemBgImage(item, weatherDay.getIcon());
@@ -89,10 +88,5 @@ public class WeatherService {
         if (item == null) {
             throw new IllegalArgumentException("Przekazano pusty CalendarItem.");
         }
-    }
-    
-    private WeatherQuery makeQuery(String location) throws ApiException {
-        String url = QueryAssistant.buildUrl(this.apiBaseUrl, location, this.apiQueryParams);
-        return QueryAssistant.makeQuery(url, WeatherQuery.class);
     }
 }

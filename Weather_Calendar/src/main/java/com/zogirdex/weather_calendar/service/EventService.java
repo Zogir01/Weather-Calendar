@@ -25,7 +25,6 @@ public class EventService {
         this.validateCalendarItem(item);
         this.validateEventName(eventName);
         this.validateEventDesc(eventDesc);
-        this.validateLocation(location);
         ScheduledEvent newEvent = new ScheduledEvent(eventName, eventDesc, location);
         this.eventManager.addEvent(item.getDate(), newEvent);
         this.bindEventToCalendarItem(item, newEvent);
@@ -95,7 +94,7 @@ public class EventService {
     }
     
     private void validateEventDesc(String eventDesc) {
-        if (eventDesc == null || eventDesc.length() > 500) {
+        if(eventDesc.length() > 500) {
             throw new IllegalArgumentException("Opis spotkania nie może przekraczać 500 znaków.");
         }
     }

@@ -55,7 +55,8 @@ public class EventManager {
     
     public void deleteEvent(LocalDate date) {
         if (!events.containsKey(date)) {
-            throw new IllegalArgumentException("Event not found for the given date: " + date);
+            throw new IllegalArgumentException(
+                    "Event not found for the given date: " + date);
         } 
         events.remove(date);
     }
@@ -63,9 +64,6 @@ public class EventManager {
     public final void loadEventsState() throws GlobalStateException {
           this.events = FXCollections.observableMap(GlobalStateAssistant.loadState(AppConstants.PATH_EVENTS_STATE));
     }
-    
-    // wymagana jest zmiana z ObservableMap na HashMap, gdyż ObservableMap nie implementuje
-    // interfejsu Serializable. Przydałoby się aby ten kod wykonywała jakaś inna klasa.
     public final void saveEventsState() throws GlobalStateException {
         GlobalStateAssistant.saveState(new HashMap<>(this.events), AppConstants.PATH_EVENTS_STATE);
     }

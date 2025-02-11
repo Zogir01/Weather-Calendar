@@ -20,8 +20,8 @@ import java.util.EnumMap;
 public class CalendarService {
     private final EventService eventService;
     private final WeatherService weatherService;
-    public List<Year> availableYears;
-    public Map<Month, String> availableMonths;
+    private List<Year> availableYears;
+    private Map<Month, String> availableMonths;
     
     public CalendarService() {
         this.eventService = new EventService();
@@ -53,10 +53,11 @@ public class CalendarService {
         return this.generateCalendar(year, month, showDayNumbers, bindToEvent);
     }
     
-    public List<CalendarItem> generateCalendar(Year year, Month month, boolean showDayNumbers, boolean bindToEvent) throws ApiException {
+    public List<CalendarItem> generateCalendar(Year year, Month month, boolean showDayNumbers, 
+            boolean bindToEvent) throws ApiException {
         this.validateYear(year);
         this.validateMonth(month);
-        
+    
         List<CalendarItem> calendarItems = new ArrayList<>();
         int daysInMonth = month.length(year.isLeap());
         int shift = LocalDate.of(year.getValue(), month, 1).getDayOfWeek().getValue() - 1;
@@ -65,14 +66,11 @@ public class CalendarService {
         for (int col = 1 + shift; col <= daysInMonth + shift; col++) {
             int day = col - shift;
             LocalDate date = LocalDate.of(year.getValue(), month, day);
-            
-           CalendarItem item = createCalendarItem(date, col, row, showDayNumbers);
-
+            CalendarItem item = createCalendarItem(date, col, row, showDayNumbers);
             if (bindToEvent) {
                 this.bindEventAndWeatherToCalendarItem(item);
             }
             calendarItems.add(item);
-
             if (col % 7 == 0) {
                 row++;
             }

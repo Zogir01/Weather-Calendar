@@ -12,7 +12,8 @@ import java.lang.reflect.Type;
 // typów typu "Observable" z JavaFX.
 class WeatherDayAdapter implements JsonDeserializer<WeatherDay> {
     @Override
-    public WeatherDay deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public WeatherDay deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) 
+            throws JsonParseException {
         JsonObject obj = json.getAsJsonObject();
         WeatherDay weatherDay = new WeatherDay();
         
