@@ -10,11 +10,6 @@ import javafx.stage.Modality;
 import javafx.scene.Node;
 import javafx.event.ActionEvent;
 
-/**
- *
- * @author tom3k
- * 
- */
 public class StageAssistant {
     private static StageAssistant instance;
     private StageAssistant() {}

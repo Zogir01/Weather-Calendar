@@ -8,11 +8,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.time.Duration;
 
-/**
- *
- * @author tom3k
- * 
- */
 public class WeatherManager {
     private static WeatherManager instance;
     private final ObservableMap<String, WeatherForecast> weatherLocations;

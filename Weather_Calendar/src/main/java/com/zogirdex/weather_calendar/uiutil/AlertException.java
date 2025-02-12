@@ -4,17 +4,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 
-
-/**
- *
- * @author tom3k
- */
 public class AlertException extends Alert {
     public AlertException(Exception ex) {
         super(AlertType.ERROR);
         setTitle("Błąd aplikacji");
         setHeaderText(ex.getMessage());
-        //setContentText(ex.getMessage());
 
         StringBuilder result = new StringBuilder();
         for (StackTraceElement element : ex.getStackTrace()) {

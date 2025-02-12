@@ -1,5 +1,4 @@
 package com.zogirdex.weather_calendar.model;
-import java.time.LocalDate;
 
 import java.util.List;
 

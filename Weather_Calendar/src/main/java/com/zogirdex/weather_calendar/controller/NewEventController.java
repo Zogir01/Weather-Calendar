@@ -14,10 +14,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-/**
- *
- * @author tom3k
- */
 public class NewEventController  implements Initializable {
     private EventService eventService;
     private WeatherService weatherService;

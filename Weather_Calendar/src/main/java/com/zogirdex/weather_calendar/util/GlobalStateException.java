@@ -1,9 +1,5 @@
 package com.zogirdex.weather_calendar.util;
 
-/**
- *
- * @author tom3k
- */
 public class GlobalStateException extends Exception {
 
     public GlobalStateException() {

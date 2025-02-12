@@ -1,6 +1,5 @@
 package com.zogirdex.weather_calendar.service;
 
-import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.manager.WeatherManager;
 import com.zogirdex.weather_calendar.model.CalendarItem;
 import com.zogirdex.weather_calendar.model.WeatherDay;
@@ -10,9 +9,7 @@ import com.zogirdex.weather_calendar.util.ApiException;
 import com.zogirdex.weather_calendar.util.QueryAssistant;
 import java.time.LocalDate;
 import java.lang.IllegalArgumentException;
-import java.util.Set;
 import java.util.Map;
-import java.util.List;
 
 /**
  *

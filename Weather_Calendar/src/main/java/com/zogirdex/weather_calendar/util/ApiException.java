@@ -1,9 +1,5 @@
 package com.zogirdex.weather_calendar.util;
 
-/**
- *
- * @author tom3k
- */
 public class ApiException extends Exception {
 
     public ApiException() {
