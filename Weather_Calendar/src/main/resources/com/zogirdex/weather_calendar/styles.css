@@ -44,3 +44,145 @@
     /*-fx-fill: white;  Kolor tekstu */
 
 }
+
+/*****************************************************************************************************************************************/
+
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: linear-gradient(to bottom, #E0F2F1, #B2DFDB);
+    -fx-padding: 0px;
+}
+
+/*.anchor-pane {
+    -fx-padding: 20px;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1;
+}*/
+
+/* Etykiety pól (np. Nazwa, Lokalizacja, Opis) */
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #004D40;
+    -fx-padding: 3px;
+}
+
+/* Pola tekstowe i ComboBox */
+.text-field, .text-area, .combo-box {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #80CBC4;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 3px;
+    -fx-font-size: 13px;
+    -fx-text-fill: #004D40;
+    -fx-prompt-text-fill: #80CBC4;
+}
+
+.text-area {
+    -fx-pref-row-count: 6;
+    -fx-wrap-text: true;
+}
+
+.button {
+    -fx-background-color: linear-gradient(to bottom, #4DB6AC, #00796B);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 5, 0, 0, 2);
+}
+
+/* Efekt po najechaniu na przycisk */
+.button:hover {
+    -fx-background-color: linear-gradient(to bottom, #00796B, #004D40);
+    -fx-text-fill: #E0F2F1;
+}
+
+/* Przycisk Usuń spotkanie */
+.button-delete {
+    -fx-background-color: linear-gradient(to bottom, #E57373, #D32F2F);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 5, 0, 0, 2);
+}
+
+.button-delete:hover {
+    -fx-background-color: linear-gradient(to bottom, #C62828, #B71C1C);
+}
+
+/* Separator dla oddzielenia sekcji */
+/*.separator {
+    -fx-padding: 10px 0;
+    -fx-opacity: 0.8;
+}*/
+
+.description-label {
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #B2DFDB);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #80CBC4;
+    -fx-border-width: 1px;
+    -fx-padding: 5px;
+    -fx-alignment: top-left;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.5, 0, 2);
+    -fx-font-size: 14px;
+    -fx-text-fill: #004D40;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* Styl dla wyświetlania pogody */
+.weather-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #00695C;
+    -fx-padding: 3px 0;
+}
+
+.heading-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #004D40;
+    -fx-padding: 10px 0 5px 0;
+    -fx-border-width: 0 0 2px 0;
+    -fx-border-color: #004D40;
+    -fx-border-style: solid; 
+}
+
+.menu-bar {
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #e0e0e0);
+    -fx-border-color: #cccccc;
+    -fx-border-width: 0 0 1 0; /* Tylko dolna ramka */
+    -fx-padding: 5 10 5 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+
+.menu {
+    -fx-text-fill: #2b6777;
+    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-font-size: 14px;
+    -fx-padding: 5 15 5 15;
+}
+
+.menu:hover {
+    -fx-background-color: #52ab98;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+.menu-item {
+    -fx-text-fill: #333333;
+    -fx-font-size: 13px;
+}
+
+.menu-item:hover {
+    -fx-background-color: #e3fdfd;
+    -fx-text-fill: #2b6777;
+}
+

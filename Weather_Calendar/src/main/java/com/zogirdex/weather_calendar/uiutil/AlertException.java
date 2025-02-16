@@ -9,7 +9,7 @@ import javafx.scene.layout.VBox;
  *
  * @author tom3k
  */
-public class AlertException extends Alert{
+public class AlertException extends Alert {
     public AlertException(Exception ex) {
         super(AlertType.ERROR);
         setTitle("Błąd aplikacji");

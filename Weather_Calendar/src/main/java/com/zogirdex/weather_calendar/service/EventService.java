@@ -1,9 +1,8 @@
 package com.zogirdex.weather_calendar.service;
 
-import com.zogirdex.weather_calendar.uiutil.CalendarItem;
+import com.zogirdex.weather_calendar.model.CalendarItem;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.manager.EventManager;
-import com.zogirdex.weather_calendar.config.AppConstants;
 
 /**
  *
@@ -16,14 +15,46 @@ public class EventService {
         this.eventManager = EventManager.getInstance();
     }
     
+    public boolean eventExists(CalendarItem item) {
+        this.validateCalendarItem(item);
+        // przenieść tą logikę do funkcji event managera "eventExists"
+        return this.eventManager.getEvents().containsKey(item.getDate());
+    }
+    
     public void addEvent(CalendarItem item, String eventName, String eventDesc, String location) {
         this.validateCalendarItem(item);
         this.validateEventName(eventName);
         this.validateEventDesc(eventDesc);
-        this.validateLocation(location);
         ScheduledEvent newEvent = new ScheduledEvent(eventName, eventDesc, location);
         this.eventManager.addEvent(item.getDate(), newEvent);
         this.bindEventToCalendarItem(item, newEvent);
+    }
+    
+    public void deleteEvent(CalendarItem item) {
+        this.validateCalendarItem(item);
+        try {
+            this.eventManager.deleteEvent(item.getDate());
+        }
+        catch(IllegalArgumentException ex) {
+            throw new IllegalArgumentException("Błąd podczas usuwania spotkania.", ex);
+        }
+    }
+    
+    public void editEvent(CalendarItem item, String eventName, String eventDesc, String location) {
+        this.validateCalendarItem(item);
+
+        ScheduledEvent event = eventManager.getEvent(item.getDate());
+        if (event != null) {
+            this.validateEventName(eventName);
+            this.validateEventDesc(eventDesc);
+            this.validateLocation(location);
+        
+            event.setEventName(eventName);
+            event.setEventDesc(eventDesc);
+            event.setLocation(location);
+        } else {
+            throw new IllegalArgumentException("Spotkanie o podanej dacie nie istnieje, nie można edytować spotkania.");
+        }        
     }
         
     public ScheduledEvent getEvent(CalendarItem item) {
@@ -41,7 +72,7 @@ public class EventService {
             this.setCalendarItemText(item, newVal);
         });
     }
-    
+
     private void setCalendarItemText(CalendarItem item, String eventName) {
         item.getButton().setText(String.valueOf(item.getDate().getDayOfMonth())
                     .concat("\n")
@@ -63,15 +94,15 @@ public class EventService {
     }
     
     private void validateEventDesc(String eventDesc) {
-        if (eventDesc == null || eventDesc.length() > 500) {
+        if(eventDesc.length() > 500) {
             throw new IllegalArgumentException("Opis spotkania nie może przekraczać 500 znaków.");
         }
     }
     
     private void validateLocation(String location) {
-        if (location == null || !AppConstants.LOCATIONS.contains(location)) {
-            throw new IllegalArgumentException("Podana lokalizacja nie jest dostępna.");
-        }
+//        if (location == null || !this.locations.contains(location)) {
+//            throw new IllegalArgumentException("Podana lokalizacja nie jest dostępna.");
+//        }
     }
     
     private void validateCalendarItem(CalendarItem item) {

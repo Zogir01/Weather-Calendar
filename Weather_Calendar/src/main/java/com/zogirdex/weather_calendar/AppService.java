@@ -3,13 +3,10 @@ package com.zogirdex.weather_calendar;
 import com.zogirdex.weather_calendar.uiutil.StageAssistant;
 import com.zogirdex.weather_calendar.util.GlobalStateException;
 import com.zogirdex.weather_calendar.manager.EventManager;
-import com.zogirdex.weather_calendar.manager.WeatherManager;
+import com.zogirdex.weather_calendar.service.WeatherService;
+import com.zogirdex.weather_calendar.service.AutoWeatherService;
 import com.zogirdex.weather_calendar.config.AppConstants;
-import com.zogirdex.weather_calendar.model.WeatherDay;
-import com.zogirdex.weather_calendar.model.WeatherLocation;
-import com.zogirdex.weather_calendar.model.WeatherQuery;
 import com.zogirdex.weather_calendar.util.ApiException;
-import com.zogirdex.weather_calendar.util.QueryAssistant;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -18,7 +15,8 @@ import java.util.Set;
 /**
  * Główna klasa aplikacji JavaFX. W klasie tej zaimplementowano inicjalizacje oraz zapis stanu aplikacji.
  */
-public class App extends Application {
+public class AppService extends Application {
+    private AutoWeatherService autoWeatherService;
       /**
      * Metoda inicjalizacyjna aplikacji, wykonująca się po stworzeniu instancji klasy Application. Ładowany jest stan
      * klas singleton EventManager oraz WeatherManager. Do stanu w WeatherManager jest zapisywane 14 dat
@@ -29,27 +27,11 @@ public class App extends Application {
     public void init() {
         System.out.println("Inicjalizacja aplikacji");
         EventManager eventManager = EventManager.getInstance();
-        WeatherManager weatherManager = WeatherManager.getInstance();
         try {
-            // zaladuj najpierw stan EventManager
             eventManager.loadEventsState();
-            Set<String> locations = eventManager.getLocations();
-            if(!locations.isEmpty()) {
-                for (String location : locations) {
-                    String url = QueryAssistant.buildUrl(AppConstants.WEATHER_API_BASE_URL + location, 
-                            AppConstants.WEATHER_API_QUERY_PARAMS);
-                     WeatherQuery result = QueryAssistant.makeQuery(url, WeatherQuery.class);
-                     WeatherLocation weatherLocation = weatherManager.getOrCreateWeatherLocation(location);
-                     for(WeatherDay day : result.getDays()) {
-                         weatherLocation.addWeatherDay(day);
-                     }
-                    // result.getDays().forEach(weatherLocation::addWeatherDay);
-                 }
-            }
+            this.autoWeatherService = new AutoWeatherService();
         }
-        catch(GlobalStateException | ApiException ex) {
-            // LOGUJ
-        }
+        catch(GlobalStateException ex) {}
     }
     
      /**
@@ -79,9 +61,10 @@ public class App extends Application {
     public void stop() {
         try {
             EventManager.getInstance().saveEventsState();
+            autoWeatherService.shutdown();
         }
         catch (GlobalStateException ex) {
-            // LOGUJ
+
         }
         System.out.println("Aplikacja zakonczona.");
     }
