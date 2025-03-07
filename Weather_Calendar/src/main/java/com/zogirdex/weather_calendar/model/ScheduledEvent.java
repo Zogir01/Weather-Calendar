@@ -8,10 +8,6 @@ import java.io.ObjectInputStream;
 import java.io.IOException;
 import java.io.ObjectStreamException;
 
-/**
- *
- * @author tom3k
- */
 public class ScheduledEvent implements Serializable {
     private transient StringProperty eventName;
     private transient StringProperty eventDesc;

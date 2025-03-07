@@ -2,7 +2,6 @@ package com.zogirdex.weather_calendar.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.model.WeatherDay;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,10 +13,6 @@ import java.util.Map;
 import java.net.URLEncoder;
 import java.io.UnsupportedEncodingException;
 
-/**
- *
- * @author tom3k
- */
 public class QueryAssistant {
     
     public static String buildUrl(String baseUrl, String endpoint, Map<String, String> params) throws ApiException {

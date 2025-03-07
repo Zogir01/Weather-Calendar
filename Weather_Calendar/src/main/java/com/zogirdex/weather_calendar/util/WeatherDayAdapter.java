@@ -1,9 +1,5 @@
 package com.zogirdex.weather_calendar.util;
 
-/**
- *
- * @author tom3k
- */
 import com.zogirdex.weather_calendar.model.WeatherDay;
 import com.google.gson.*;
 import java.lang.reflect.Type;

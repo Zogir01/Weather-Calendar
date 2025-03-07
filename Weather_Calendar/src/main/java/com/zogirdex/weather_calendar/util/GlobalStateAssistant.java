@@ -6,11 +6,6 @@ import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-/**
- *
- * @author tom3k
- * 
- */
 public class GlobalStateAssistant {
     public GlobalStateAssistant() {}
     // pomyslec nad tym: getClass().getClassLoader().getResourceAsStream(EVENTS_STATE_FILE);

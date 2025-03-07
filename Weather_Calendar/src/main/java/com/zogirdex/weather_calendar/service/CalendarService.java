@@ -13,10 +13,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.EnumMap;
 
-/**
- *
- * @author tom3k
- */
 public class CalendarService {
     private final EventService eventService;
     private final WeatherService weatherService;

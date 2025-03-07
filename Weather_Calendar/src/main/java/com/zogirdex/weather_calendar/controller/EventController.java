@@ -5,7 +5,6 @@ import com.zogirdex.weather_calendar.model.WeatherDay;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.service.EventService;
 import com.zogirdex.weather_calendar.service.WeatherService;
-import com.zogirdex.weather_calendar.service.CalendarService;
 import com.zogirdex.weather_calendar.uiutil.AlertException;
 import com.zogirdex.weather_calendar.uiutil.AlertSucces;
 

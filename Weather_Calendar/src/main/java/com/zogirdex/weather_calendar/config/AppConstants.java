@@ -2,7 +2,6 @@ package com.zogirdex.weather_calendar.config;
 
 /**
  *
- * @author tom3k
  * Dobrym pomysłem było zrobić konfiguracje aplikacji w plikach (np. JSON) i robić wczytywanie tego configu.
  * Wadą obecnego podejścia z "AppConstants" jest np. to, że aby zmienić konfigurację aplikacji, trzeba ją 
  * na nowo skompilować.
@@ -14,7 +13,6 @@ public class AppConstants {
     public static final String PATH_CSS_STYLES = PATH_RESOURCES + "styles.css";
     public static final String PATH_EVENTS_STATE = "eventmanager.dat"; // przerobić aby te ścieżki były także w RESOURCES_PATH
     public static final String PATH_FILES_STATE = "filemanager.dat"; // przerobić aby te ścieżki były także w RESOURCES_PATH
-    //public static final 
     
     //----------------------------------- STAGE --------------------------------------------------------
     public static final String CALENDAR_STAGE_NAME = "Kalendarz";

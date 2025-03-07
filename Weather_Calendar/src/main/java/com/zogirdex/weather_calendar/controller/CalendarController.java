@@ -10,6 +10,7 @@ import com.zogirdex.weather_calendar.util.ApiException;
 import com.zogirdex.weather_calendar.config.AppConstants;
 import com.zogirdex.weather_calendar.uiutil.AlertError;
 import com.zogirdex.weather_calendar.uiutil.AlertException;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import java.net.URL;

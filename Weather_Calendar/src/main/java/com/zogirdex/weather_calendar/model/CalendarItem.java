@@ -3,10 +3,6 @@ package com.zogirdex.weather_calendar.model;
 import com.zogirdex.weather_calendar.uiutil.CalendarButton;
 import java.time.LocalDate;
 
-/**
- *
- * @author tom3k
- */
 public class CalendarItem {
     private final LocalDate date;
     private final int column;

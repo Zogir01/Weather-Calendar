@@ -4,10 +4,6 @@ import com.zogirdex.weather_calendar.model.CalendarItem;
 import com.zogirdex.weather_calendar.model.ScheduledEvent;
 import com.zogirdex.weather_calendar.manager.EventManager;
 
-/**
- *
- * @author tom3k
- */
 public class EventService {
     private final EventManager eventManager;
     
