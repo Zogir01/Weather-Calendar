@@ -21,7 +21,9 @@ Simple JavaFX application for university that allows users to schedule meetings 
 
 ## Graphical User Interface
 ![Window with callendar](Docs/image_1.png)
+
 ![Window with meeting and weather information](Docs/image_2.png)
+
 
 ## Authors
 - [Tomasz Wojtasek (Zogir01)](https://github.com/Zogir01)
