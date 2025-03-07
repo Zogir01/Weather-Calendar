@@ -1,5 +1,5 @@
 # Weather-Calendar
-Simple JavaFX application for university that allows users to schedule meetings and check the weather forecast for the selected day.
+JavaFX application for university that allows users to schedule meetings and check the weather forecast for the selected day.
 
 ## Objectives
 - the ability to add a meeting on a specific day using a calendar mechanism,
