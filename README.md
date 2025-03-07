@@ -20,8 +20,8 @@ Simple JavaFX application for university that allows users to schedule meetings 
 - Serialization, deserialization with API: [Gson 2.11.0](https://github.com/google/gson)
 
 ## Graphical User Interface
-![Docs/image_1](image_1.png)
-![Docs/image_1](image_2.png)
+![Window with callendar](Docs/image_1.png)
+![Window with meeting and weather information](Docs/image_2.png)
 
 ## Authors
 - [Tomasz Wojtasek (Zogir01)](https://github.com/Zogir01)
